@@ -1,0 +1,536 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>VibViz Integration</title>
+  <style>
+    body { font-family: Arial, sans-serif; }
+    .sound-item { margin: 5px 0; }
+    button { margin-left: 10px; }
+  </style>
+</head>
+<body>
+  <h2>Sound Library</h2>
+  <div id="sound-list"></div>
+  <button id="cancel">Cancel</button>
+
+  <script>
+    // Iterate over urls.txt and make a sound array with key: sound id, value: sound url
+    sounds = [
+      {
+        "name": "v-09-09-8-11",
+        "url": "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-09-09-8-11.wav"
+      },
+      {
+        "name": "v-09-09-8-20",
+        "url": "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-09-09-8-20.wav"
+      },
+      {
+        "name": "v-09-09-8-24",
+        "url": "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-09-09-8-24.wav"
+      },
+      {
+        "name": "v-09-10-11-55",
+        "url": "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-09-10-11-55.wav"
+      },
+      {
+        "name": "v-09-10-11-58",
+        "url": "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-09-10-11-58.wav"
+      },
+      {
+        "name": "v-09-10-12-11",
+        "url": "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-09-10-12-11.wav"
+      },
+      {
+        "name": "v-09-10-12-13",
+        "url": "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-09-10-12-13.wav"
+      },
+      {
+        "name": "v-09-10-12-16",
+        "url": "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-09-10-12-16.wav"
+      },
+      {
+        "name": "v-09-10-12-2",
+        "url": "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-09-10-12-2.wav"
+      },
+      {
+        "name": "v-09-10-12-6",
+        "url": "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-09-10-12-6.wav"
+      },
+      {
+        "name": "v-09-10-12-9",
+        "url": "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-09-10-12-9.wav"
+      },
+      {
+        "name": "v-09-10-3-52",
+        "url": "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-09-10-3-52.wav"
+      },
+      {
+        "name": "v-09-10-3-56",
+        "url": "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-09-10-3-56.wav"
+      },
+      {
+        "name": "v-09-10-4-2",
+        "url": "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-09-10-4-2.wav"
+      },
+      {
+        "name": "v-09-10-4-20",
+        "url": "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-09-10-4-20.wav"
+      },
+      {
+        "name": "v-09-10-4-23",
+        "url": "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-09-10-4-23.wav"
+      },
+      {
+        "name": "v-09-10-4-25",
+        "url": "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-09-10-4-25.wav"
+      },
+      {
+        "name": "v-09-10-4-6",
+        "url": "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-09-10-4-6.wav"
+      },
+      {
+        "name": "v-09-10-6-16",
+        "url": "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-09-10-6-16.wav"
+      },
+      {
+        "name": "v-09-10-6-22",
+        "url": "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-09-10-6-22.wav"
+      },
+      {
+        "name": "v-09-10-6-27",
+        "url": "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-09-10-6-27.wav"
+      },
+      {
+        "name": "v-09-10-6-38",
+        "url": "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-09-10-6-38.wav"
+      },
+      {
+        "name": "v-09-10-6-43",
+        "url": "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-09-10-6-43.wav"
+      },
+      {
+        "name": "v-09-10-6-46",
+        "url": "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-09-10-6-46.wav"
+      },
+      {
+        "name": "v-09-10-6-5",
+        "url": "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-09-10-6-5.wav"
+      },
+      {
+        "name": "v-09-10-6-59",
+        "url": "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-09-10-6-59.wav"
+      },
+      {
+        "name": "v-09-10-7-34",
+        "url": "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-09-10-7-34.wav"
+      },
+      {
+        "name": "v-09-10-7-36",
+        "url": "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-09-10-7-36.wav"
+      },
+      {
+        "name": "v-09-10-7-9",
+        "url": "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-09-10-7-9.wav"
+      },
+      {
+        "name": "v-09-10-8-5",
+        "url": "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-09-10-8-5.wav"
+      },
+      {
+        "name": "v-09-10-8-7",
+        "url": "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-09-10-8-7.wav"
+      },
+      {
+        "name": "v-09-11-3-12",
+        "url": "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-09-11-3-12.wav"
+      },
+      {
+        "name": "v-09-11-3-16",
+        "url": "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-09-11-3-16.wav"
+      },
+      {
+        "name": "v-09-11-3-19",
+        "url": "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-09-11-3-19.wav"
+      },
+      {
+        "name": "v-09-11-3-21",
+        "url": "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-09-11-3-21.wav"
+      },
+      {
+        "name": "v-09-11-3-24",
+        "url": "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-09-11-3-24.wav"
+      },
+      {
+        "name": "v-09-11-3-4",
+        "url": "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-09-11-3-4.wav"
+      },
+      {
+        "name": "v-09-11-3-43",
+        "url": "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-09-11-3-43.wav"
+      },
+      {
+        "name": "v-09-11-3-50",
+        "url": "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-09-11-3-50.wav"
+      },
+      {
+        "name": "v-09-11-3-54",
+        "url": "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-09-11-3-54.wav"
+      },
+      {
+        "name": "v-09-11-3-56",
+        "url": "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-09-11-3-56.wav"
+      },
+      {
+        "name": "v-09-11-3-8",
+        "url": "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-09-11-3-8.wav"
+      },
+      {
+        "name": "v-09-11-4-1",
+        "url": "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-09-11-4-1.wav"
+      },
+      {
+        "name": "v-09-11-4-12",
+        "url": "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-09-11-4-12.wav"
+      },
+      {
+        "name": "v-09-11-4-22",
+        "url": "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-09-11-4-22.wav"
+      },
+      {
+        "name": "v-09-11-4-3",
+        "url": "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-09-11-4-3.wav"
+      },
+      {
+        "name": "v-09-11-4-41",
+        "url": "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-09-11-4-41.wav"
+      },
+      {
+        "name": "v-09-11-4-54",
+        "url": "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-09-11-4-54.wav"
+      },
+      {
+        "name": "v-09-11-4-8",
+        "url": "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-09-11-4-8.wav"
+      },
+      {
+        "name": "v-09-12-1-0",
+        "url": "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-09-12-1-0.wav"
+      },
+      {
+        "name": "v-09-12-1-19",
+        "url": "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-09-12-1-19.wav"
+      },
+      {
+        "name": "v-09-12-1-23",
+        "url": "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-09-12-1-23.wav"
+      },
+      {
+        "name": "v-09-12-1-29",
+        "url": "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-09-12-1-29.wav"
+      },
+      {
+        "name": "v-09-12-1-39",
+        "url": "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-09-12-1-39.wav"
+      },
+      {
+        "name": "v-09-12-1-48",
+        "url": "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-09-12-1-48.wav"
+      },
+      {
+        "name": "v-09-12-1-53",
+        "url": "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-09-12-1-53.wav"
+      },
+      {
+        "name": "v-09-12-2-17",
+        "url": "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-09-12-2-17.wav"
+      },
+      {
+        "name": "v-09-12-2-20",
+        "url": "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-09-12-2-20.wav"
+      },
+      {
+        "name": "v-09-12-2-23",
+        "url": "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-09-12-2-23.wav"
+      },
+      {
+        "name": "v-09-12-2-40",
+        "url": "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-09-12-2-40.wav"
+      },
+      {
+        "name": "v-09-12-8-10",
+        "url": "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-09-12-8-10.wav"
+      },
+      {
+        "name": "v-09-12-8-13",
+        "url": "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-09-12-8-13.wav"
+      },
+      {
+        "name": "v-09-12-8-21",
+        "url": "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-09-12-8-21.wav"
+      },
+      {
+        "name": "v-09-12-8-27",
+        "url": "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-09-12-8-27.wav"
+      },
+      {
+        "name": "v-09-12-8-30",
+        "url": "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-09-12-8-30.wav"
+      },
+      {
+        "name": "v-09-12-8-32",
+        "url": "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-09-12-8-32.wav"
+      },
+      {
+        "name": "v-09-16-1-43",
+        "url": "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-09-16-1-43.wav"
+      },
+      {
+        "name": "v-09-16-1-56",
+        "url": "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-09-16-1-56.wav"
+      },
+      {
+        "name": "v-09-18-1-55",
+        "url": "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-09-18-1-55.wav"
+      },
+      {
+        "name": "v-09-18-2-7",
+        "url": "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-09-18-2-7.wav"
+      },
+      {
+        "name": "v-09-18-4-12",
+        "url": "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-09-18-4-12.wav"
+      },
+      {
+        "name": "v-09-18-4-15",
+        "url": "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-09-18-4-15.wav"
+      },
+      {
+        "name": "v-09-18-4-16",
+        "url": "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-09-18-4-16.wav"
+      },
+      {
+        "name": "v-09-18-4-18",
+        "url": "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-09-18-4-18.wav"
+      },
+      {
+        "name": "v-09-18-4-22",
+        "url": "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-09-18-4-22.wav"
+      },
+      {
+        "name": "v-09-18-4-56",
+        "url": "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-09-18-4-56.wav"
+      },
+      {
+        "name": "v-09-23-6-24",
+        "url": "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-09-23-6-24.wav"
+      },
+      {
+        "name": "v-09-26-1-39",
+        "url": "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-09-26-1-39.wav"
+      },
+      {
+        "name": "v-10-09-1-1",
+        "url": "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-10-09-1-1.wav"
+      },
+      {
+        "name": "v-10-09-1-11",
+        "url": "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-10-09-1-11.wav"
+      },
+      {
+        "name": "v-10-09-1-12",
+        "url": "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-10-09-1-12.wav"
+      },
+      {
+        "name": "v-10-09-1-14",
+        "url": "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-10-09-1-14.wav"
+      },
+      {
+        "name": "v-10-09-1-16",
+        "url": "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-10-09-1-16.wav"
+      },
+      {
+        "name": "v-10-09-1-20",
+        "url": "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-10-09-1-20.wav"
+      },
+      {
+        "name": "v-10-09-1-8",
+        "url": "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-10-09-1-8.wav"
+      },
+      {
+        "name": "v-10-09-5-0",
+        "url": "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-10-09-5-0.wav"
+      },
+      {
+        "name": "v-10-09-5-2",
+        "url": "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-10-09-5-2.wav"
+      },
+      {
+        "name": "v-10-09-5-4",
+        "url": "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-10-09-5-4.wav"
+      },
+      {
+        "name": "v-10-09-5-7",
+        "url": "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-10-09-5-7.wav"
+      },
+      {
+        "name": "v-10-10-1-10",
+        "url": "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-10-10-1-10.wav"
+      },
+      {
+        "name": "v-10-10-1-18",
+        "url": "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-10-10-1-18.wav"
+      },
+      {
+        "name": "v-10-10-1-21",
+        "url": "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-10-10-1-21.wav"
+      },
+      {
+        "name": "v-10-10-1-5",
+        "url": "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-10-10-1-5.wav"
+      },
+      {
+        "name": "v-10-18-11-11",
+        "url": "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-10-18-11-11.wav"
+      },
+      {
+        "name": "v-10-21-2-48",
+        "url": "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-10-21-2-48.wav"
+      },
+      {
+        "name": "v-10-21-3-11",
+        "url": "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-10-21-3-11.wav"
+      },
+      {
+        "name": "v-10-21-3-17",
+        "url": "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-10-21-3-17.wav"
+      },
+      {
+        "name": "v-10-21-3-2",
+        "url": "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-10-21-3-2.wav"
+      },
+      {
+        "name": "v-10-21-3-21",
+        "url": "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-10-21-3-21.wav"
+      },
+      {
+        "name": "v-10-21-3-30",
+        "url": "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-10-21-3-30.wav"
+      },
+      {
+        "name": "v-10-21-3-33",
+        "url": "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-10-21-3-33.wav"
+      },
+      {
+        "name": "v-10-21-3-39",
+        "url": "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-10-21-3-39.wav"
+      },
+      {
+        "name": "v-10-21-3-4",
+        "url": "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-10-21-3-4.wav"
+      },
+      {
+        "name": "v-10-21-3-45",
+        "url": "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-10-21-3-45.wav"
+      },
+      {
+        "name": "v-10-21-3-7",
+        "url": "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-10-21-3-7.wav"
+      },
+      {
+        "name": "v-10-23-1-10",
+        "url": "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-10-23-1-10.wav"
+      },
+      {
+        "name": "v-10-23-1-16",
+        "url": "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-10-23-1-16.wav"
+      },
+      {
+        "name": "v-10-23-1-21",
+        "url": "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-10-23-1-21.wav"
+      },
+      {
+        "name": "v-10-23-1-23",
+        "url": "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-10-23-1-23.wav"
+      },
+      {
+        "name": "v-10-23-1-24",
+        "url": "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-10-23-1-24.wav"
+      },
+      {
+        "name": "v-10-28-7-22",
+        "url": "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-10-28-7-22.wav"
+      },
+      {
+        "name": "v-10-28-7-23",
+        "url": "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-10-28-7-23.wav"
+      },
+      {
+        "name": "v-10-28-7-26",
+        "url": "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-10-28-7-26.wav"
+      },
+      {
+        "name": "v-10-28-7-29",
+        "url": "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-10-28-7-29.wav"
+      },
+      {
+        "name": "v-10-28-7-31",
+        "url": "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-10-28-7-31.wav"
+      },
+      {
+        "name": "v-10-28-7-33",
+        "url": "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-10-28-7-33.wav"
+      },
+      {
+        "name": "v-10-28-7-35",
+        "url": "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-10-28-7-35.wav"
+      },
+      {
+        "name": "v-10-28-7-36",
+        "url": "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-10-28-7-36.wav"
+      },
+      {
+        "name": "v-10-29-4-20",
+        "url": "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-10-29-4-20.wav"
+      },
+      {
+        "name": "v-10-29-4-22",
+        "url": "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-10-29-4-22.wav"
+      }
+    ];
+
+    const soundList = document.getElementById('sound-list');
+
+    sounds.forEach(sound => {
+      const soundItem = document.createElement('div');
+      soundItem.className = 'sound-item';
+
+      const soundName = document.createElement('span');
+      soundName.textContent = sound.name;
+
+      const playButton = document.createElement('button');
+      playButton.textContent = 'Play';
+      playButton.onclick = () => {
+        playSound(sound.url);
+        selectSound(sound.url);
+      };
+
+      soundItem.appendChild(soundName);
+      soundItem.appendChild(playButton);
+      soundList.appendChild(soundItem);
+    });
+
+    function playSound(url) {
+      const audio = new Audio(url);
+      audio.play().catch(err => console.error("Error playing sound:", err));
+    }
+
+    function selectSound(url) {
+      parent.postMessage({ pluginMessage: { type: 'select-sound', url: url } }, '*');
+    }
+
+    document.getElementById('cancel').onclick = () => {
+      parent.postMessage({ pluginMessage: { type: 'cancel' } }, '*');
+    };
+  </script>
+</body>
+</html>
