@@ -1,5 +1,5 @@
 {
-  "name": "haptic",
+  "name": "haptic-plugin",
   "id": "1395468340784446197",
   "api": "1.0.0",
   "main": "code.js",
