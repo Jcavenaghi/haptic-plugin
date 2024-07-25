@@ -81,7 +81,7 @@
 
   <body>
     <h2>Edit Sound Metadata</h2>
-    <div id="sounds-container"></div>
+    <div id="sound-list"></div>
     <button id="add-sound">Add Sound</button>
 
     <!-- Modal Structure -->
@@ -922,51 +922,51 @@
         },
       ];
 
-      async function loadSounds() {
-        let keys;
-        try {
-            keys = await parent.postMessage({ pluginMessage: { type: 'get-keys' } }, '*');
-            console.log("Fetched keys on load:", keys);
-        } catch (error) {
-            console.error("Error fetching keys:", error);
-            keys = [];
+      window.onmessage = (event) => {
+        const msg = event.data.pluginMessage;
+        if (msg.type === "keys") {
+          console.log("Received keys:", msg.keys);
+          retrieveSounds(msg.keys);
+        } else if (msg.type === "sound") {
+          console.log("Received sound data:", msg);
+          updateSoundMetaphors(msg.key, msg.value);
+          displaySounds();
         }
+      };
 
-        if (!keys) {
-          keys = [];
-        }
-
-        keys.forEach(async key => {
-            try {
-                const soundData = await parent.postMessage({ pluginMessage: { type: 'get-sound', key } }, '*');
-                const sound = sounds.find(s => s.name === key);
-                if (sound) {
-                    sound.metaphors = soundData.value;
-                }
-            } catch (error) {
-                console.error(`Error fetching sound data for key ${key}:`, error);
-            }
+      function retrieveSounds(keys) {
+        keys.forEach((key) => {
+          parent.postMessage(
+            { pluginMessage: { type: "get-sound", key } },
+            "*"
+          );
         });
-        renderSounds();
       }
 
-      function renderSounds() {
-        const container = document.getElementById("sounds-container");
-        container.innerHTML = "";
+      function updateSoundMetaphors(key, newMetaphors) {
+        const sound = sounds.find((s) => s.name === key);
+        if (sound) {
+          sound.metaphors = newMetaphors;
+        }
+      }
+
+      function displaySounds() {
+        const soundList = document.getElementById("sound-list");
+        soundList.innerHTML = "";
         sounds.forEach((sound) => {
-          container.innerHTML += `
-                    <div class="sound-item" id="sound-${sound.name}">
-                        <div class="sound-image">
-                            <img src="${sound.image}" alt="${sound.name}" width="50" height="50">
-                        </div>
-                        <div class="sound-info">
-                            <span>Name: ${sound.name}</span>
-                            <span>Metaphors: ${sound.metaphors}</span>
-                        </div>
-                        <button onclick="playSound('${sound.url}')">Play</button>
-                        <button onclick="editMetaphors('${sound.name}')">Edit metaphors</button>
-                    </div>
-                `;
+          soundList.innerHTML += `
+          <div class="sound-item" id="sound-${sound.name}">
+            <div class="sound-image">
+              <img src="${sound.image}" alt="${sound.name}" width="50" height="50">
+            </div>
+            <div class="sound-info">
+              <span>Name: ${sound.name}</span>
+              <span>Metaphors: ${sound.metaphors}</span>
+            </div>
+            <button onclick="playSound('${sound.url}')">Play</button>
+            <button onclick="editMetaphors('${sound.name}')">Edit metaphors</button>
+          </div>
+        `;
         });
       }
 
@@ -999,7 +999,8 @@
         };
       }
 
-      loadSounds();
+      // Request keys on load
+      parent.postMessage({ pluginMessage: { type: "get-keys" } }, "*");
 
       document.getElementById("cancel").onclick = () => {
         parent.postMessage({ pluginMessage: { type: "cancel" } }, "*");
