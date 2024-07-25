@@ -7,90 +7,14 @@
 // full browser environment (See https://www.figma.com/plugin-docs/how-plugins-run).
 
 // This shows the HTML page in "ui.html".
-figma.showUI(__html__, {width: 550, height: 500});
+figma.showUI(__html__, { width: 550, height: 500 });
 
-// Calls to "parent.postMessage" from within the HTML page will trigger this
-// callback. The callback will be passed the "pluginMessage" property of the
-// posted message.
 figma.ui.onmessage = async msg => {
-  if (msg.type === 'select-sound') {
-    const sound = msg.sound;
-    const nodes = figma.currentPage.selection;
-
-    let frame;
-    if (nodes.length > 0 && nodes[0].type === "FRAME") {
-      frame = nodes[0];
-    } else {
-      frame = figma.createFrame();
-      frame.resize(400, 400);
-      frame.fills = [{ type: 'SOLID', color: { r: 1, g: 0, b: 0 } }];
-      figma.currentPage.appendChild(frame);
-    }
-
-    frame.name = `Sound: ${sound.name}`;
-    console.log(frame.name)
-    // Agregar la imagen del sonido
-    let imageNode = frame.findOne(node => node.name === 'Sound Image');
-    if (!imageNode) {
-      imageNode = figma.createRectangle();
-      imageNode.name = 'Sound Image';
-      frame.appendChild(imageNode);
-    }
-    const image = await loadImage(sound.image);
-    imageNode.fills = [{ type: 'IMAGE', imageHash: image.hash }];
-    imageNode.resize(50, 50);
-    imageNode.x = 10;
-    imageNode.y = 10;
-
-    // Agregar la información del sonido
-    let textNode = frame.findOne(node => node.name === 'Sound Info');
-    if (!textNode) {
-      textNode = figma.createText();
-      textNode.name = 'Sound Info';
-      frame.appendChild(textNode);
-    }
-    textNode.fontName = { family: 'Roboto', style: 'Regular' };
-    await figma.loadFontAsync(textNode.fontName);
-    textNode.characters = `Name: ${sound.name}\nMetaphors: ${sound.metaphors}`;
-    textNode.x = 70;
-    textNode.y = 10;
-
-    // Agregar un botón para reproducir el sonido
-    let playButtonNode = frame.findOne(node => node.name === 'Play Button');
-    if (!playButtonNode) {
-      playButtonNode = figma.createRectangle();
-      playButtonNode.name = 'Play Button';
-      frame.appendChild(playButtonNode);
-    }
-    playButtonNode.resize(100, 30);
-    playButtonNode.cornerRadius = 5;
-    playButtonNode.fills = [{ type: 'SOLID', color: { r: 0, g: 0.5, b: 1 } }];
-    playButtonNode.x = 10;
-    playButtonNode.y = 70;
-
-    let buttonTextNode = playButtonNode.findOne(node => node.name === 'Button Text');
-    if (!buttonTextNode) {
-      buttonTextNode = figma.createText();
-      buttonTextNode.name = 'Button Text';
-      playButtonNode.appendChild(buttonTextNode);
-    }
-    buttonTextNode.fontName = { family: 'Roboto', style: 'Regular' };
-    await figma.loadFontAsync(buttonTextNode.fontName);
-    buttonTextNode.characters = 'Play Sound';
-    buttonTextNode.fills = [{ type: 'SOLID', color: { r: 1, g: 1, b: 1 } }];
-    buttonTextNode.x = 10;
-    buttonTextNode.y = 5;
-
-    playButtonNode.setPluginData('sound-url', sound.url);
-
-    playButtonNode.on('click', () => {
-      playSound(sound.url);
-    });
-
-    figma.viewport.scrollAndZoomIntoView([frame]);
-  }
-
-  if (msg.type === 'cancel') {
+  if (msg.type === 'update-sound') {
+    await updateSound(msg.sound);
+  } else if (msg.type === 'get-metaphors') {
+    loadAndSendSounds();
+  } else if (msg.type === 'cancel') {
     figma.closePlugin();
   }
 };
@@ -106,3 +30,42 @@ function playSound(url) {
   const audio = new Audio(url);
   audio.play().catch(err => console.error("Error playing sound:", err));
 }
+
+async function updateSound(sound) {
+  await figma.clientStorage.setAsync(sound.name, sound.metaphors);
+  let test = await figma.clientStorage.getAsync(sound.name);
+  console.log("A VEEEER: ", test);
+}
+
+async function getMetaphors(sound) {
+  return await figma.clientStorage.getAsync(sound.name) || sound.metaphors;
+}
+
+// async function updateSoundMetadata(updatedSound) {
+//   const sounds = await figma.clientStorage.getAsync('sounds') || {};
+//   sounds[updatedSound.id] = updatedSound;
+//   await figma.clientStorage.setAsync('sounds', sounds);
+// }
+
+async function getSounds() {
+  const storedSounds = await figma.clientStorage.getAsync('sounds') || {};
+  return Object.values(storedSounds);
+}
+
+async function loadAndSendSounds() {
+  const sounds = await getSounds();
+  figma.ui.postMessage({ type: 'load-sounds', sounds });
+}
+
+// Nueva función para cargar los sonidos desde el archivo JSON
+// async function loadSoundsFromJSON() {
+//   const response = await fetch('https://example.com/path/to/sounds.json'); // Reemplaza esta URL con la URL real de tu archivo JSON
+//   const sounds = await response.json();
+//   sounds.forEach(sound => {
+//     updateSoundMetadata(sound);
+//   });
+//   loadAndSendSounds();
+// }
+
+// Llamada a la nueva función
+// loadSoundsFromJSON();
