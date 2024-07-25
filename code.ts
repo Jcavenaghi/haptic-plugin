@@ -12,34 +12,38 @@ figma.showUI(__html__, { width: 550, height: 500 });
 figma.ui.onmessage = async msg => {
   if (msg.type === 'update-sound') {
     await updateSound(msg.sound);
-  } else if (msg.type === 'get-metaphors') {
-    loadAndSendSounds();
+  } else if (msg.type === 'get-keys') {
+    const keys = await figma.clientStorage.keysAsync();
+    figma.ui.postMessage({ type: 'keys', keys });
+  } else if (msg.type === 'get-sound') {
+    const data = await figma.clientStorage.getAsync(msg.key);
+    figma.ui.postMessage({ type: 'sound', key: msg.key, value: data });
   } else if (msg.type === 'cancel') {
     figma.closePlugin();
   }
 };
 
-async function loadImage(url) {
-  const response = await fetch(url);
-  const arrayBuffer = await response.arrayBuffer();
-  const image = figma.createImage(new Uint8Array(arrayBuffer));
-  return image;
-}
+// async function loadImage(url) {
+//   const response = await fetch(url);
+//   const arrayBuffer = await response.arrayBuffer();
+//   const image = figma.createImage(new Uint8Array(arrayBuffer));
+//   return image;
+// }
 
-function playSound(url) {
-  const audio = new Audio(url);
-  audio.play().catch(err => console.error("Error playing sound:", err));
-}
+// function playSound(url) {
+//   const audio = new Audio(url);
+//   audio.play().catch(err => console.error("Error playing sound:", err));
+// }
 
 async function updateSound(sound) {
   await figma.clientStorage.setAsync(sound.name, sound.metaphors);
-  let test = await figma.clientStorage.getAsync(sound.name);
-  console.log("A VEEEER: ", test);
+  console.log("KEYS MODIFIED:", await figma.clientStorage.keysAsync());
 }
 
-async function getMetaphors(sound) {
-  return await figma.clientStorage.getAsync(sound.name) || sound.metaphors;
-}
+
+// async function getMetaphors(sound) {
+//   return await figma.clientStorage.getAsync(sound.name) || sound.metaphors;
+// }
 
 // async function updateSoundMetadata(updatedSound) {
 //   const sounds = await figma.clientStorage.getAsync('sounds') || {};
@@ -47,15 +51,15 @@ async function getMetaphors(sound) {
 //   await figma.clientStorage.setAsync('sounds', sounds);
 // }
 
-async function getSounds() {
-  const storedSounds = await figma.clientStorage.getAsync('sounds') || {};
-  return Object.values(storedSounds);
-}
+// async function getSounds() {
+//   const storedSounds = await figma.clientStorage.getAsync('sounds') || {};
+//   return Object.values(storedSounds);
+// }
 
-async function loadAndSendSounds() {
-  const sounds = await getSounds();
-  figma.ui.postMessage({ type: 'load-sounds', sounds });
-}
+// async function loadAndSendSounds() {
+//   const sounds = await getSounds();
+//   figma.ui.postMessage({ type: 'load-sounds', sounds });
+// }
 
 // Nueva función para cargar los sonidos desde el archivo JSON
 // async function loadSoundsFromJSON() {
