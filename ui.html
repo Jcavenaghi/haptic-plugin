@@ -90,25 +90,74 @@
         border: 2px solid #007bff;
         outline: none;
       }
+      #add-sound{
+        float: right;
+      }
+      .close-upload {
+        color: #aaa;
+        float: right;
+        font-size: 28px;
+        font-weight: bold;
+        margin-top: -10px;
+        margin-right: -10px;
+        cursor: pointer;
+      }
+
+      .close-upload:hover,
+      .close-upload:focus {
+        color: black;
+        text-decoration: none;
+        cursor: pointer;
+      }
+
+      input[type="file"].styled-input {
+        width: 100%;
+        padding: 12px 20px;
+        margin: 8px 0;
+        box-sizing: border-box;
+        font-size: 16px;
+        border: 2px solid #ccc;
+        border-radius: 4px;
+        cursor: pointer;
+      }
+
+      input[type="file"].styled-input:focus {
+        border: 2px solid #007bff;
+        outline: none;
+      }
+
     </style>
   </head>
 
   <body>
     <h2>Edit Sound Metadata</h2>
+    <button id="add-sound" title="Add sound">
+      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-plus-circle-fill" viewBox="0 0 16 16">
+        <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0M8.5 4.5a.5.5 0 0 0-1 0v3h-3a.5.5 0 0 0 0 1h3v3a.5.5 0 0 0 1 0v-3h3a.5.5 0 0 0 0-1h-3z"/>
+      </svg>
+    </button>
     <input type="text" id="metaphorFilter" placeholder="Filter by metaphor" oninput="filterSounds()" />
     <div id="sound-list"></div>
-    <button id="cancel">Cancel</button>
-    <button id="add-sound">Add Sound</button>
 
     <!-- Modal Structure -->
-    <div id="editModal" class="modal">
+    <div id="uploadModal" class="modal">
       <div class="modal-content">
-        <span class="close">&times;</span>
-        <h2>Edit Metaphors</h2>
-        <textarea id="metaphorsInput" rows="4" cols="50"></textarea><br />
-        <button id="saveMetaphors">Save</button>
+        <span class="close-upload">&times;</span>
+        <h2>Upload Sound</h2>
+        <input type="file" id="soundFile" class="styled-input" /><br />
+        <button id="uploadSound">Upload</button>
       </div>
     </div>
+    
+    <!-- Modal add sound -->
+    <div id="uploadModal" class="modal">
+      <div class="modal-content">
+        <span class="close-upload">&times;</span>
+        <h2>Upload Sound</h2>
+        <input type="file" id="soundFile" /><br />
+        <button id="uploadSound">Upload</button>
+      </div>
+    </div>    
 
     <script>
       //DEFAULT SOUNDS LIST
@@ -988,8 +1037,17 @@
                 <span>Name: ${sound.name}</span>
                 <span>Metaphors: ${sound.metaphors}</span>
               </div>
-              <button onclick="playSound('${sound.url}')">Play</button>
-              <button onclick="editMetaphors('${sound.name}')">Edit metaphors</button>
+              <button onclick="playSound('${sound.url}')" title="Play sound">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-play-circle-fill" viewBox="0 0 16 16">
+                  <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0M6.79 5.093A.5.5 0 0 0 6 5.5v5a.5.5 0 0 0 .79.407l3.5-2.5a.5.5 0 0 0 0-.814z"/>
+                </svg>
+              </button>
+              <button onclick="editMetaphors('${sound.name}')" title="Edit metaphors">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil-square" viewBox="0 0 16 16">
+                  <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z"/>
+                  <path fill-rule="evenodd" d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5z"/>
+                </svg>
+              </button>
             </div>
           `;
         });
@@ -1031,10 +1089,6 @@
 
       // Request keys on load
       parent.postMessage({ pluginMessage: { type: "get-keys" } }, "*");
-
-      document.getElementById("cancel").onclick = () => {
-        parent.postMessage({ pluginMessage: { type: "cancel" } }, "*");
-      };
 
       // //ADD SOUND
       // const addSoundButton = document.getElementById('add-sound');
@@ -1081,6 +1135,45 @@
 
       // Request sounds on load
       //parent.postMessage({ pluginMessage: { type: 'request-sounds' } }, '*');
+
+      //manejo de add sound
+      // Show upload modal when add-sound button is clicked
+      document.getElementById("add-sound").onclick = () => {
+        document.getElementById("uploadModal").style.display = "block";
+      };
+
+      // Close upload modal
+      document.querySelector(".close-upload").onclick = () => {
+        document.getElementById("uploadModal").style.display = "none";
+      };
+
+      // Handle file upload
+      document.getElementById("uploadSound").onclick = () => {
+        const fileInput = document.getElementById("soundFile");
+        if (fileInput.files.length > 0) {
+          const file = fileInput.files[0];
+          const reader = new FileReader();
+
+          reader.onload = (e) => {
+            const newSound = {
+              name: file.name,
+              url: e.target.result,
+              image: '', // Placeholder for the image
+              metaphors: ''
+            };
+            sounds.push(newSound);
+            displaySounds();
+            parent.postMessage({ pluginMessage: { type: "update-sound", sound: newSound } }, "*");
+            document.getElementById("uploadModal").style.display = "none";
+          };
+
+          reader.readAsDataURL(file);
+        } else {
+          alert("Please select a file to upload.");
+        }
+      };
+
+
     </script>
   </body>
 </html>
