@@ -82,6 +82,7 @@
   <body>
     <h2>Edit Sound Metadata</h2>
     <div id="sound-list"></div>
+    <button id="cancel">Cancel</button>
     <button id="add-sound">Add Sound</button>
 
     <!-- Modal Structure -->
@@ -924,12 +925,13 @@
 
       window.onmessage = (event) => {
         const msg = event.data.pluginMessage;
+        console.log(msg);
         if (msg.type === "keys") {
-          console.log("Received keys:", msg.keys);
           retrieveSounds(msg.keys);
         } else if (msg.type === "sound") {
-          console.log("Received sound data:", msg);
           updateSoundMetaphors(msg.key, msg.value);
+          displaySounds();
+        } else {
           displaySounds();
         }
       };

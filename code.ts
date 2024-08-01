@@ -14,7 +14,11 @@ figma.ui.onmessage = async msg => {
     await updateSound(msg.sound);
   } else if (msg.type === 'get-keys') {
     const keys = await figma.clientStorage.keysAsync();
-    figma.ui.postMessage({ type: 'keys', keys });
+    if (keys.length > 0) {
+      figma.ui.postMessage({ type: 'keys', keys });
+    } else {
+      figma.ui.postMessage({ type: 'init'});
+    }
   } else if (msg.type === 'get-sound') {
     const data = await figma.clientStorage.getAsync(msg.key);
     figma.ui.postMessage({ type: 'sound', key: msg.key, value: data });
@@ -37,7 +41,6 @@ figma.ui.onmessage = async msg => {
 
 async function updateSound(sound) {
   await figma.clientStorage.setAsync(sound.name, sound.metaphors);
-  console.log("KEYS MODIFIED:", await figma.clientStorage.keysAsync());
 }
 
 
