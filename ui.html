@@ -76,11 +76,26 @@
         text-decoration: none;
         cursor: pointer;
       }
+      input[type="text"]#metaphorFilter {
+        width: 100%;
+        padding: 12px 20px;
+        margin: 8px 0;
+        box-sizing: border-box;
+        font-size: 16px;
+        border: 2px solid #ccc;
+        border-radius: 4px;
+      }
+
+      input[type="text"]#metaphorFilter:focus {
+        border: 2px solid #007bff;
+        outline: none;
+      }
     </style>
   </head>
 
   <body>
     <h2>Edit Sound Metadata</h2>
+    <input type="text" id="metaphorFilter" placeholder="Filter by metaphor" oninput="filterSounds()" />
     <div id="sound-list"></div>
     <button id="cancel">Cancel</button>
     <button id="add-sound">Add Sound</button>
@@ -952,25 +967,38 @@
         }
       }
 
-      function displaySounds() {
+      function filterSounds() {
+        const filter = document.getElementById("metaphorFilter").value.toLowerCase();
+        const filteredSounds = sounds.filter(sound => 
+          sound.metaphors.split(',').some(metaphor => metaphor.trim().toLowerCase().includes(filter))
+        );
+        displayFilteredSounds(filteredSounds);
+      }
+
+      function displaySounds(soundsToDisplay = sounds) {
         const soundList = document.getElementById("sound-list");
         soundList.innerHTML = "";
-        sounds.forEach((sound) => {
+        soundsToDisplay.forEach((sound) => {
           soundList.innerHTML += `
-          <div class="sound-item" id="sound-${sound.name}">
-            <div class="sound-image">
-              <img src="${sound.image}" alt="${sound.name}" width="50" height="50">
+            <div class="sound-item" id="sound-${sound.name}">
+              <div class="sound-image">
+                <img src="${sound.image}" alt="${sound.name}" width="50" height="50">
+              </div>
+              <div class="sound-info">
+                <span>Name: ${sound.name}</span>
+                <span>Metaphors: ${sound.metaphors}</span>
+              </div>
+              <button onclick="playSound('${sound.url}')">Play</button>
+              <button onclick="editMetaphors('${sound.name}')">Edit metaphors</button>
             </div>
-            <div class="sound-info">
-              <span>Name: ${sound.name}</span>
-              <span>Metaphors: ${sound.metaphors}</span>
-            </div>
-            <button onclick="playSound('${sound.url}')">Play</button>
-            <button onclick="editMetaphors('${sound.name}')">Edit metaphors</button>
-          </div>
-        `;
+          `;
         });
       }
+
+      function displayFilteredSounds(filteredSounds) {
+        displaySounds(filteredSounds);
+      }
+
 
       function playSound(url) {
         const audio = new Audio(url);
