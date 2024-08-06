@@ -27,52 +27,6 @@ figma.ui.onmessage = async msg => {
   }
 };
 
-// async function loadImage(url) {
-//   const response = await fetch(url);
-//   const arrayBuffer = await response.arrayBuffer();
-//   const image = figma.createImage(new Uint8Array(arrayBuffer));
-//   return image;
-// }
-
-// function playSound(url) {
-//   const audio = new Audio(url);
-//   audio.play().catch(err => console.error("Error playing sound:", err));
-// }
-
 async function updateSound(sound) {
   await figma.clientStorage.setAsync(sound.name, sound.metaphors);
 }
-
-
-// async function getMetaphors(sound) {
-//   return await figma.clientStorage.getAsync(sound.name) || sound.metaphors;
-// }
-
-// async function updateSoundMetadata(updatedSound) {
-//   const sounds = await figma.clientStorage.getAsync('sounds') || {};
-//   sounds[updatedSound.id] = updatedSound;
-//   await figma.clientStorage.setAsync('sounds', sounds);
-// }
-
-// async function getSounds() {
-//   const storedSounds = await figma.clientStorage.getAsync('sounds') || {};
-//   return Object.values(storedSounds);
-// }
-
-// async function loadAndSendSounds() {
-//   const sounds = await getSounds();
-//   figma.ui.postMessage({ type: 'load-sounds', sounds });
-// }
-
-// Nueva función para cargar los sonidos desde el archivo JSON
-// async function loadSoundsFromJSON() {
-//   const response = await fetch('https://example.com/path/to/sounds.json'); // Reemplaza esta URL con la URL real de tu archivo JSON
-//   const sounds = await response.json();
-//   sounds.forEach(sound => {
-//     updateSoundMetadata(sound);
-//   });
-//   loadAndSendSounds();
-// }
-
-// Llamada a la nueva función
-// loadSoundsFromJSON();

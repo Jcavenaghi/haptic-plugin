@@ -2,7 +2,7 @@
 <html>
   <head>
     <meta charset="utf-8" />
-    <title>Edit Sound Metadata</title>
+    <title>Haptic Plugin</title>
     <style>
       body {
         font-family: Arial, sans-serif;
@@ -90,7 +90,7 @@
         border: 2px solid #007bff;
         outline: none;
       }
-      #add-sound{
+      #add-sound {
         float: right;
       }
       .close-upload {
@@ -125,30 +125,43 @@
         border: 2px solid #007bff;
         outline: none;
       }
-
     </style>
   </head>
 
   <body>
-    <h2>Edit Sound Metadata</h2>
+    <h2>Haptic Plugin</h2>
     <button id="add-sound" title="Add sound">
-      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-plus-circle-fill" viewBox="0 0 16 16">
-        <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0M8.5 4.5a.5.5 0 0 0-1 0v3h-3a.5.5 0 0 0 0 1h3v3a.5.5 0 0 0 1 0v-3h3a.5.5 0 0 0 0-1h-3z"/>
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        width="16"
+        height="16"
+        fill="currentColor"
+        class="bi bi-plus-circle-fill"
+        viewBox="0 0 16 16"
+      >
+        <path
+          d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0M8.5 4.5a.5.5 0 0 0-1 0v3h-3a.5.5 0 0 0 0 1h3v3a.5.5 0 0 0 1 0v-3h3a.5.5 0 0 0 0-1h-3z"
+        />
       </svg>
     </button>
-    <input type="text" id="metaphorFilter" placeholder="Filter by metaphor" oninput="filterSounds()" />
+    <input
+      type="text"
+      id="metaphorFilter"
+      placeholder="Filter by metaphor"
+      oninput="filterSounds()"
+    />
     <div id="sound-list"></div>
 
     <!-- Modal Structure -->
-    <div id="uploadModal" class="modal">
+    <div id="editModal" class="modal">
       <div class="modal-content">
-        <span class="close-upload">&times;</span>
-        <h2>Upload Sound</h2>
-        <input type="file" id="soundFile" class="styled-input" /><br />
-        <button id="uploadSound">Upload</button>
+        <span class="close">&times;</span>
+        <h2>Edit Metaphors</h2>
+        <textarea id="metaphorsInput" rows="4" cols="50"></textarea><br />
+        <button id="saveMetaphors">Save</button>
       </div>
     </div>
-    
+
     <!-- Modal add sound -->
     <div id="uploadModal" class="modal">
       <div class="modal-content">
@@ -157,7 +170,7 @@
         <input type="file" id="soundFile" /><br />
         <button id="uploadSound">Upload</button>
       </div>
-    </div>    
+    </div>
 
     <script>
       //DEFAULT SOUNDS LIST
@@ -989,7 +1002,6 @@
 
       window.onmessage = (event) => {
         const msg = event.data.pluginMessage;
-        console.log(msg);
         if (msg.type === "keys") {
           retrieveSounds(msg.keys);
         } else if (msg.type === "sound") {
@@ -1017,9 +1029,13 @@
       }
 
       function filterSounds() {
-        const filter = document.getElementById("metaphorFilter").value.toLowerCase();
-        const filteredSounds = sounds.filter(sound => 
-          sound.metaphors.split(',').some(metaphor => metaphor.trim().toLowerCase().includes(filter))
+        const filter = document
+          .getElementById("metaphorFilter")
+          .value.toLowerCase();
+        const filteredSounds = sounds.filter((sound) =>
+          sound.metaphors
+            .split(",")
+            .some((metaphor) => metaphor.trim().toLowerCase().includes(filter))
         );
         displayFilteredSounds(filteredSounds);
       }
@@ -1057,7 +1073,6 @@
         displaySounds(filteredSounds);
       }
 
-
       function playSound(url) {
         const audio = new Audio(url);
         audio.play().catch((err) => console.error("Error playing sound:", err));
@@ -1090,53 +1105,6 @@
       // Request keys on load
       parent.postMessage({ pluginMessage: { type: "get-keys" } }, "*");
 
-      // //ADD SOUND
-      // const addSoundButton = document.getElementById('add-sound');
-
-      // function createSoundEditor(sound) {
-      //     const soundDiv = document.createElement('div');
-      //     soundDiv.classList.add('sound');
-
-      //     const nameInput = document.createElement('input');
-      //     nameInput.type = 'text';
-      //     nameInput.value = sound.name;
-      //     nameInput.placeholder = 'Sound Name';
-      //     soundDiv.appendChild(nameInput);
-
-      //     const metaphorsInput = document.createElement('input');
-      //     metaphorsInput.type = 'text';
-      //     metaphorsInput.value = sound.metaphors;
-      //     metaphorsInput.placeholder = 'Sound Metaphors';
-      //     soundDiv.appendChild(metaphorsInput);
-
-      //     const saveButton = document.createElement('button');
-      //     saveButton.textContent = 'Save';
-      //     saveButton.onclick = () => {
-      //         parent.postMessage({ pluginMessage: { type: 'update-sound', sound: { ...sound, name: nameInput.value, metaphors: metaphorsInput.value } } }, '*');
-      //     };
-      //     soundDiv.appendChild(saveButton);
-
-      //     soundsContainer.appendChild(soundDiv);
-      // }
-
-      // addSoundButton.onclick = () => {
-      //     const newSound = { id: `sound-${Date.now()}`, name: '', metaphors: '' };
-      //     createSoundEditor(newSound);
-      //     parent.postMessage({ pluginMessage: { type: 'update-sound', sound: newSound } }, '*');
-      // };
-
-      // window.onmessage = (event) => {
-      //     const message = event.data.pluginMessage;
-      //     if (message.type === 'load-sounds') {
-      //         soundsContainer.innerHTML = '';
-      //         message.sounds.forEach(createSoundEditor);
-      //     }
-      // };
-
-      // Request sounds on load
-      //parent.postMessage({ pluginMessage: { type: 'request-sounds' } }, '*');
-
-      //manejo de add sound
       // Show upload modal when add-sound button is clicked
       document.getElementById("add-sound").onclick = () => {
         document.getElementById("uploadModal").style.display = "block";
@@ -1158,12 +1126,15 @@
             const newSound = {
               name: file.name,
               url: e.target.result,
-              image: '', // Placeholder for the image
-              metaphors: ''
+              image: "", // Placeholder for the image
+              metaphors: "",
             };
             sounds.push(newSound);
             displaySounds();
-            parent.postMessage({ pluginMessage: { type: "update-sound", sound: newSound } }, "*");
+            parent.postMessage(
+              { pluginMessage: { type: "update-sound", sound: newSound } },
+              "*"
+            );
             document.getElementById("uploadModal").style.display = "none";
           };
 
@@ -1172,8 +1143,6 @@
           alert("Please select a file to upload.");
         }
       };
-
-
     </script>
   </body>
 </html>
