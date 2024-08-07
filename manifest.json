@@ -12,7 +12,8 @@
   "ui": "ui.html",
   "networkAccess": {
     "allowedDomains": [
-      "https://www.cs.ubc.ca"
+      "https://www.cs.ubc.ca",
+      "https://freesound.org/"
     ]
   }
 }
