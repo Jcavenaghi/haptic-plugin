@@ -9,9 +9,32 @@
 // This shows the HTML page in "ui.html".
 figma.showUI(__html__, { width: 550, height: 500 });
 
+let registered = false;
+
 figma.ui.onmessage = async msg => {
   if (msg.type === 'update-sound') {
-    await updateSound(msg.sound);
+    if (registered) {
+      await updateSound(msg.sound);
+    } else {
+      // Make the user register with the freesound API
+
+      registered = true;
+    }
+  } else if (msg.type === 'check-registration') {
+    const token = await figma.clientStorage.getAsync('token');
+    if (token) {
+      registered = true;
+    }
+    figma.ui.postMessage({ type: 'registration', value: registered });
+  } else if (msg.type === 'save-auth-code') {
+    const success = await setUserAccessToken(msg.token);
+    if (success) {
+      registered = true;
+      figma.ui.postMessage({ type: 'result-save-auth', value: registered });
+    }
+    else {
+      figma.ui.postMessage({ type: 'result-save-auth', value: false });
+    }
   } else if (msg.type === 'get-keys') {
     const keys = await figma.clientStorage.keysAsync();
     if (keys.length > 0) {
@@ -29,4 +52,29 @@ figma.ui.onmessage = async msg => {
 
 async function updateSound(sound) {
   await figma.clientStorage.setAsync(sound.name, sound.metaphors);
+}
+
+async function setUserAccessToken(token) {
+  const data = new FormData();
+  data.append("client_id", "sk4SYvtNWujw8dwXsjub");
+  data.append("client_secret", "BISQF8r4KvtJAnTciMYXuyigPKwBmT4B4AvibBpf");
+  data.append("grant_type", "authorization_code");
+  data.append("code", token);
+  
+  const requestOptions = {
+    method: "POST",
+    body: data
+  };
+  
+  const request = await fetch("https://freesound.org/apiv2/oauth2/access_token/", requestOptions);
+  console.log("request", request);
+  const response = await request.text();
+  console.log("response", response);
+  // if (response.access_token) {
+  //   await figma.clientStorage.setAsync('access_token', response.access_token);
+  //   await figma.clientStorage.setAsync('refresh_token', response.refresh_token);
+  //   return true;
+  // } else {
+  //   return false;
+  // }
 }

@@ -93,7 +93,8 @@
       #add-sound {
         float: right;
       }
-      .close-upload {
+      .close-upload,
+      .close-register {
         color: #aaa;
         float: right;
         font-size: 28px;
@@ -104,7 +105,9 @@
       }
 
       .close-upload:hover,
-      .close-upload:focus {
+      .close-upload:focus,
+      .close-register:hover,
+      .close-register:focus {
         color: black;
         text-decoration: none;
         cursor: pointer;
@@ -169,6 +172,22 @@
         <h2>Upload Sound</h2>
         <input type="file" id="soundFile" /><br />
         <button id="uploadSound">Upload</button>
+      </div>
+    </div>
+
+    <!-- Modal registration -->
+    <div id="registrationModal" class="modal">
+      <div class="modal-content">
+        <span class="close-register">&times;</span>
+        <h2>Please register to FreeSound</h2>
+        <p>
+          You need to register to FreeSound to be able to upload sounds. Please
+          click the button below to register or log in. 
+          After registering, you need to provide us with the 'Authorization Code' to be able to upload sounds.
+        </p>
+        <button id="registerButton"><a href="https://freesound.org/apiv2/oauth2/authorize/?client_id=	sk4SYvtNWujw8dwXsjub&response_type=code&state=xyz" target="_blank">Register/Log in</a></button>
+        <input type="text" id="authCode" placeholder="Authorization code" required/>
+        <button id="saveAuthCode">Save</button>
       </div>
     </div>
 
@@ -1000,6 +1019,8 @@
         },
       ];
 
+      let registered = false;
+
       window.onmessage = (event) => {
         const msg = event.data.pluginMessage;
         if (msg.type === "keys") {
@@ -1007,7 +1028,20 @@
         } else if (msg.type === "sound") {
           updateSoundMetaphors(msg.key, msg.value);
           displaySounds();
-        } else {
+        } else if (msg.type === "registration") {
+          registered = msg.value;
+        } else if (msg.type === "result-save-auth") {
+          if (msg.value) {
+            registered = true;
+            document.getElementById("uploadSounds").style.display = "block";
+            document.getElementById("registrationModal").style.display = "none";
+          } else {
+            alert("Invalid authentication code. Please try again.");
+            // Clear the auth code
+            document.getElementById("authCode").value = "";
+          }
+        }
+        else {
           displaySounds();
         }
       };
@@ -1105,14 +1139,27 @@
       // Request keys on load
       parent.postMessage({ pluginMessage: { type: "get-keys" } }, "*");
 
+      // Check user registration
+      parent.postMessage({ pluginMessage: { type: "check-registration" } }, "*");
+
       // Show upload modal when add-sound button is clicked
       document.getElementById("add-sound").onclick = () => {
-        document.getElementById("uploadModal").style.display = "block";
+        if (!registered) {
+          document.getElementById("registrationModal").style.display = "block";
+        } else {
+          document.getElementById("uploadModal").style.display = "block";
+          document.getElementById("registrationModal").style.display = "none";
+        }
       };
 
       // Close upload modal
       document.querySelector(".close-upload").onclick = () => {
         document.getElementById("uploadModal").style.display = "none";
+      };
+
+      // Close upload modal
+      document.querySelector(".close-register").onclick = () => {
+        document.getElementById("registrationModal").style.display = "none";
       };
 
       // Handle file upload
@@ -1142,6 +1189,15 @@
         } else {
           alert("Please select a file to upload.");
         }
+      };
+
+      // Save Auth Code
+      document.getElementById("saveAuthCode").onclick = () => {
+        const authCode = document.getElementById("authCode").value;
+        parent.postMessage(
+          { pluginMessage: { type: "save-auth-code", token: authCode } },
+          "*"
+        );
       };
     </script>
   </body>
