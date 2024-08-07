@@ -50,31 +50,32 @@ figma.ui.onmessage = async msg => {
   }
 };
 
-async function updateSound(sound) {
+async function updateSound(sound: {name: string, metaphors: string}) {
   await figma.clientStorage.setAsync(sound.name, sound.metaphors);
 }
 
-async function setUserAccessToken(token) {
+async function setUserAccessToken(token: string) {
   const data = new FormData();
   data.append("client_id", "sk4SYvtNWujw8dwXsjub");
   data.append("client_secret", "BISQF8r4KvtJAnTciMYXuyigPKwBmT4B4AvibBpf");
   data.append("grant_type", "authorization_code");
   data.append("code", token);
   
-  const requestOptions = {
+  const requestOptions: RequestInit = {
     method: "POST",
     body: data
   };
   
   const request = await fetch("https://freesound.org/apiv2/oauth2/access_token/", requestOptions);
   console.log("request", request);
-  const response = await request.text();
+  const response = await request.json();
   console.log("response", response);
-  // if (response.access_token) {
-  //   await figma.clientStorage.setAsync('access_token', response.access_token);
-  //   await figma.clientStorage.setAsync('refresh_token', response.refresh_token);
-  //   return true;
-  // } else {
-  //   return false;
-  // }
+  
+  if (response.access_token) {
+    await figma.clientStorage.setAsync('access_token', response.access_token);
+    await figma.clientStorage.setAsync('refresh_token', response.refresh_token);
+    return true;
+  } else {
+    return false;
+  }
 }
