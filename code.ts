@@ -11,15 +11,23 @@ figma.ui.onmessage = async msg => {
     await updateSound(msg.sound);
 
   } else if (msg.type === 'check-token') {
-    const token = await figma.clientStorage.getAsync('token');
+    const access_token = await figma.clientStorage.getAsync('access_token');
     let registered = false;
-    if (token) {
+    if (access_token) {
       registered = true;
     }
-    figma.ui.postMessage({ type: 'result-token', value: registered });
+    figma.ui.postMessage({ type: 'result-token', value: registered});
+
+  } else if (msg.type === 'initialize-tokens') {
+    const access_token = await figma.clientStorage.getAsync('access_token');
+    const refresh_token = await figma.clientStorage.getAsync('refresh_token');
+    let registered = false;
+    if (access_token && refresh_token) {
+      registered = true;
+    }
+    figma.ui.postMessage({ type: 'initialize-tokens-result', value: registered, tokens: { access_token, refresh_token} });
 
   } else if (msg.type === 'save-token') {
-    console.log(msg.token);
     await figma.clientStorage.setAsync('access_token', msg.token.access_token);
     await figma.clientStorage.setAsync('refresh_token', msg.token.refresh_token);
 
@@ -34,6 +42,9 @@ figma.ui.onmessage = async msg => {
   } else if (msg.type === 'get-sound') {
     const data = await figma.clientStorage.getAsync(msg.key);
     figma.ui.postMessage({ type: 'sound', key: msg.key, value: data });
+
+  } else if (msg.type === 'sound-uploaded') {
+    await figma.clientStorage.setAsync(msg.sound, msg.sound);
 
   } else if (msg.type === 'cancel') {
     figma.closePlugin();
