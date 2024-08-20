@@ -180,6 +180,8 @@
       <div class="modal-content" style="display: flex; flex-direction: column;">
         <span class="close-upload">&times;</span>
         <h2>Subir un sonido</h2>
+        <label for="name">Nombre</label>
+        <input type="text" id="name" class="uploadInput" style="height: 12px !important; cursor: text;">  
         <label for="description">Descripción</label>
         <input type="text" id="description" class="uploadInput" style="height: 12px !important; cursor: text;">  
         <label for="tags">Metáforas</label>
@@ -1046,6 +1048,8 @@
       ];
 
       let registered = false;
+      let t0k3n = "";
+      let uniqueId = "";
 
       window.onmessage = (event) => {
         const msg = event.data.pluginMessage;
@@ -1186,8 +1190,9 @@
       };
 
       // Handle file upload
-      document.getElementById("uploadSound").onclick = () => {
+      document.getElementById("uploadSound").onclick = async () => {
         // Obtener los valores de los campos de entrada
+        const name = document.getElementById("name").value.trim();
         const description = document.getElementById("description").value.trim();
         const tags = document.getElementById("tags").value.trim();
         const fileInput = document.getElementById("soundFile");
@@ -1195,32 +1200,49 @@
         // Validar que todos los campos estén completos
         if (description === "" || tags === "" || fileInput.files.length === 0) {
           alert("Todos los campos son obligatorios");
-          return; // Detener la ejecución si falta información
+        }
+
+        // Validar que haya mas de 3 tags
+        if (tags.split(" ").length < 3) {
+          alert("Por favor, ingrese al menos 3 tags.");
+          return;
+        }
+
+        // Validar que el nombre del sonido no exista en el arreglo de sounds
+        if (sounds.some((sound) => sound.name === name)) {
+          alert("El nombre ya existe en la lista de sonidos. Por favor, elija otro.");
+          return;
         }
 
         if (fileInput.files.length > 0) {
           const file = fileInput.files[0];
           const reader = new FileReader();
-
-          reader.onload = (e) => {
-            const newSound = {
-              name: file.name,
-              url: e.target.result,
-              image: "", // Placeholder for the image
-              metaphors: tags,
-            };
-            sounds.push(newSound);
-            displaySounds();
-            parent.postMessage(
-              { pluginMessage: { type: "update-sound", sound: newSound } },
-              "*"
+          
+          const succeded = await uploadSound(file, tags, description, name);
+          if (succeded) {
+            // Limpiar los campos de entrada
+            document.getElementById("name").value = "";
+            document.getElementById("description").value = "";
+            document.getElementById("tags").value = "";
+            document.getElementById("soundFile").value = "";
+            alert(
+              "Sonido subido exitosamente! Aguarde unos minutos para que aparezca en la lista de sonidos."
             );
-            document.getElementById("uploadModal").style.display = "none";
-          };
+            sounds.push({
+              name: name,
+              url: "", // Placeholder for the URL
+              image: "https://res.cloudinary.com/cloudinary/image/upload/waveform_post.png", // Placeholder for the image
+              metaphors: tags,
+            });
+            displaySounds();            
+          } else {
+            alert("Error al cargar el sonido. Por favor, inténtelo de nuevo.");
+          }
 
-          reader.readAsDataURL(file);
+          document.getElementById("uploadModal").style.display = "none";
+
         } else {
-          alert("Please select a file to upload.");
+          alert("Seleccione un archivo para cargar.");
         }
       };
 
@@ -1233,7 +1255,7 @@
           document.getElementById("uploadModal").style.display = "block";
           document.getElementById("registrationModal").style.display = "none";
         } else {
-          alert("Invalid authentication code. Please try again.");
+          alert("Código de autenticación inválido. Por favor, inténtelo de nuevo.");
           // Clear the auth code
           document.getElementById("authCode").value = "";
         }
@@ -1249,22 +1271,39 @@
         data.append("grant_type", "authorization_code");
         data.append("code", token);
 
-        const requestOptions = {
+        const requestOptionsPost = {
           method: "POST",
           body: data,
         };
 
-        const request = await fetch(
+        const requestPost = await fetch(
           "https://freesound.org/apiv2/oauth2/access_token/",
-          requestOptions
+          requestOptionsPost
         );
-        const response = await request.json();
+        const responsePost = await requestPost.json();
 
-        if (response.access_token) {
+        if (responsePost.access_token) {
           parent.postMessage(
-            { pluginMessage: { type: "save-token", token: response } },
+            { pluginMessage: { type: "save-token", token: responsePost } },
             "*"
           );
+          t0k3n = responsePost.access_token;
+
+          // Save unique id
+          const header = new Headers();
+          header.append("Authorization", "Bearer " + t0k3n);
+          const requestOptionsGet = {
+            method: "GET",
+            headers: header
+          };
+          const requestGet = await fetch(
+            "https://freesound.org/apiv2/me/",
+            requestOptionsGet
+          );
+
+          const responseGet = await requestGet.json();
+          uniqueId = responseGet.unique_id;
+
           return true;
         } else {
           return false;
@@ -1297,23 +1336,29 @@
             { pluginMessage: { type: "save-token", token: response } },
             "*"
           );
+          t0k3n = response.access_token;
           return true;
         } else {
+          console.log("Error refreshing token");
+          console.log(response.status);
           return false;
         }
       }
 
-      async function uploadSound(file, tags, description) {
+      async function uploadSound(file, tags, description, name) {
         const data = new FormData();
-        data.append("name", file.name);
+        data.append("name", name);
         data.append("tags", tags);
         data.append("description", description);
         data.append("license", "Creative Commons 0");
-        data.append("file", file);
+        data.append("audiofile", file);
 
+        const header = new Headers();
+        header.append("Authorization", "Bearer " + t0k3n);
         const requestOptions = {
           method: "POST",
-          body: data,
+          headers: header,
+          body: data
         };
 
         const request = await fetch(
@@ -1321,17 +1366,22 @@
           requestOptions
         );
         const response = await request.json();
+        const key = response.id.toString();   
+        sound_data = {
+          key: key,
+          url: `https://cdn.freesound.org/previews/${key.slice(0,3)}/${key}_${uniqueId}-lq.mp3`,
+          image: `https://cdn.freesound.org/displays/${key.slice(0,3)}/${key}_${uniqueId}_wave_bw_M.png`
+        };
 
         if (response.id) {
-          alert(
-            "Sonido subido exitosamente! Aguarde unos minutos para que aparezca en la lista de sonidos."
-          );
           parent.postMessage(
-            { pluginMessage: { type: "sound-uploaded", sound: response.id } },
+            { pluginMessage: { type: "sound-uploaded", sound: sound_data } },
             "*"
           );
           return true;
         } else {
+          console.log("Error uploading sound");
+          console.log(response);
           return false;
         }
       }

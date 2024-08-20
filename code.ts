@@ -44,7 +44,9 @@ figma.ui.onmessage = async msg => {
     figma.ui.postMessage({ type: 'sound', key: msg.key, value: data });
 
   } else if (msg.type === 'sound-uploaded') {
-    await figma.clientStorage.setAsync(msg.sound, msg.sound);
+    console.log(msg.sound);
+    await figma.clientStorage.setAsync(msg.sound.key+"-url", msg.sound.url);
+    await figma.clientStorage.setAsync(msg.sound.key+"-image", msg.sound.image);
 
   } else if (msg.type === 'cancel') {
     figma.closePlugin();

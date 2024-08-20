@@ -13,7 +13,9 @@
   "networkAccess": {
     "allowedDomains": [
       "https://www.cs.ubc.ca",
-      "https://freesound.org/"
+      "https://freesound.org/",
+      "https://res.cloudinary.com/",
+      "https://cdn.freesound.org/"
     ]
   }
 }
