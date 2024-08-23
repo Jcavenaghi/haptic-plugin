@@ -41,10 +41,13 @@ figma.ui.onmessage = async msg => {
 
   } else if (msg.type === 'get-sound') {
     const data = await figma.clientStorage.getAsync(msg.key);
-    figma.ui.postMessage({ type: 'sound', key: msg.key, value: data });
+    const url = await figma.clientStorage.getAsync(msg.key+"-url");
+    const image = await figma.clientStorage.getAsync(msg.key+"-image");
+    const external = url && image;
+    figma.ui.postMessage({ type: 'sound', key: msg.key, value: data, url, image, external });
 
   } else if (msg.type === 'sound-uploaded') {
-    console.log(msg.sound);
+    await figma.clientStorage.setAsync(msg.sound.key, msg.sound.metaphors);
     await figma.clientStorage.setAsync(msg.sound.key+"-url", msg.sound.url);
     await figma.clientStorage.setAsync(msg.sound.key+"-image", msg.sound.image);
 

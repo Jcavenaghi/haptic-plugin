@@ -123,7 +123,8 @@
         cursor: pointer;
       }
 
-      input[type="file"].styled-input, .uploadInput {
+      input[type="file"].styled-input,
+      .uploadInput {
         width: 100%;
         padding: 12px 20px;
         margin: 8px 0;
@@ -134,7 +135,8 @@
         cursor: pointer;
       }
 
-      input[type="file"].styled-input:focus, .uploadInput:focus {
+      input[type="file"].styled-input:focus,
+      .uploadInput:focus {
         border: 2px solid #007bff;
         outline: none;
       }
@@ -165,7 +167,7 @@
     />
     <div id="sound-list"></div>
 
-    <!-- Modal Structure -->
+    <!-- Modal de editar -->
     <div id="editModal" class="modal">
       <div class="modal-content">
         <span class="close">&times;</span>
@@ -175,23 +177,38 @@
       </div>
     </div>
 
-    <!-- Modal add sound -->
+    <!-- Modal de añadir sonido -->
     <div id="uploadModal" class="modal">
-      <div class="modal-content" style="display: flex; flex-direction: column;">
+      <div class="modal-content" style="display: flex; flex-direction: column">
         <span class="close-upload">&times;</span>
         <h2>Subir un sonido</h2>
         <label for="name">Nombre</label>
-        <input type="text" id="name" class="uploadInput" style="height: 12px !important; cursor: text;">  
+        <input
+          type="text"
+          id="name"
+          class="uploadInput"
+          style="height: 12px !important; cursor: text"
+        />
         <label for="description">Descripción</label>
-        <input type="text" id="description" class="uploadInput" style="height: 12px !important; cursor: text;">  
+        <input
+          type="text"
+          id="description"
+          class="uploadInput"
+          style="height: 12px !important; cursor: text"
+        />
         <label for="tags">Metáforas</label>
-        <input type="text" id="tags" class="uploadInput" style="height: 12px !important; cursor: text;"> 
-        <input type="file" id="soundFile" class="uploadInput"/>
+        <input
+          type="text"
+          id="tags"
+          class="uploadInput"
+          style="height: 12px !important; cursor: text"
+        />
+        <input type="file" id="soundFile" class="uploadInput" />
         <button id="uploadSound">Subir</button>
       </div>
-    </div>    
+    </div>
 
-    <!-- Modal registration -->
+    <!-- Modal de registro -->
     <div id="registrationModal" class="modal">
       <div class="modal-content">
         <span class="close-register">&times;</span>
@@ -204,7 +221,7 @@
         </p>
         <button id="registerButton">
           <a
-            href="https://freesound.org/apiv2/oauth2/authorize/?client_id=	sk4SYvtNWujw8dwXsjub&response_type=code&state=xyz"
+            href="https://freesound.org/apiv2/oauth2/authorize/?client_id=sk4SYvtNWujw8dwXsjub&response_type=code&state=xyz"
             target="_blank"
             >Registrarse/Iniciar sesion</a
           >
@@ -220,7 +237,7 @@
     </div>
 
     <script>
-      //DEFAULT SOUNDS LIST
+      // Lista de sonidos default - VibViz
       sounds = [
         {
           name: "v-09-09-8-11",
@@ -1056,7 +1073,11 @@
         if (msg.type === "keys") {
           retrieveSounds(msg.keys);
         } else if (msg.type === "sound") {
-          updateSoundMetaphors(msg.key, msg.value);
+          if (msg.external) {
+            addExternalSound(msg.key, msg.value, msg.url, msg.image);
+          } else {
+            updateSoundMetaphors(msg.key, msg.value);
+          }
           displaySounds();
         } else if (msg.type === "result-token") {
           registered = msg.value;
@@ -1110,12 +1131,12 @@
                     <span>Name: ${sound.name}</span>
                     <span>Metaphors: ${sound.metaphors}</span>
                   </div>
-                  <button onclick="playSound('${sound.url}')" title="Play sound">
+                  <button onclick="playSound('${sound.url}')" title="Reproducir sonido">
                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-play-circle-fill" viewBox="0 0 16 16">
                       <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0M6.79 5.093A.5.5 0 0 0 6 5.5v5a.5.5 0 0 0 .79.407l3.5-2.5a.5.5 0 0 0 0-.814z"/>
                     </svg>
                   </button>
-                  <button onclick="editMetaphors('${sound.name}')" title="Edit metaphors">
+                  <button onclick="editMetaphors('${sound.name}')" title="Editar metaforas">
                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil-square" viewBox="0 0 16 16">
                       <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z"/>
                       <path fill-rule="evenodd" d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5z"/>
@@ -1159,16 +1180,16 @@
         };
       }
 
-      // Request keys on load
+      // Obtener keys en carga inicial
       parent.postMessage({ pluginMessage: { type: "get-keys" } }, "*");
 
-      // Check user registration
+      // Chequear registro de usuario
       parent.postMessage({ pluginMessage: { type: "check-token" } }, "*");
 
-      // Initialize tokens
+      // Inicializar tokens
       parent.postMessage({ pluginMessage: { type: "initialize-tokens" } }, "*");
 
-      // Show upload modal when add-sound button is clicked
+      // Mostrar modal de subida cuando el boton "Subir" es clickeado
       document.getElementById("add-sound").onclick = () => {
         parent.postMessage({ pluginMessage: { type: "check-token" } }, "*");
         if (!registered) {
@@ -1179,85 +1200,114 @@
         }
       };
 
-      // Close upload modal
+      // Cerrar modal de subida
       document.querySelector(".close-upload").onclick = () => {
         document.getElementById("uploadModal").style.display = "none";
       };
 
-      // Close upload modal
+      // Close modal de registro
       document.querySelector(".close-register").onclick = () => {
         document.getElementById("registrationModal").style.display = "none";
       };
 
-      // Handle file upload
+      // Funcion para subir sonido
       document.getElementById("uploadSound").onclick = async () => {
+        // Bloquer el boton de subida
+        document.getElementById("uploadSound").disabled = true;
+
         // Obtener los valores de los campos de entrada
         const name = document.getElementById("name").value.trim();
         const description = document.getElementById("description").value.trim();
         const tags = document.getElementById("tags").value.trim();
         const fileInput = document.getElementById("soundFile");
-        
-        // Validar que todos los campos estén completos
-        if (description === "" || tags === "" || fileInput.files.length === 0) {
-          alert("Todos los campos son obligatorios");
-        }
 
-        // Validar que haya mas de 3 tags
-        if (tags.split(" ").length < 3) {
-          alert("Por favor, ingrese al menos 3 tags.");
-          return;
-        }
-
-        // Validar que el nombre del sonido no exista en el arreglo de sounds
-        if (sounds.some((sound) => sound.name === name)) {
-          alert("El nombre ya existe en la lista de sonidos. Por favor, elija otro.");
-          return;
-        }
-
-        if (fileInput.files.length > 0) {
-          const file = fileInput.files[0];
-          const reader = new FileReader();
-          
-          const succeded = await uploadSound(file, tags, description, name);
-          if (succeded) {
-            // Limpiar los campos de entrada
-            document.getElementById("name").value = "";
-            document.getElementById("description").value = "";
-            document.getElementById("tags").value = "";
-            document.getElementById("soundFile").value = "";
-            alert(
-              "Sonido subido exitosamente! Aguarde unos minutos para que aparezca en la lista de sonidos."
-            );
-            sounds.push({
-              name: name,
-              url: "", // Placeholder for the URL
-              image: "https://res.cloudinary.com/cloudinary/image/upload/waveform_post.png", // Placeholder for the image
-              metaphors: tags,
-            });
-            displaySounds();            
-          } else {
-            alert("Error al cargar el sonido. Por favor, inténtelo de nuevo.");
+        try {
+          // Validar que todos los campos estén completos
+          if (
+            description === "" ||
+            tags === "" ||
+            fileInput.files.length === 0
+          ) {
+            alert("Todos los campos son obligatorios");
           }
 
-          document.getElementById("uploadModal").style.display = "none";
+          // Validar que haya mas de 3 tags
+          if (tags.split(" ").length < 3) {
+            alert("Por favor, ingrese al menos 3 tags.");
+            return;
+          }
 
-        } else {
-          alert("Seleccione un archivo para cargar.");
+          // Validar que el nombre del sonido no exista en el arreglo de sounds
+          if (sounds.some((sound) => sound.name === name)) {
+            alert(
+              "El nombre ya existe en la lista de sonidos. Por favor, elija otro."
+            );
+            return;
+          }
+
+          if (fileInput.files.length > 0) {
+            const file = fileInput.files[0];
+            const reader = new FileReader();
+
+            const succeded = await uploadSound(file, tags, description, name);
+
+            if (succeded) {
+              // Limpiar los campos de entrada
+              document.getElementById("name").value = "";
+              document.getElementById("description").value = "";
+              document.getElementById("tags").value = "";
+              document.getElementById("soundFile").value = "";
+              alert(
+                "Sonido subido exitosamente! Aguarde unos minutos para que aparezca en la lista de sonidos."
+              );
+
+              // Agregar un delay de 3 segundos para processing de sonido
+              setTimeout(() => {
+                displaySounds();
+              }, 3000);
+              
+            } else {
+              alert(
+                "Error al cargar el sonido. Por favor, inténtelo de nuevo."
+              );
+            }
+
+            document.getElementById("uploadModal").style.display = "none";
+          } else {
+            alert("Seleccione un archivo para cargar.");
+          }
+        } catch (error) {
+          console.error("Error uploading sound:", error);
+        } finally {
+          // Desbloquear el boton de subida
+          document.getElementById("uploadSound").disabled = false;
         }
       };
 
-      // Save Auth Code
+      // Guardar Auth Code
       document.getElementById("saveAuthCode").onclick = async () => {
-        const authCode = document.getElementById("authCode").value;
-        const valid = await saveAuthCode(authCode);
-        if (valid) {
-          registered = true;
-          document.getElementById("uploadModal").style.display = "block";
-          document.getElementById("registrationModal").style.display = "none";
-        } else {
-          alert("Código de autenticación inválido. Por favor, inténtelo de nuevo.");
-          // Clear the auth code
-          document.getElementById("authCode").value = "";
+        // Bloquear el boton de guardar
+        document.getElementById("saveAuthCode").disabled = true;
+
+        try {
+          const authCode = document.getElementById("authCode").value;
+          const valid = await saveAuthCode(authCode);
+          if (valid) {
+            registered = true;
+            document.getElementById("uploadModal").style.display = "block";
+            document.getElementById("registrationModal").style.display = "none";
+          } else {
+            alert(
+              "Código de autenticación inválido. Por favor, inténtelo de nuevo."
+            );
+            // Clear the auth code
+            document.getElementById("authCode").value = "";
+          }
+        } catch {
+          console.error("Error saving auth code");
+        } finally {
+          // Desbloquear el boton de guardar
+          document.getElementById("saveAuthCode").disabled = false;
         }
       };
 
@@ -1271,43 +1321,55 @@
         data.append("grant_type", "authorization_code");
         data.append("code", token);
 
-        const requestOptionsPost = {
+        const requestOptions = {
           method: "POST",
           body: data,
         };
 
-        const requestPost = await fetch(
+        const request = await fetch(
           "https://freesound.org/apiv2/oauth2/access_token/",
-          requestOptionsPost
+          requestOptions
         );
-        const responsePost = await requestPost.json();
+        const response = await request.json();
 
-        if (responsePost.access_token) {
+        if (response.access_token) {
           parent.postMessage(
-            { pluginMessage: { type: "save-token", token: responsePost } },
+            { pluginMessage: { type: "save-token", token: response } },
             "*"
           );
-          t0k3n = responsePost.access_token;
-
-          // Save unique id
-          const header = new Headers();
-          header.append("Authorization", "Bearer " + t0k3n);
-          const requestOptionsGet = {
-            method: "GET",
-            headers: header
-          };
-          const requestGet = await fetch(
-            "https://freesound.org/apiv2/me/",
-            requestOptionsGet
-          );
-
-          const responseGet = await requestGet.json();
-          uniqueId = responseGet.unique_id;
+          t0k3n = response.access_token;
+          await getUniqueId();
 
           return true;
         } else {
           return false;
         }
+      }
+
+      async function getUniqueId() {
+        // Guardar Unique ID
+        const header = new Headers();
+        header.append("Authorization", "Bearer " + t0k3n);
+        const requestOptions = {
+          method: "GET",
+          headers: header,
+        };
+        const request = await fetch(
+          "https://freesound.org/apiv2/me/",
+          requestOptions
+        );
+
+        const response = await request.json();
+        uniqueId = response.unique_id;
+      }
+
+      async function addExternalSound(name, metaphors, url, image) {
+        sounds.push({
+          name: name,
+          url: url,
+          image: image,
+          metaphors: metaphors,
+        });
       }
 
       async function refreshTokens(refreshToken) {
@@ -1337,6 +1399,9 @@
             "*"
           );
           t0k3n = response.access_token;
+          if (!uniqueId) {
+            await getUniqueId();
+          }
           return true;
         } else {
           console.log("Error refreshing token");
@@ -1358,30 +1423,50 @@
         const requestOptions = {
           method: "POST",
           headers: header,
-          body: data
+          body: data,
         };
 
         const request = await fetch(
           "https://freesound.org/apiv2/sounds/upload/",
           requestOptions
         );
-        const response = await request.json();
-        const key = response.id.toString();   
-        sound_data = {
-          key: key,
-          url: `https://cdn.freesound.org/previews/${key.slice(0,3)}/${key}_${uniqueId}-lq.mp3`,
-          image: `https://cdn.freesound.org/displays/${key.slice(0,3)}/${key}_${uniqueId}_wave_bw_M.png`
-        };
 
+        // Chequeo doble del UniqueID
+        if (!uniqueId) {
+          await getUniqueId();
+        }
+
+        const response = await request.json();
         if (response.id) {
+          const key = response.id.toString();
+          sound_data = {
+            key: key,
+            metaphors: tags,
+            url: `https://cdn.freesound.org/previews/${key.slice(
+              0,
+              3
+            )}/${key}_${uniqueId}-lq.mp3`,
+            image: `https://cdn.freesound.org/displays/${key.slice(
+              0,
+              3
+            )}/${key}_${uniqueId}_wave_bw_M.png`,
+          };
+
+          //Se lo agrega para verlo ahora
+          sounds.push({
+            name: key,
+            url: sound_data.url,
+            image: sound_data.image,
+            metaphors: tags,
+          });
+
           parent.postMessage(
             { pluginMessage: { type: "sound-uploaded", sound: sound_data } },
             "*"
           );
           return true;
         } else {
-          console.log("Error uploading sound");
-          console.log(response);
+          console.log("Error en la subida del archivo");
           return false;
         }
       }
