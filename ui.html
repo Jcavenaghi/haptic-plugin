@@ -1156,6 +1156,45 @@
         audio.play().catch((err) => console.error("Error playing sound:", err));
       }
 
+      // a partir del id de FreeSound, descarga el wav para luego convertirlo en array
+      async function getSoundFromFreesound(soundId) {
+        // soundId= 750345
+        // el soundId de arriba es el unico que no esta en moderation del usuario elpepe. 
+        //si quieren probar la funcion para que ande, descomenten esa linea 
+        //y clickeen play en algun sonido subido a freesound
+        const header = new Headers();
+        header.append("Authorization", "Bearer " + t0k3n);
+        const requestOptions = {
+          method: "GET",
+          headers: header,
+        };
+        const request = await fetch(
+          `https://freesound.org/apiv2/sounds/${soundId}/download/`, //este es el intento de descarga que no funciona
+          requestOptions
+        );
+        if (request.ok) {
+          // obtener el archivo como un blob
+          const fileBlob = await request.blob();
+          console.log(fileBlob)
+          await getArraySound(fileBlob);          
+        }
+      }
+
+      // a partir de un wav, retorna el array de valores que lo representa
+      async function getArraySound(file) {
+        const arrayBuffer = await file.arrayBuffer();
+          const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+          const audioBuffer = await audioContext.decodeAudioData(arrayBuffer);
+          const samples = audioBuffer.getChannelData(0);
+          const sampleRate = audioBuffer.sampleRate;
+          const intervalSeconds = 0.05; // Duración del fragmento en segundos
+          const intervalSamples = Math.floor(intervalSeconds * sampleRate); // Número de muestras por fragmento
+          // Calcular el número de fragmentos y crear un array de ese tamaño
+          const fragmentCount = Math.ceil(samples.length / intervalSamples);
+          const concatenated = Float32Array.from({length: fragmentCount * intervalSamples}, (_, i) => samples[i] || 0);
+          return concatenated
+        }
+
       function editMetaphors(soundName) {
         const sound = sounds.find((s) => s.name === soundName);
         document.getElementById("metaphorsInput").value = sound.metaphors;
