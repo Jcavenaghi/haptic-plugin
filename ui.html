@@ -1142,6 +1142,11 @@
                       <path fill-rule="evenodd" d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5z"/>
                     </svg>
                   </button>
+                  <button onclick="getSoundToArray('${sound.url}')" title="Agregar al prototipo">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-plus" viewBox="0 0 16 16">
+                      <path d="M8 1a.5.5 0 0 1 .5.5v6h6a.5.5 0 0 1 0 1h-6v6a.5.5 0 0 1-1 0v-6h-6a.5.5 0 0 1 0-1h6v-6A.5.5 0 0 1 8 1z"/>
+                    </svg>
+                  </button>
                 </div>
               `;
         });
@@ -1157,43 +1162,49 @@
       }
 
       // a partir del id de FreeSound, descarga el wav para luego convertirlo en array
-      async function getSoundFromFreesound(soundId) {
-        // soundId= 750345
-        // el soundId de arriba es el unico que no esta en moderation del usuario elpepe. 
-        //si quieren probar la funcion para que ande, descomenten esa linea 
-        //y clickeen play en algun sonido subido a freesound
+      async function getSoundToArray(soundUrl) {
         const header = new Headers();
         header.append("Authorization", "Bearer " + t0k3n);
+        // Add the X-Requested-With header to satisfy CORS Anywhere requirements
+        header.append("X-Requested-With", "XMLHttpRequest");
         const requestOptions = {
           method: "GET",
           headers: header,
         };
+
         const request = await fetch(
-          `https://freesound.org/apiv2/sounds/${soundId}/download/`, //este es el intento de descarga que no funciona
+          `https://cors-anywhere.herokuapp.com/${soundUrl}`, // Use CORS Anywhere proxy
           requestOptions
         );
         if (request.ok) {
-          // obtener el archivo como un blob
+          // Get the file as a blob
           const fileBlob = await request.blob();
-          console.log(fileBlob)
-          await getArraySound(fileBlob);          
+          console.log(fileBlob);
+          const array = await getArraySound(fileBlob);
+          console.log(array);
+        } else {
+          console.error('Error fetching sound:', request.statusText);
         }
       }
 
       // a partir de un wav, retorna el array de valores que lo representa
       async function getArraySound(file) {
         const arrayBuffer = await file.arrayBuffer();
-          const audioContext = new (window.AudioContext || window.webkitAudioContext)();
-          const audioBuffer = await audioContext.decodeAudioData(arrayBuffer);
-          const samples = audioBuffer.getChannelData(0);
-          const sampleRate = audioBuffer.sampleRate;
-          const intervalSeconds = 0.05; // Duración del fragmento en segundos
-          const intervalSamples = Math.floor(intervalSeconds * sampleRate); // Número de muestras por fragmento
-          // Calcular el número de fragmentos y crear un array de ese tamaño
-          const fragmentCount = Math.ceil(samples.length / intervalSamples);
-          const concatenated = Float32Array.from({length: fragmentCount * intervalSamples}, (_, i) => samples[i] || 0);
-          return concatenated
-        }
+        const audioContext = new (window.AudioContext ||
+          window.webkitAudioContext)();
+        const audioBuffer = await audioContext.decodeAudioData(arrayBuffer);
+        const samples = audioBuffer.getChannelData(0);
+        const sampleRate = audioBuffer.sampleRate;
+        const intervalSeconds = 0.1; // Duración del fragmento en segundos
+        const intervalSamples = Math.floor(intervalSeconds * sampleRate); // Número de muestras por fragmento
+        // Calcular el número de fragmentos y crear un array de ese tamaño
+        const fragmentCount = Math.ceil(samples.length / intervalSamples);
+        const concatenated = Float32Array.from(
+          { length: fragmentCount * intervalSamples },
+          (_, i) => samples[i] || 0
+        );
+        return concatenated;
+      }
 
       function editMetaphors(soundName) {
         const sound = sounds.find((s) => s.name === soundName);
@@ -1304,7 +1315,6 @@
               setTimeout(() => {
                 displaySounds();
               }, 3000);
-              
             } else {
               alert(
                 "Error al cargar el sonido. Por favor, inténtelo de nuevo."
