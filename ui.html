@@ -1053,20 +1053,24 @@
         headers: header,
       };
 
-      const request = await fetch(
-        `https://cors-anywhere.herokuapp.com/${soundUrl}`, // Use CORS Anywhere proxy
-        requestOptions
-      );
-      if (request.ok) {
-        // Get the file as a blob
-        const fileBlob = await request.blob();
-        console.log(fileBlob);
-        const array = await getArraySound(fileBlob);
-        console.log(array);
-      } else {
-        console.error('Error fetching sound:', request.statusText);
+        const request = await fetch(
+          `https://cors-anywhere.herokuapp.com/${soundUrl}`, // Use CORS Anywhere proxy
+          requestOptions
+        );
+        if (request.ok) {
+          // Get the file as a blob
+          const fileBlob = await request.blob();
+          console.log(fileBlob);
+          const array = await getArraySound(fileBlob);
+          
+          parent.postMessage(
+            { pluginMessage: { type: "add-to-figma", array: array } },
+            "*"
+          );
+        } else {
+          console.error("Error fetching sound:", request.statusText);
+        }
       }
-    }
 
     async function getArraySound(file, threshold = 0.5, sampleStep = 100) {
       const context = new(window.AudioContext || window.webkitAudioContext)();
@@ -1115,7 +1119,7 @@
 
       // Agregar la última vibración o pausa si quedó algo pendiente
       if (currentDuration > 0) pattern.push(currentDuration);
-      alert(pattern);
+      console.log(pattern);
       return pattern;
     }
 
