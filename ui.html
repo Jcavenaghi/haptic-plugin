@@ -410,7 +410,8 @@
           name: "v-09-10-6-5",
           url: "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-09-10-6-5.wav",
           image: "https://www.cs.ubc.ca/~seifi/VibViz/PNGglyph/v-09-10-6-5.png",
-          metaphors: "tocando,instrumentos musicales,batería,latido del corazón,reloj",
+          metaphors:
+            "tocando,instrumentos musicales,batería,latido del corazón,reloj",
         },
         {
           name: "v-09-10-6-59",
@@ -723,7 +724,8 @@
           url: "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-09-18-4-12.wav",
           image:
             "https://www.cs.ubc.ca/~seifi/VibViz/PNGglyph/v-09-18-4-12.png",
-          metaphors: "saltando,animal,juego,instrumentos musicales,batería,alarma",
+          metaphors:
+            "saltando,animal,juego,instrumentos musicales,batería,alarma",
         },
         {
           name: "v-09-18-4-15",
@@ -737,7 +739,8 @@
           url: "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-09-18-4-16.wav",
           image:
             "https://www.cs.ubc.ca/~seifi/VibViz/PNGglyph/v-09-18-4-16.png",
-          metaphors: "bip,campana,juego,latido del corazón,teléfono,ranas,animal",
+          metaphors:
+            "bip,campana,juego,latido del corazón,teléfono,ranas,animal",
         },
         {
           name: "v-09-18-4-18",
@@ -858,7 +861,8 @@
           url: "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-10-10-1-18.wav",
           image:
             "https://www.cs.ubc.ca/~seifi/VibViz/PNGglyph/v-10-10-1-18.png",
-          metaphors: "código morse,alarma,bip,juego,latido del corazón,palpando",
+          metaphors:
+            "código morse,alarma,bip,juego,latido del corazón,palpando",
         },
         {
           name: "v-10-10-1-21",
@@ -947,7 +951,8 @@
           url: "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-10-21-3-45.wav",
           image:
             "https://www.cs.ubc.ca/~seifi/VibViz/PNGglyph/v-10-21-3-45.png",
-          metaphors: "alarma,teléfono,instrumentos musicales,batería,juego,celebración",
+          metaphors:
+            "alarma,teléfono,instrumentos musicales,batería,juego,celebración",
         },
         {
           name: "v-10-21-3-7",
@@ -990,7 +995,8 @@
           url: "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-10-23-1-24.wav",
           image:
             "https://www.cs.ubc.ca/~seifi/VibViz/PNGglyph/v-10-23-1-24.png",
-          metaphors: "motor,pistola,zumbido,animal,yendo o viniendo,celebración",
+          metaphors:
+            "motor,pistola,zumbido,animal,yendo o viniendo,celebración",
         },
         {
           name: "v-10-28-7-22",
@@ -1085,6 +1091,9 @@
           if (registered) {
             refreshTokens(msg.tokens.refresh_token);
           }
+        } else if (msg.type === 'open-url') {
+          console.log("ABRIR URL", msg.url);
+          window.open(msg.url, '_blank');
         } else {
           displaySounds();
         }
@@ -1181,9 +1190,13 @@
           const fileBlob = await request.blob();
           console.log(fileBlob);
           const array = await getArraySound(fileBlob);
-          console.log(array);
+          
+          parent.postMessage(
+            { pluginMessage: { type: "add-to-figma", array: array } },
+            "*"
+          );
         } else {
-          console.error('Error fetching sound:', request.statusText);
+          console.error("Error fetching sound:", request.statusText);
         }
       }
 
@@ -1194,16 +1207,26 @@
           window.webkitAudioContext)();
         const audioBuffer = await audioContext.decodeAudioData(arrayBuffer);
         const samples = audioBuffer.getChannelData(0);
-        const sampleRate = audioBuffer.sampleRate;
-        const intervalSeconds = 0.1; // Duración del fragmento en sepistolados
-        const intervalSamples = Math.floor(intervalSeconds * sampleRate); // Número de muestras por fragmento
-        // Calcular el número de fragmentos y crear un array de ese tamaño
-        const fragmentCount = Math.ceil(samples.length / intervalSamples);
-        const concatenated = Float32Array.from(
-          { length: fragmentCount * intervalSamples },
-          (_, i) => samples[i] || 0
-        );
-        return concatenated;
+
+        const interval = 0.01; // time interval in seconds
+        const sampleRate = audioContext.sampleRate;
+        const samplesPerInterval = Math.floor(sampleRate * interval);
+
+        const intensities = [];
+        for (let i = 0; i < samples.length; i += samplesPerInterval) {
+          let sum = 0;
+          for (
+            let j = 0;
+            j < samplesPerInterval && i + j < samples.length;
+            j++
+          ) {
+            sum += Math.abs(samples[i + j]);
+          }
+          const averageIntensity = sum / samplesPerInterval;
+          intensities.push(averageIntensity);
+        }
+
+        return intensities.map(intensity => intensity * 100); // Scale intensity to milliseconds
       }
 
       function editMetaphors(soundName) {
