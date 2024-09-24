@@ -1099,7 +1099,7 @@
             currentDuration += msPerStep;
           } else {
             // Si estábamos en pausa, guardamos el tiempo de pausa y comenzamos a vibrar
-            if (currentDuration > 0) pattern.push(currentDuration); // Agregar duración de pausa
+            if (currentDuration > 0) pattern.push(Math.round(currentDuration)); // Agregar duración de pausa
             vibrate = true; // Cambiamos a modo vibración
             currentDuration = msPerStep; // Empezamos a contar tiempo de vibración
           }
@@ -1107,7 +1107,7 @@
           // Si la amplitud es menor o igual al umbral, estamos en un período de pausa
           if (vibrate) {
             // Si estábamos vibrando, guardamos el tiempo de vibración y comenzamos a pausar
-            if (currentDuration > 0) pattern.push(currentDuration); // Agregar duración de vibración
+            if (currentDuration > 0) pattern.push(Math.round(currentDuration)); // Agregar duración de vibración
             vibrate = false; // Cambiamos a modo pausa
             currentDuration = msPerStep; // Empezamos a contar tiempo de pausa
           } else {
@@ -1118,7 +1118,7 @@
       }
 
       // Agregar la última vibración o pausa si quedó algo pendiente
-      if (currentDuration > 0) pattern.push(currentDuration);
+      if (currentDuration > 0) pattern.push(Math.round(currentDuration));
       console.log(pattern);
       return pattern;
     }
