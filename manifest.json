@@ -15,7 +15,8 @@
       "https://www.cs.ubc.ca",
       "https://freesound.org/",
       "https://res.cloudinary.com/",
-      "https://cdn.freesound.org/"
+      "https://cdn.freesound.org/",
+      "https://cors-anywhere.herokuapp.com"
     ]
   }
 }

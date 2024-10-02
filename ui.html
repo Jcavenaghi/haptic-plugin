@@ -1,1135 +1,1016 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <meta charset="utf-8" />
-    <title>Plugin háptico</title>
-    <style>
-      body {
-        font-family: Arial, sans-serif;
-        margin: 20px;
-      }
-      h2 {
-        text-align: center;
-      }
-      .sound-item {
-        margin: 15px 0;
-        display: flex;
-        align-items: center;
-        border: 1px solid #ddd;
-        padding: 10px;
-        border-radius: 8px;
-        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-      }
-      .sound-image {
-        margin-right: 20px;
-      }
-      .sound-image img {
-        border-radius: 8px;
-      }
-      .sound-info {
-        flex-grow: 1;
-      }
-      .sound-info span {
-        display: block;
-        margin: 5px 0;
-      }
-      button {
-        margin-left: 10px;
-        padding: 5px 10px;
-        background-color: #007bff;
-        color: white;
-        border: none;
-        border-radius: 4px;
-        cursor: pointer;
-      }
-      button:hover {
-        background-color: #0056b3;
-      }
-      .modal {
-        display: none;
-        position: fixed;
-        z-index: 1;
-        left: 0;
-        top: 0;
-        width: 100%;
-        height: 100%;
-        overflow: auto;
-        background-color: rgba(0, 0, 0, 0.4);
-      }
-      .modal-content {
-        background-color: #fefefe;
-        margin: 15% auto;
-        padding: 20px;
-        border: 1px solid #888;
-        width: 80%;
-        border-radius: 8px;
-      }
-      .close {
-        color: #aaa;
-        float: right;
-        font-size: 28px;
-        font-weight: bold;
-      }
-      .close:hover,
-      .close:focus {
-        color: black;
-        text-decoration: none;
-        cursor: pointer;
-      }
-      input[type="text"]#metaphorFilter {
-        width: 100%;
-        padding: 12px 20px;
-        margin: 8px 0;
-        box-sizing: border-box;
-        font-size: 16px;
-        border: 2px solid #ccc;
-        border-radius: 4px;
-      }
 
-      .textUpload {
-        width: 100%;
-        padding: 12px 20px;
-        margin: 8px 0;
-        box-sizing: border-box;
-        font-size: 12px;
-        border: 2px solid #ccc;
-        border-radius: 4px;
-      }
+<head>
+  <meta charset="utf-8" />
+  <title>DiseñoVibrante</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 20px;
+    }
 
-      input[type="text"]#metaphorFilter:focus {
-        border: 2px solid #007bff;
-        outline: none;
-      }
-      #add-sound {
-        float: right;
-      }
-      .close-upload,
-      .close-register {
-        color: #aaa;
-        float: right;
-        font-size: 28px;
-        font-weight: bold;
-        margin-top: -10px;
-        margin-right: -10px;
-        cursor: pointer;
-      }
+    h2 {
+      text-align: center;
+    }
 
-      .close-upload:hover,
-      .close-upload:focus,
-      .close-register:hover,
-      .close-register:focus {
-        color: black;
-        text-decoration: none;
-        cursor: pointer;
-      }
+    .sound-item {
+      margin: 15px 0;
+      display: flex;
+      align-items: center;
+      border: 1px solid #ddd;
+      padding: 10px;
+      border-radius: 8px;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
 
-      input[type="file"].styled-input,
-      .uploadInput {
-        width: 100%;
-        padding: 12px 20px;
-        margin: 8px 0;
-        box-sizing: border-box;
-        font-size: 14px;
-        border: 2px solid #ccc;
-        border-radius: 4px;
-        cursor: pointer;
-      }
+    .sound-image {
+      margin-right: 20px;
+    }
 
-      input[type="file"].styled-input:focus,
-      .uploadInput:focus {
-        border: 2px solid #007bff;
-        outline: none;
-      }
-    </style>
-  </head>
+    .sound-image img {
+      border-radius: 8px;
+    }
 
-  <body>
-    <h2>Plugin háptico</h2>
-    <button id="add-sound" title="Add sound">
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        width="16"
-        height="16"
-        fill="currentColor"
-        class="bi bi-plus-circle-fill"
-        viewBox="0 0 16 16"
-      >
-        <path
-          d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0M8.5 4.5a.5.5 0 0 0-1 0v3h-3a.5.5 0 0 0 0 1h3v3a.5.5 0 0 0 1 0v-3h3a.5.5 0 0 0 0-1h-3z"
-        />
-      </svg>
-    </button>
-    <input
-      type="text"
-      id="metaphorFilter"
-      placeholder="Filtrar por metáfora"
-      oninput="filterSounds()"
-    />
-    <div id="sound-list"></div>
+    .sound-info {
+      flex-grow: 1;
+    }
 
-    <!-- Modal de editar -->
-    <div id="editModal" class="modal">
-      <div class="modal-content">
-        <span class="close">&times;</span>
-        <h2>Editar metáforas</h2>
-        <textarea id="metaphorsInput" rows="4" cols="50"></textarea><br />
-        <button id="saveMetaphors">Guardar</button>
-      </div>
+    .sound-info span {
+      display: block;
+      margin: 5px 0;
+    }
+
+    button {
+      margin-left: 10px;
+      padding: 5px 10px;
+      background-color: #007bff;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #0056b3;
+    }
+
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 1;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      overflow: auto;
+      background-color: rgba(0, 0, 0, 0.4);
+    }
+
+    .modal-content {
+      background-color: #fefefe;
+      margin: 15% auto;
+      padding: 20px;
+      border: 1px solid #888;
+      width: 80%;
+      border-radius: 8px;
+    }
+
+    .close {
+      color: #aaa;
+      float: right;
+      font-size: 28px;
+      font-weight: bold;
+    }
+
+    .close:hover,
+    .close:focus {
+      color: black;
+      text-decoration: none;
+      cursor: pointer;
+    }
+
+    input[type="text"]#metaphorFilter {
+      width: 100%;
+      padding: 12px 20px;
+      margin: 8px 0;
+      box-sizing: border-box;
+      font-size: 16px;
+      border: 2px solid #ccc;
+      border-radius: 4px;
+    }
+
+    .textUpload {
+      width: 100%;
+      padding: 12px 20px;
+      margin: 8px 0;
+      box-sizing: border-box;
+      font-size: 12px;
+      border: 2px solid #ccc;
+      border-radius: 4px;
+    }
+
+    input[type="text"]#metaphorFilter:focus {
+      border: 2px solid #007bff;
+      outline: none;
+    }
+
+    #add-sound {
+      float: right;
+    }
+
+    .close-upload,
+    .close-register {
+      color: #aaa;
+      float: right;
+      font-size: 28px;
+      font-weight: bold;
+      margin-top: -10px;
+      margin-right: -10px;
+      cursor: pointer;
+    }
+
+    .close-upload:hover,
+    .close-upload:focus,
+    .close-register:hover,
+    .close-register:focus {
+      color: black;
+      text-decoration: none;
+      cursor: pointer;
+    }
+
+    input[type="file"].styled-input,
+    .uploadInput {
+      width: 100%;
+      padding: 12px 20px;
+      margin: 8px 0;
+      box-sizing: border-box;
+      font-size: 14px;
+      border: 2px solid #ccc;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+
+    input[type="file"].styled-input:focus,
+    .uploadInput:focus {
+      border: 2px solid #007bff;
+      outline: none;
+    }
+  </style>
+</head>
+
+<body>
+  <h2>Diseño vibrante</h2>
+  <button id="add-sound" title="Add sound">
+    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-plus-circle-fill"
+      viewBox="0 0 16 16">
+      <path
+        d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0M8.5 4.5a.5.5 0 0 0-1 0v3h-3a.5.5 0 0 0 0 1h3v3a.5.5 0 0 0 1 0v-3h3a.5.5 0 0 0 0-1h-3z" />
+    </svg>
+  </button>
+  <input type="text" id="metaphorFilter" placeholder="Filtrar por metáfora" oninput="filterSounds()" />
+  <div id="sound-list"></div>
+
+  <!-- Modal de editar -->
+  <div id="editModal" class="modal">
+    <div class="modal-content">
+      <span class="close">&times;</span>
+      <h2>Editar metáforas</h2>
+      <textarea id="metaphorsInput" rows="4" cols="50"></textarea><br />
+      <button id="saveMetaphors">Guardar</button>
     </div>
+  </div>
 
-    <!-- Modal de añadir sonido -->
-    <div id="uploadModal" class="modal">
-      <div class="modal-content" style="display: flex; flex-direction: column">
-        <span class="close-upload">&times;</span>
-        <h2>Subir un sonido</h2>
-        <label for="name">Nombre</label>
-        <input
-          type="text"
-          id="name"
-          class="uploadInput"
-          style="height: 12px !important; cursor: text"
-        />
-        <label for="description">Descripción</label>
-        <input
-          type="text"
-          id="description"
-          class="uploadInput"
-          style="height: 12px !important; cursor: text"
-        />
-        <label for="tags">Metáforas</label>
-        <input
-          type="text"
-          id="tags"
-          class="uploadInput"
-          style="height: 12px !important; cursor: text"
-        />
-        <input type="file" id="soundFile" class="uploadInput" />
-        <button id="uploadSound">Subir</button>
-      </div>
+  <!-- Modal de añadir sonido -->
+  <div id="uploadModal" class="modal">
+    <div class="modal-content" style="display: flex; flex-direction: column">
+      <span class="close-upload">&times;</span>
+      <h2>Subir un sonido</h2>
+      <label for="name">Nombre</label>
+      <input type="text" id="name" class="uploadInput" style="height: 12px !important; cursor: text" />
+      <label for="description">Descripción</label>
+      <input type="text" id="description" class="uploadInput" style="height: 12px !important; cursor: text" />
+      <label for="tags">Metáforas</label>
+      <input type="text" id="tags" class="uploadInput" style="height: 12px !important; cursor: text" />
+      <input type="file" id="soundFile" class="uploadInput" />
+      <button id="uploadSound">Subir</button>
     </div>
+  </div>
 
-    <!-- Modal de registro -->
-    <div id="registrationModal" class="modal">
-      <div class="modal-content">
-        <span class="close-register">&times;</span>
-        <h2>Por favor registrese en FreeSound</h2>
-        <p>
-          Tienes que registrarte en FreeSound para poder subir sonidos. Por
-          favor, haga clic en el botón de abajo para registrarse o iniciar
-          sesión. Después de registrarse ingrese el 'Código de Autorización'
-          para poder cargar sonidos.
-        </p>
-        <button id="registerButton">
-          <a
-            href="https://freesound.org/apiv2/oauth2/authorize/?client_id=sk4SYvtNWujw8dwXsjub&response_type=code&state=xyz"
-            target="_blank"
-            >Registrarse/Iniciar sesion</a
-          >
-        </button>
-        <input
-          type="text"
-          id="authCode"
-          placeholder="Authorization code"
-          required
-        />
-        <button id="saveAuthCode">Guardar</button>
-      </div>
+  <!-- Modal de registro -->
+  <div id="registrationModal" class="modal">
+    <div class="modal-content">
+      <span class="close-register">&times;</span>
+      <h2>Por favor registrese en FreeSound</h2>
+      <p>
+        Tienes que registrarte en FreeSound para poder subir sonidos. Por
+        favor, haga clic en el botón de abajo para registrarse o iniciar
+        sesión. Después de registrarse ingrese el 'Código de Autorización'
+        para poder cargar sonidos.
+      </p>
+      <button id="registerButton">
+        <a href="https://freesound.org/apiv2/oauth2/authorize/?client_id=sk4SYvtNWujw8dwXsjub&response_type=code&state=xyz"
+          target="_blank">Registrarse/Iniciar sesion</a>
+      </button>
+      <input type="text" id="authCode" placeholder="Authorization code" required />
+      <button id="saveAuthCode">Guardar</button>
     </div>
+  </div>
 
-    <script>
-      // Lista de sonidos default - VibViz
-      sounds = [
-        {
-          name: "v-09-09-8-11",
-          url: "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-09-09-8-11.wav",
-          image:
-            "https://www.cs.ubc.ca/~seifi/VibViz/PNGglyph/v-09-09-8-11.png",
-          metaphors: "hearbeat,pulsing,tapping,poking",
-        },
-        {
-          name: "v-09-09-8-20",
-          url: "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-09-09-8-20.wav",
-          image:
-            "https://www.cs.ubc.ca/~seifi/VibViz/PNGglyph/v-09-09-8-20.png",
-          metaphors: "hearbeat,tapping,animal",
-        },
-        {
-          name: "v-09-09-8-24",
-          url: "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-09-09-8-24.wav",
-          image:
-            "https://www.cs.ubc.ca/~seifi/VibViz/PNGglyph/v-09-09-8-24.png",
-          metaphors: "engine,coming or going",
-        },
-        {
-          name: "v-09-10-11-55",
-          url: "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-09-10-11-55.wav",
-          image:
-            "https://www.cs.ubc.ca/~seifi/VibViz/PNGglyph/v-09-10-11-55.png",
-          metaphors: "alarm,jumping,sliding,phone",
-        },
-        {
-          name: "v-09-10-11-58",
-          url: "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-09-10-11-58.wav",
-          image:
-            "https://www.cs.ubc.ca/~seifi/VibViz/PNGglyph/v-09-10-11-58.png",
-          metaphors: "purring,snoring,animal,coming or going",
-        },
-        {
-          name: "v-09-10-12-11",
-          url: "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-09-10-12-11.wav",
-          image:
-            "https://www.cs.ubc.ca/~seifi/VibViz/PNGglyph/v-09-10-12-11.png",
-          metaphors: "alarm,electric shock",
-        },
-        {
-          name: "v-09-10-12-13",
-          url: "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-09-10-12-13.wav",
-          image:
-            "https://www.cs.ubc.ca/~seifi/VibViz/PNGglyph/v-09-10-12-13.png",
-          metaphors:
-            "alarm,tapping,musical instruments,drums,beep,phone,celebration",
-        },
-        {
-          name: "v-09-10-12-16",
-          url: "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-09-10-12-16.wav",
-          image:
-            "https://www.cs.ubc.ca/~seifi/VibViz/PNGglyph/v-09-10-12-16.png",
-          metaphors: "musical instruments,beep",
-        },
-        {
-          name: "v-09-10-12-2",
-          url: "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-09-10-12-2.wav",
-          image:
-            "https://www.cs.ubc.ca/~seifi/VibViz/PNGglyph/v-09-10-12-2.png",
-          metaphors: "snoring,buzz",
-        },
-        {
-          name: "v-09-10-12-6",
-          url: "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-09-10-12-6.wav",
-          image:
-            "https://www.cs.ubc.ca/~seifi/VibViz/PNGglyph/v-09-10-12-6.png",
-          metaphors: "snoring,bell,walking,alarm,coming or going",
-        },
-        {
-          name: "v-09-10-12-9",
-          url: "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-09-10-12-9.wav",
-          image:
-            "https://www.cs.ubc.ca/~seifi/VibViz/PNGglyph/v-09-10-12-9.png",
-          metaphors: "tapping,alarm,musical instruments,drums,animal",
-        },
-        {
-          name: "v-09-10-3-52",
-          url: "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-09-10-3-52.wav",
-          image:
-            "https://www.cs.ubc.ca/~seifi/VibViz/PNGglyph/v-09-10-3-52.png",
-          metaphors: "tapping,morse code,phone,alarm",
-        },
-        {
-          name: "v-09-10-3-56",
-          url: "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-09-10-3-56.wav",
-          image:
-            "https://www.cs.ubc.ca/~seifi/VibViz/PNGglyph/v-09-10-3-56.png",
-          metaphors: "gun",
-        },
-        {
-          name: "v-09-10-4-2",
-          url: "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-09-10-4-2.wav",
-          image: "https://www.cs.ubc.ca/~seifi/VibViz/PNGglyph/v-09-10-4-2.png",
-          metaphors: "tapping,pulsing",
-        },
-        {
-          name: "v-09-10-4-20",
-          url: "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-09-10-4-20.wav",
-          image:
-            "https://www.cs.ubc.ca/~seifi/VibViz/PNGglyph/v-09-10-4-20.png",
-          metaphors: "hearbeat,pawing,animal,tapping",
-        },
-        {
-          name: "v-09-10-4-23",
-          url: "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-09-10-4-23.wav",
-          image:
-            "https://www.cs.ubc.ca/~seifi/VibViz/PNGglyph/v-09-10-4-23.png",
-          metaphors: "hearbeat,tapping,pawing,clock",
-        },
-        {
-          name: "v-09-10-4-25",
-          url: "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-09-10-4-25.wav",
-          image:
-            "https://www.cs.ubc.ca/~seifi/VibViz/PNGglyph/v-09-10-4-25.png",
-          metaphors: "engine,hearbeat,tapping",
-        },
-        {
-          name: "v-09-10-4-6",
-          url: "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-09-10-4-6.wav",
-          image: "https://www.cs.ubc.ca/~seifi/VibViz/PNGglyph/v-09-10-4-6.png",
-          metaphors: "tapping,coming or going,animal",
-        },
-        {
-          name: "v-09-10-6-16",
-          url: "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-09-10-6-16.wav",
-          image:
-            "https://www.cs.ubc.ca/~seifi/VibViz/PNGglyph/v-09-10-6-16.png",
-          metaphors: "tapping,beep,hearbeat",
-        },
-        {
-          name: "v-09-10-6-22",
-          url: "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-09-10-6-22.wav",
-          image:
-            "https://www.cs.ubc.ca/~seifi/VibViz/PNGglyph/v-09-10-6-22.png",
-          metaphors: "gun,electric shock,engine,riding",
-        },
-        {
-          name: "v-09-10-6-27",
-          url: "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-09-10-6-27.wav",
-          image:
-            "https://www.cs.ubc.ca/~seifi/VibViz/PNGglyph/v-09-10-6-27.png",
-          metaphors: "tapping,beep,alarm,musical instruments,drums",
-        },
-        {
-          name: "v-09-10-6-38",
-          url: "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-09-10-6-38.wav",
-          image:
-            "https://www.cs.ubc.ca/~seifi/VibViz/PNGglyph/v-09-10-6-38.png",
-          metaphors: "getting close,engine",
-        },
-        {
-          name: "v-09-10-6-43",
-          url: "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-09-10-6-43.wav",
-          image:
-            "https://www.cs.ubc.ca/~seifi/VibViz/PNGglyph/v-09-10-6-43.png",
-          metaphors: "pulsing,game,tapping,snoring,sliding",
-        },
-        {
-          name: "v-09-10-6-46",
-          url: "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-09-10-6-46.wav",
-          image:
-            "https://www.cs.ubc.ca/~seifi/VibViz/PNGglyph/v-09-10-6-46.png",
-          metaphors: "",
-        },
-        {
-          name: "v-09-10-6-5",
-          url: "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-09-10-6-5.wav",
-          image: "https://www.cs.ubc.ca/~seifi/VibViz/PNGglyph/v-09-10-6-5.png",
-          metaphors: "tapping,musical instruments,drums,hearbeat,clock",
-        },
-        {
-          name: "v-09-10-6-59",
-          url: "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-09-10-6-59.wav",
-          image:
-            "https://www.cs.ubc.ca/~seifi/VibViz/PNGglyph/v-09-10-6-59.png",
-          metaphors: "engine,buzz,animal,riding,shaking",
-        },
-        {
-          name: "v-09-10-7-34",
-          url: "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-09-10-7-34.wav",
-          image:
-            "https://www.cs.ubc.ca/~seifi/VibViz/PNGglyph/v-09-10-7-34.png",
-          metaphors: "tapping,poking,hearbeat",
-        },
-        {
-          name: "v-09-10-7-36",
-          url: "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-09-10-7-36.wav",
-          image:
-            "https://www.cs.ubc.ca/~seifi/VibViz/PNGglyph/v-09-10-7-36.png",
-          metaphors: "buzz,animal,coming or going,bell",
-        },
-        {
-          name: "v-09-10-7-9",
-          url: "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-09-10-7-9.wav",
-          image: "https://www.cs.ubc.ca/~seifi/VibViz/PNGglyph/v-09-10-7-9.png",
-          metaphors: "tapping",
-        },
-        {
-          name: "v-09-10-8-5",
-          url: "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-09-10-8-5.wav",
-          image: "https://www.cs.ubc.ca/~seifi/VibViz/PNGglyph/v-09-10-8-5.png",
-          metaphors: "game,poking,alarm",
-        },
-        {
-          name: "v-09-10-8-7",
-          url: "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-09-10-8-7.wav",
-          image: "https://www.cs.ubc.ca/~seifi/VibViz/PNGglyph/v-09-10-8-7.png",
-          metaphors: "game,pulsing,poking,tapping,buzz",
-        },
-        {
-          name: "v-09-11-3-12",
-          url: "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-09-11-3-12.wav",
-          image:
-            "https://www.cs.ubc.ca/~seifi/VibViz/PNGglyph/v-09-11-3-12.png",
-          metaphors: "alarm,phone,SOS",
-        },
-        {
-          name: "v-09-11-3-16",
-          url: "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-09-11-3-16.wav",
-          image:
-            "https://www.cs.ubc.ca/~seifi/VibViz/PNGglyph/v-09-11-3-16.png",
-          metaphors: "alarm,phone,musical instruments,drums",
-        },
-        {
-          name: "v-09-11-3-19",
-          url: "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-09-11-3-19.wav",
-          image:
-            "https://www.cs.ubc.ca/~seifi/VibViz/PNGglyph/v-09-11-3-19.png",
-          metaphors: "morse code,horn,game,phone,alarm",
-        },
-        {
-          name: "v-09-11-3-21",
-          url: "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-09-11-3-21.wav",
-          image:
-            "https://www.cs.ubc.ca/~seifi/VibViz/PNGglyph/v-09-11-3-21.png",
-          metaphors: "hearbeat,phone",
-        },
-        {
-          name: "v-09-11-3-24",
-          url: "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-09-11-3-24.wav",
-          image:
-            "https://www.cs.ubc.ca/~seifi/VibViz/PNGglyph/v-09-11-3-24.png",
-          metaphors: "engine",
-        },
-        {
-          name: "v-09-11-3-4",
-          url: "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-09-11-3-4.wav",
-          image: "https://www.cs.ubc.ca/~seifi/VibViz/PNGglyph/v-09-11-3-4.png",
-          metaphors: "alarm,engine",
-        },
-        {
-          name: "v-09-11-3-43",
-          url: "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-09-11-3-43.wav",
-          image:
-            "https://www.cs.ubc.ca/~seifi/VibViz/PNGglyph/v-09-11-3-43.png",
-          metaphors: "dancing,tapping,musical instruments",
-        },
-        {
-          name: "v-09-11-3-50",
-          url: "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-09-11-3-50.wav",
-          image:
-            "https://www.cs.ubc.ca/~seifi/VibViz/PNGglyph/v-09-11-3-50.png",
-          metaphors: "game,jumping",
-        },
-        {
-          name: "v-09-11-3-54",
-          url: "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-09-11-3-54.wav",
-          image:
-            "https://www.cs.ubc.ca/~seifi/VibViz/PNGglyph/v-09-11-3-54.png",
-          metaphors: "hearbeat,pulsing,tapping,clock,jumping",
-        },
-        {
-          name: "v-09-11-3-56",
-          url: "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-09-11-3-56.wav",
-          image:
-            "https://www.cs.ubc.ca/~seifi/VibViz/PNGglyph/v-09-11-3-56.png",
-          metaphors: "",
-        },
-        {
-          name: "v-09-11-3-8",
-          url: "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-09-11-3-8.wav",
-          image: "https://www.cs.ubc.ca/~seifi/VibViz/PNGglyph/v-09-11-3-8.png",
-          metaphors: "engine",
-        },
-        {
-          name: "v-09-11-4-1",
-          url: "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-09-11-4-1.wav",
-          image: "https://www.cs.ubc.ca/~seifi/VibViz/PNGglyph/v-09-11-4-1.png",
-          metaphors: "tapping,musical instruments,drums,game",
-        },
-        {
-          name: "v-09-11-4-12",
-          url: "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-09-11-4-12.wav",
-          image:
-            "https://www.cs.ubc.ca/~seifi/VibViz/PNGglyph/v-09-11-4-12.png",
-          metaphors: "engine,bell,game,alarm",
-        },
-        {
-          name: "v-09-11-4-22",
-          url: "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-09-11-4-22.wav",
-          image:
-            "https://www.cs.ubc.ca/~seifi/VibViz/PNGglyph/v-09-11-4-22.png",
-          metaphors: "buzz,celebration,horn,alarm",
-        },
-        {
-          name: "v-09-11-4-3",
-          url: "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-09-11-4-3.wav",
-          image: "https://www.cs.ubc.ca/~seifi/VibViz/PNGglyph/v-09-11-4-3.png",
-          metaphors: "tapping,morse code,riding,jumping",
-        },
-        {
-          name: "v-09-11-4-41",
-          url: "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-09-11-4-41.wav",
-          image:
-            "https://www.cs.ubc.ca/~seifi/VibViz/PNGglyph/v-09-11-4-41.png",
-          metaphors: "coming or going,going away,riding,hearbeat",
-        },
-        {
-          name: "v-09-11-4-54",
-          url: "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-09-11-4-54.wav",
-          image:
-            "https://www.cs.ubc.ca/~seifi/VibViz/PNGglyph/v-09-11-4-54.png",
-          metaphors: "tapping,alarm,pulsing,beep,poking,phone",
-        },
-        {
-          name: "v-09-11-4-8",
-          url: "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-09-11-4-8.wav",
-          image: "https://www.cs.ubc.ca/~seifi/VibViz/PNGglyph/v-09-11-4-8.png",
-          metaphors: "tapping",
-        },
-        {
-          name: "v-09-12-1-0",
-          url: "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-09-12-1-0.wav",
-          image: "https://www.cs.ubc.ca/~seifi/VibViz/PNGglyph/v-09-12-1-0.png",
-          metaphors: "poking,nature,animal",
-        },
-        {
-          name: "v-09-12-1-19",
-          url: "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-09-12-1-19.wav",
-          image:
-            "https://www.cs.ubc.ca/~seifi/VibViz/PNGglyph/v-09-12-1-19.png",
-          metaphors: "",
-        },
-        {
-          name: "v-09-12-1-23",
-          url: "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-09-12-1-23.wav",
-          image:
-            "https://www.cs.ubc.ca/~seifi/VibViz/PNGglyph/v-09-12-1-23.png",
-          metaphors: "beep,game,poking",
-        },
-        {
-          name: "v-09-12-1-29",
-          url: "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-09-12-1-29.wav",
-          image:
-            "https://www.cs.ubc.ca/~seifi/VibViz/PNGglyph/v-09-12-1-29.png",
-          metaphors:
-            "beep,game,heartbeat,pawing,animal,musical instruments,drums,tapping",
-        },
-        {
-          name: "v-09-12-1-39",
-          url: "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-09-12-1-39.wav",
-          image:
-            "https://www.cs.ubc.ca/~seifi/VibViz/PNGglyph/v-09-12-1-39.png",
-          metaphors: "musical instruments,drums,echo,bell",
-        },
-        {
-          name: "v-09-12-1-48",
-          url: "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-09-12-1-48.wav",
-          image:
-            "https://www.cs.ubc.ca/~seifi/VibViz/PNGglyph/v-09-12-1-48.png",
-          metaphors: "tapping,pulsing,beep",
-        },
-        {
-          name: "v-09-12-1-53",
-          url: "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-09-12-1-53.wav",
-          image:
-            "https://www.cs.ubc.ca/~seifi/VibViz/PNGglyph/v-09-12-1-53.png",
-          metaphors: "hearbeat,musical instruments,drums",
-        },
-        {
-          name: "v-09-12-2-17",
-          url: "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-09-12-2-17.wav",
-          image:
-            "https://www.cs.ubc.ca/~seifi/VibViz/PNGglyph/v-09-12-2-17.png",
-          metaphors: "gun,engine,animal",
-        },
-        {
-          name: "v-09-12-2-20",
-          url: "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-09-12-2-20.wav",
-          image:
-            "https://www.cs.ubc.ca/~seifi/VibViz/PNGglyph/v-09-12-2-20.png",
-          metaphors: "tapping,game",
-        },
-        {
-          name: "v-09-12-2-23",
-          url: "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-09-12-2-23.wav",
-          image:
-            "https://www.cs.ubc.ca/~seifi/VibViz/PNGglyph/v-09-12-2-23.png",
-          metaphors: "alarm,beep,sliding,pawing,animal",
-        },
-        {
-          name: "v-09-12-2-40",
-          url: "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-09-12-2-40.wav",
-          image:
-            "https://www.cs.ubc.ca/~seifi/VibViz/PNGglyph/v-09-12-2-40.png",
-          metaphors: "walking",
-        },
-        {
-          name: "v-09-12-8-10",
-          url: "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-09-12-8-10.wav",
-          image:
-            "https://www.cs.ubc.ca/~seifi/VibViz/PNGglyph/v-09-12-8-10.png",
-          metaphors: "engine,snoring,horn,animal",
-        },
-        {
-          name: "v-09-12-8-13",
-          url: "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-09-12-8-13.wav",
-          image:
-            "https://www.cs.ubc.ca/~seifi/VibViz/PNGglyph/v-09-12-8-13.png",
-          metaphors: "engine,buzz,animal,snoring",
-        },
-        {
-          name: "v-09-12-8-21",
-          url: "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-09-12-8-21.wav",
-          image:
-            "https://www.cs.ubc.ca/~seifi/VibViz/PNGglyph/v-09-12-8-21.png",
-          metaphors: "tapping,beep,clock,poking",
-        },
-        {
-          name: "v-09-12-8-27",
-          url: "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-09-12-8-27.wav",
-          image:
-            "https://www.cs.ubc.ca/~seifi/VibViz/PNGglyph/v-09-12-8-27.png",
-          metaphors: "beep,bell,nature",
-        },
-        {
-          name: "v-09-12-8-30",
-          url: "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-09-12-8-30.wav",
-          image:
-            "https://www.cs.ubc.ca/~seifi/VibViz/PNGglyph/v-09-12-8-30.png",
-          metaphors: "animal,snoring,nature",
-        },
-        {
-          name: "v-09-12-8-32",
-          url: "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-09-12-8-32.wav",
-          image:
-            "https://www.cs.ubc.ca/~seifi/VibViz/PNGglyph/v-09-12-8-32.png",
-          metaphors: "animal",
-        },
-        {
-          name: "v-09-16-1-43",
-          url: "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-09-16-1-43.wav",
-          image:
-            "https://www.cs.ubc.ca/~seifi/VibViz/PNGglyph/v-09-16-1-43.png",
-          metaphors: "beep",
-        },
-        {
-          name: "v-09-16-1-56",
-          url: "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-09-16-1-56.wav",
-          image:
-            "https://www.cs.ubc.ca/~seifi/VibViz/PNGglyph/v-09-16-1-56.png",
-          metaphors: "alarm,coming or going,game,bell,horn,jumping",
-        },
-        {
-          name: "v-09-18-1-55",
-          url: "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-09-18-1-55.wav",
-          image:
-            "https://www.cs.ubc.ca/~seifi/VibViz/PNGglyph/v-09-18-1-55.png",
-          metaphors: "hearbeat,tapping",
-        },
-        {
-          name: "v-09-18-2-7",
-          url: "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-09-18-2-7.wav",
-          image: "https://www.cs.ubc.ca/~seifi/VibViz/PNGglyph/v-09-18-2-7.png",
-          metaphors: "beep",
-        },
-        {
-          name: "v-09-18-4-12",
-          url: "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-09-18-4-12.wav",
-          image:
-            "https://www.cs.ubc.ca/~seifi/VibViz/PNGglyph/v-09-18-4-12.png",
-          metaphors: "jumping,animal,game,musical instruments,drums,alarm",
-        },
-        {
-          name: "v-09-18-4-15",
-          url: "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-09-18-4-15.wav",
-          image:
-            "https://www.cs.ubc.ca/~seifi/VibViz/PNGglyph/v-09-18-4-15.png",
-          metaphors: "beep,tapping,poking",
-        },
-        {
-          name: "v-09-18-4-16",
-          url: "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-09-18-4-16.wav",
-          image:
-            "https://www.cs.ubc.ca/~seifi/VibViz/PNGglyph/v-09-18-4-16.png",
-          metaphors: "beep,bell,game,hearbeat,phone,frogs,animal",
-        },
-        {
-          name: "v-09-18-4-18",
-          url: "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-09-18-4-18.wav",
-          image:
-            "https://www.cs.ubc.ca/~seifi/VibViz/PNGglyph/v-09-18-4-18.png",
-          metaphors: "beep,horn,alarm,game,nature,animal,tapping",
-        },
-        {
-          name: "v-09-18-4-22",
-          url: "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-09-18-4-22.wav",
-          image:
-            "https://www.cs.ubc.ca/~seifi/VibViz/PNGglyph/v-09-18-4-22.png",
-          metaphors: "breathing,pulsing,hearbeat",
-        },
-        {
-          name: "v-09-18-4-56",
-          url: "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-09-18-4-56.wav",
-          image:
-            "https://www.cs.ubc.ca/~seifi/VibViz/PNGglyph/v-09-18-4-56.png",
-          metaphors: "coming or going,alarm,sliding",
-        },
-        {
-          name: "v-09-23-6-24",
-          url: "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-09-23-6-24.wav",
-          image:
-            "https://www.cs.ubc.ca/~seifi/VibViz/PNGglyph/v-09-23-6-24.png",
-          metaphors: "animal,engine,sliding,coming or going",
-        },
-        {
-          name: "v-09-26-1-39",
-          url: "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-09-26-1-39.wav",
-          image:
-            "https://www.cs.ubc.ca/~seifi/VibViz/PNGglyph/v-09-26-1-39.png",
-          metaphors: "pulsing",
-        },
-        {
-          name: "v-10-09-1-1",
-          url: "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-10-09-1-1.wav",
-          image: "https://www.cs.ubc.ca/~seifi/VibViz/PNGglyph/v-10-09-1-1.png",
-          metaphors: "tapping,drums",
-        },
-        {
-          name: "v-10-09-1-11",
-          url: "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-10-09-1-11.wav",
-          image:
-            "https://www.cs.ubc.ca/~seifi/VibViz/PNGglyph/v-10-09-1-11.png",
-          metaphors: "pawing",
-        },
-        {
-          name: "v-10-09-1-12",
-          url: "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-10-09-1-12.wav",
-          image:
-            "https://www.cs.ubc.ca/~seifi/VibViz/PNGglyph/v-10-09-1-12.png",
-          metaphors: "alarm,musical instruments,game",
-        },
-        {
-          name: "v-10-09-1-14",
-          url: "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-10-09-1-14.wav",
-          image:
-            "https://www.cs.ubc.ca/~seifi/VibViz/PNGglyph/v-10-09-1-14.png",
-          metaphors:
-            "phone,musical instruments,drums,beep,music,singing,celebration",
-        },
-        {
-          name: "v-10-09-1-16",
-          url: "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-10-09-1-16.wav",
-          image:
-            "https://www.cs.ubc.ca/~seifi/VibViz/PNGglyph/v-10-09-1-16.png",
-          metaphors: "engine",
-        },
-        {
-          name: "v-10-09-1-20",
-          url: "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-10-09-1-20.wav",
-          image:
-            "https://www.cs.ubc.ca/~seifi/VibViz/PNGglyph/v-10-09-1-20.png",
-          metaphors: "snoring,nature",
-        },
-        {
-          name: "v-10-09-1-8",
-          url: "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-10-09-1-8.wav",
-          image: "https://www.cs.ubc.ca/~seifi/VibViz/PNGglyph/v-10-09-1-8.png",
-          metaphors: "buzz,animal,celebration",
-        },
-        {
-          name: "v-10-09-5-0",
-          url: "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-10-09-5-0.wav",
-          image: "https://www.cs.ubc.ca/~seifi/VibViz/PNGglyph/v-10-09-5-0.png",
-          metaphors: "alarm,tapping",
-        },
-        {
-          name: "v-10-09-5-2",
-          url: "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-10-09-5-2.wav",
-          image: "https://www.cs.ubc.ca/~seifi/VibViz/PNGglyph/v-10-09-5-2.png",
-          metaphors: "tapping,morse code",
-        },
-        {
-          name: "v-10-09-5-4",
-          url: "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-10-09-5-4.wav",
-          image: "https://www.cs.ubc.ca/~seifi/VibViz/PNGglyph/v-10-09-5-4.png",
-          metaphors: "alarm,bell,electric shock",
-        },
-        {
-          name: "v-10-09-5-7",
-          url: "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-10-09-5-7.wav",
-          image: "https://www.cs.ubc.ca/~seifi/VibViz/PNGglyph/v-10-09-5-7.png",
-          metaphors: "electric shock,gun,beep,game",
-        },
-        {
-          name: "v-10-10-1-10",
-          url: "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-10-10-1-10.wav",
-          image:
-            "https://www.cs.ubc.ca/~seifi/VibViz/PNGglyph/v-10-10-1-10.png",
-          metaphors: "",
-        },
-        {
-          name: "v-10-10-1-18",
-          url: "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-10-10-1-18.wav",
-          image:
-            "https://www.cs.ubc.ca/~seifi/VibViz/PNGglyph/v-10-10-1-18.png",
-          metaphors: "morse code,alarm,beep,game,hearbeat,poking",
-        },
-        {
-          name: "v-10-10-1-21",
-          url: "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-10-10-1-21.wav",
-          image:
-            "https://www.cs.ubc.ca/~seifi/VibViz/PNGglyph/v-10-10-1-21.png",
-          metaphors: "phone,alarm,riding",
-        },
-        {
-          name: "v-10-10-1-5",
-          url: "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-10-10-1-5.wav",
-          image: "https://www.cs.ubc.ca/~seifi/VibViz/PNGglyph/v-10-10-1-5.png",
-          metaphors: "sliding,coming or going,alarm,game",
-        },
-        {
-          name: "v-10-18-11-11",
-          url: "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-10-18-11-11.wav",
-          image:
-            "https://www.cs.ubc.ca/~seifi/VibViz/PNGglyph/v-10-18-11-11.png",
-          metaphors: "phone,alarm,beep,game",
-        },
-        {
-          name: "v-10-21-2-48",
-          url: "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-10-21-2-48.wav",
-          image:
-            "https://www.cs.ubc.ca/~seifi/VibViz/PNGglyph/v-10-21-2-48.png",
-          metaphors: "musical instruments,drums,cymbal,explosion tapping",
-        },
-        {
-          name: "v-10-21-3-11",
-          url: "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-10-21-3-11.wav",
-          image:
-            "https://www.cs.ubc.ca/~seifi/VibViz/PNGglyph/v-10-21-3-11.png",
-          metaphors: "tapping,game",
-        },
-        {
-          name: "v-10-21-3-17",
-          url: "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-10-21-3-17.wav",
-          image:
-            "https://www.cs.ubc.ca/~seifi/VibViz/PNGglyph/v-10-21-3-17.png",
-          metaphors: "buzz,alarm",
-        },
-        {
-          name: "v-10-21-3-2",
-          url: "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-10-21-3-2.wav",
-          image: "https://www.cs.ubc.ca/~seifi/VibViz/PNGglyph/v-10-21-3-2.png",
-          metaphors: "beep,clock",
-        },
-        {
-          name: "v-10-21-3-21",
-          url: "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-10-21-3-21.wav",
-          image:
-            "https://www.cs.ubc.ca/~seifi/VibViz/PNGglyph/v-10-21-3-21.png",
-          metaphors: "",
-        },
-        {
-          name: "v-10-21-3-30",
-          url: "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-10-21-3-30.wav",
-          image:
-            "https://www.cs.ubc.ca/~seifi/VibViz/PNGglyph/v-10-21-3-30.png",
-          metaphors: "beep,buzz,electric shock,alarm",
-        },
-        {
-          name: "v-10-21-3-33",
-          url: "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-10-21-3-33.wav",
-          image:
-            "https://www.cs.ubc.ca/~seifi/VibViz/PNGglyph/v-10-21-3-33.png",
-          metaphors: "tapping,beep,poking,clock",
-        },
-        {
-          name: "v-10-21-3-39",
-          url: "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-10-21-3-39.wav",
-          image:
-            "https://www.cs.ubc.ca/~seifi/VibViz/PNGglyph/v-10-21-3-39.png",
-          metaphors: "alarm,game,fail game,gun,electric shock",
-        },
-        {
-          name: "v-10-21-3-4",
-          url: "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-10-21-3-4.wav",
-          image: "https://www.cs.ubc.ca/~seifi/VibViz/PNGglyph/v-10-21-3-4.png",
-          metaphors:
-            "tapping,jumping,musical instruments,drums,coming or going,SOS,celebration,gun,alarm,poking",
-        },
-        {
-          name: "v-10-21-3-45",
-          url: "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-10-21-3-45.wav",
-          image:
-            "https://www.cs.ubc.ca/~seifi/VibViz/PNGglyph/v-10-21-3-45.png",
-          metaphors: "alarm,phone,musical instruments,drums,game,celebration",
-        },
-        {
-          name: "v-10-21-3-7",
-          url: "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-10-21-3-7.wav",
-          image: "https://www.cs.ubc.ca/~seifi/VibViz/PNGglyph/v-10-21-3-7.png",
-          metaphors: "engine,getting close,coming & going,sliding",
-        },
-        {
-          name: "v-10-23-1-10",
-          url: "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-10-23-1-10.wav",
-          image:
-            "https://www.cs.ubc.ca/~seifi/VibViz/PNGglyph/v-10-23-1-10.png",
-          metaphors: "coming or going,phone,alarm,horn,beep",
-        },
-        {
-          name: "v-10-23-1-16",
-          url: "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-10-23-1-16.wav",
-          image:
-            "https://www.cs.ubc.ca/~seifi/VibViz/PNGglyph/v-10-23-1-16.png",
-          metaphors: "phone,alarm,SOS,horn,game,beep,poking",
-        },
-        {
-          name: "v-10-23-1-21",
-          url: "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-10-23-1-21.wav",
-          image:
-            "https://www.cs.ubc.ca/~seifi/VibViz/PNGglyph/v-10-23-1-21.png",
-          metaphors:
-            "coming or going,engine,snoring,something moving,something rolling,sliding",
-        },
-        {
-          name: "v-10-23-1-23",
-          url: "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-10-23-1-23.wav",
-          image:
-            "https://www.cs.ubc.ca/~seifi/VibViz/PNGglyph/v-10-23-1-23.png",
-          metaphors:
-            "engine,electric shock,snoring,coming or going,stopping,growl,chainsaw,a door closing",
-        },
-        {
-          name: "v-10-23-1-24",
-          url: "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-10-23-1-24.wav",
-          image:
-            "https://www.cs.ubc.ca/~seifi/VibViz/PNGglyph/v-10-23-1-24.png",
-          metaphors: "engine,gun,buzz,animal,coming or going,celebration",
-        },
-        {
-          name: "v-10-28-7-22",
-          url: "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-10-28-7-22.wav",
-          image:
-            "https://www.cs.ubc.ca/~seifi/VibViz/PNGglyph/v-10-28-7-22.png",
-          metaphors: "SOS,alarm,beep,tapping,drums",
-        },
-        {
-          name: "v-10-28-7-23",
-          url: "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-10-28-7-23.wav",
-          image:
-            "https://www.cs.ubc.ca/~seifi/VibViz/PNGglyph/v-10-28-7-23.png",
-          metaphors: "alarm,tapping",
-        },
-        {
-          name: "v-10-28-7-26",
-          url: "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-10-28-7-26.wav",
-          image:
-            "https://www.cs.ubc.ca/~seifi/VibViz/PNGglyph/v-10-28-7-26.png",
-          metaphors: "pawing,animal,nature",
-        },
-        {
-          name: "v-10-28-7-29",
-          url: "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-10-28-7-29.wav",
-          image:
-            "https://www.cs.ubc.ca/~seifi/VibViz/PNGglyph/v-10-28-7-29.png",
-          metaphors: "riding,coming or going,engine",
-        },
-        {
-          name: "v-10-28-7-31",
-          url: "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-10-28-7-31.wav",
-          image:
-            "https://www.cs.ubc.ca/~seifi/VibViz/PNGglyph/v-10-28-7-31.png",
-          metaphors: "walking,tapping,clock",
-        },
-        {
-          name: "v-10-28-7-33",
-          url: "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-10-28-7-33.wav",
-          image:
-            "https://www.cs.ubc.ca/~seifi/VibViz/PNGglyph/v-10-28-7-33.png",
-          metaphors: "buzz,engine",
-        },
-        {
-          name: "v-10-28-7-35",
-          url: "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-10-28-7-35.wav",
-          image:
-            "https://www.cs.ubc.ca/~seifi/VibViz/PNGglyph/v-10-28-7-35.png",
-          metaphors: "buzz,animal,fog horn",
-        },
-        {
-          name: "v-10-28-7-36",
-          url: "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-10-28-7-36.wav",
-          image:
-            "https://www.cs.ubc.ca/~seifi/VibViz/PNGglyph/v-10-28-7-36.png",
-          metaphors: "buzz,electric shock,engine,snoring,phone,animal",
-        },
-        {
-          name: "v-10-29-4-20",
-          url: "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-10-29-4-20.wav",
-          image:
-            "https://www.cs.ubc.ca/~seifi/VibViz/PNGglyph/v-10-29-4-20.png",
-          metaphors: "snoring,engine,coming or going,breathing",
-        },
-        {
-          name: "v-10-29-4-22",
-          url: "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-10-29-4-22.wav",
-          image:
-            "https://www.cs.ubc.ca/~seifi/VibViz/PNGglyph/v-10-29-4-22.png",
-          metaphors: "engine,game",
-        },
-      ];
+  <script>
+    // Lista de sonidos default - VibViz
+    sounds = [{
+        name: "v-09-09-8-11",
+        url: "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-09-09-8-11.wav",
+        image: "https://www.cs.ubc.ca/~seifi/VibViz/PNGglyph/v-09-09-8-11.png",
+        metaphors: "latido del corazón,pulsante,tocando,palpando",
+      },
+      {
+        name: "v-09-09-8-20",
+        url: "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-09-09-8-20.wav",
+        image: "https://www.cs.ubc.ca/~seifi/VibViz/PNGglyph/v-09-09-8-20.png",
+        metaphors: "latido del corazón,tocando,animal",
+      },
+      {
+        name: "v-09-09-8-24",
+        url: "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-09-09-8-24.wav",
+        image: "https://www.cs.ubc.ca/~seifi/VibViz/PNGglyph/v-09-09-8-24.png",
+        metaphors: "motor,yendo o viniendo",
+      },
+      {
+        name: "v-09-10-11-55",
+        url: "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-09-10-11-55.wav",
+        image: "https://www.cs.ubc.ca/~seifi/VibViz/PNGglyph/v-09-10-11-55.png",
+        metaphors: "alarma,saltando,deslizando,teléfono",
+      },
+      {
+        name: "v-09-10-11-58",
+        url: "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-09-10-11-58.wav",
+        image: "https://www.cs.ubc.ca/~seifi/VibViz/PNGglyph/v-09-10-11-58.png",
+        metaphors: "ronroneando,roncando,animal,yendo o viniendo",
+      },
+      {
+        name: "v-09-10-12-11",
+        url: "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-09-10-12-11.wav",
+        image: "https://www.cs.ubc.ca/~seifi/VibViz/PNGglyph/v-09-10-12-11.png",
+        metaphors: "alarma,shock eléctrico",
+      },
+      {
+        name: "v-09-10-12-13",
+        url: "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-09-10-12-13.wav",
+        image: "https://www.cs.ubc.ca/~seifi/VibViz/PNGglyph/v-09-10-12-13.png",
+        metaphors: "alarma,tocando,instrumentos musicales,batería,bip,teléfono,celebración",
+      },
+      {
+        name: "v-09-10-12-16",
+        url: "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-09-10-12-16.wav",
+        image: "https://www.cs.ubc.ca/~seifi/VibViz/PNGglyph/v-09-10-12-16.png",
+        metaphors: "instrumentos musicales,bip",
+      },
+      {
+        name: "v-09-10-12-2",
+        url: "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-09-10-12-2.wav",
+        image: "https://www.cs.ubc.ca/~seifi/VibViz/PNGglyph/v-09-10-12-2.png",
+        metaphors: "roncando,zumbido",
+      },
+      {
+        name: "v-09-10-12-6",
+        url: "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-09-10-12-6.wav",
+        image: "https://www.cs.ubc.ca/~seifi/VibViz/PNGglyph/v-09-10-12-6.png",
+        metaphors: "roncando,campana,caminando,alarma,yendo o viniendo",
+      },
+      {
+        name: "v-09-10-12-9",
+        url: "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-09-10-12-9.wav",
+        image: "https://www.cs.ubc.ca/~seifi/VibViz/PNGglyph/v-09-10-12-9.png",
+        metaphors: "tocando,alarma,instrumentos musicales,batería,animal",
+      },
+      {
+        name: "v-09-10-3-52",
+        url: "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-09-10-3-52.wav",
+        image: "https://www.cs.ubc.ca/~seifi/VibViz/PNGglyph/v-09-10-3-52.png",
+        metaphors: "tocando,código morse,teléfono,alarma",
+      },
+      {
+        name: "v-09-10-3-56",
+        url: "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-09-10-3-56.wav",
+        image: "https://www.cs.ubc.ca/~seifi/VibViz/PNGglyph/v-09-10-3-56.png",
+        metaphors: "pistola",
+      },
+      {
+        name: "v-09-10-4-2",
+        url: "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-09-10-4-2.wav",
+        image: "https://www.cs.ubc.ca/~seifi/VibViz/PNGglyph/v-09-10-4-2.png",
+        metaphors: "tocando,pulsante",
+      },
+      {
+        name: "v-09-10-4-20",
+        url: "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-09-10-4-20.wav",
+        image: "https://www.cs.ubc.ca/~seifi/VibViz/PNGglyph/v-09-10-4-20.png",
+        metaphors: "latido del corazón,rascando,animal,tocando",
+      },
+      {
+        name: "v-09-10-4-23",
+        url: "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-09-10-4-23.wav",
+        image: "https://www.cs.ubc.ca/~seifi/VibViz/PNGglyph/v-09-10-4-23.png",
+        metaphors: "latido del corazón,tocando,rascando,reloj",
+      },
+      {
+        name: "v-09-10-4-25",
+        url: "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-09-10-4-25.wav",
+        image: "https://www.cs.ubc.ca/~seifi/VibViz/PNGglyph/v-09-10-4-25.png",
+        metaphors: "motor,latido del corazón,tocando",
+      },
+      {
+        name: "v-09-10-4-6",
+        url: "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-09-10-4-6.wav",
+        image: "https://www.cs.ubc.ca/~seifi/VibViz/PNGglyph/v-09-10-4-6.png",
+        metaphors: "tocando,yendo o viniendo,animal",
+      },
+      {
+        name: "v-09-10-6-16",
+        url: "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-09-10-6-16.wav",
+        image: "https://www.cs.ubc.ca/~seifi/VibViz/PNGglyph/v-09-10-6-16.png",
+        metaphors: "tocando,bip,latido del corazón",
+      },
+      {
+        name: "v-09-10-6-22",
+        url: "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-09-10-6-22.wav",
+        image: "https://www.cs.ubc.ca/~seifi/VibViz/PNGglyph/v-09-10-6-22.png",
+        metaphors: "pistola,shock eléctrico,motor,andando",
+      },
+      {
+        name: "v-09-10-6-27",
+        url: "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-09-10-6-27.wav",
+        image: "https://www.cs.ubc.ca/~seifi/VibViz/PNGglyph/v-09-10-6-27.png",
+        metaphors: "tocando,bip,alarma,instrumentos musicales,batería",
+      },
+      {
+        name: "v-09-10-6-38",
+        url: "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-09-10-6-38.wav",
+        image: "https://www.cs.ubc.ca/~seifi/VibViz/PNGglyph/v-09-10-6-38.png",
+        metaphors: "getting close,motor",
+      },
+      {
+        name: "v-09-10-6-43",
+        url: "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-09-10-6-43.wav",
+        image: "https://www.cs.ubc.ca/~seifi/VibViz/PNGglyph/v-09-10-6-43.png",
+        metaphors: "pulsante,juego,tocando,roncando,deslizando",
+      },
+      {
+        name: "v-09-10-6-46",
+        url: "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-09-10-6-46.wav",
+        image: "https://www.cs.ubc.ca/~seifi/VibViz/PNGglyph/v-09-10-6-46.png",
+        metaphors: "",
+      },
+      {
+        name: "v-09-10-6-5",
+        url: "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-09-10-6-5.wav",
+        image: "https://www.cs.ubc.ca/~seifi/VibViz/PNGglyph/v-09-10-6-5.png",
+        metaphors: "tocando,instrumentos musicales,batería,latido del corazón,reloj",
+      },
+      {
+        name: "v-09-10-6-59",
+        url: "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-09-10-6-59.wav",
+        image: "https://www.cs.ubc.ca/~seifi/VibViz/PNGglyph/v-09-10-6-59.png",
+        metaphors: "motor,zumbido,animal,andando,shaking",
+      },
+      {
+        name: "v-09-10-7-34",
+        url: "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-09-10-7-34.wav",
+        image: "https://www.cs.ubc.ca/~seifi/VibViz/PNGglyph/v-09-10-7-34.png",
+        metaphors: "tocando,palpando,latido del corazón",
+      },
+      {
+        name: "v-09-10-7-36",
+        url: "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-09-10-7-36.wav",
+        image: "https://www.cs.ubc.ca/~seifi/VibViz/PNGglyph/v-09-10-7-36.png",
+        metaphors: "zumbido,animal,yendo o viniendo,campana",
+      },
+      {
+        name: "v-09-10-7-9",
+        url: "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-09-10-7-9.wav",
+        image: "https://www.cs.ubc.ca/~seifi/VibViz/PNGglyph/v-09-10-7-9.png",
+        metaphors: "tocando",
+      },
+      {
+        name: "v-09-10-8-5",
+        url: "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-09-10-8-5.wav",
+        image: "https://www.cs.ubc.ca/~seifi/VibViz/PNGglyph/v-09-10-8-5.png",
+        metaphors: "juego,palpando,alarma",
+      },
+      {
+        name: "v-09-10-8-7",
+        url: "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-09-10-8-7.wav",
+        image: "https://www.cs.ubc.ca/~seifi/VibViz/PNGglyph/v-09-10-8-7.png",
+        metaphors: "juego,pulsante,palpando,tocando,zumbido",
+      },
+      {
+        name: "v-09-11-3-12",
+        url: "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-09-11-3-12.wav",
+        image: "https://www.cs.ubc.ca/~seifi/VibViz/PNGglyph/v-09-11-3-12.png",
+        metaphors: "alarma,teléfono,SOS",
+      },
+      {
+        name: "v-09-11-3-16",
+        url: "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-09-11-3-16.wav",
+        image: "https://www.cs.ubc.ca/~seifi/VibViz/PNGglyph/v-09-11-3-16.png",
+        metaphors: "alarma,teléfono,instrumentos musicales,batería",
+      },
+      {
+        name: "v-09-11-3-19",
+        url: "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-09-11-3-19.wav",
+        image: "https://www.cs.ubc.ca/~seifi/VibViz/PNGglyph/v-09-11-3-19.png",
+        metaphors: "código morse,bocina,juego,teléfono,alarma",
+      },
+      {
+        name: "v-09-11-3-21",
+        url: "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-09-11-3-21.wav",
+        image: "https://www.cs.ubc.ca/~seifi/VibViz/PNGglyph/v-09-11-3-21.png",
+        metaphors: "latido del corazón,teléfono",
+      },
+      {
+        name: "v-09-11-3-24",
+        url: "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-09-11-3-24.wav",
+        image: "https://www.cs.ubc.ca/~seifi/VibViz/PNGglyph/v-09-11-3-24.png",
+        metaphors: "motor",
+      },
+      {
+        name: "v-09-11-3-4",
+        url: "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-09-11-3-4.wav",
+        image: "https://www.cs.ubc.ca/~seifi/VibViz/PNGglyph/v-09-11-3-4.png",
+        metaphors: "alarma,motor",
+      },
+      {
+        name: "v-09-11-3-43",
+        url: "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-09-11-3-43.wav",
+        image: "https://www.cs.ubc.ca/~seifi/VibViz/PNGglyph/v-09-11-3-43.png",
+        metaphors: "dancing,tocando,instrumentos musicales",
+      },
+      {
+        name: "v-09-11-3-50",
+        url: "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-09-11-3-50.wav",
+        image: "https://www.cs.ubc.ca/~seifi/VibViz/PNGglyph/v-09-11-3-50.png",
+        metaphors: "juego,saltando",
+      },
+      {
+        name: "v-09-11-3-54",
+        url: "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-09-11-3-54.wav",
+        image: "https://www.cs.ubc.ca/~seifi/VibViz/PNGglyph/v-09-11-3-54.png",
+        metaphors: "latido del corazón,pulsante,tocando,reloj,saltando",
+      },
+      {
+        name: "v-09-11-3-56",
+        url: "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-09-11-3-56.wav",
+        image: "https://www.cs.ubc.ca/~seifi/VibViz/PNGglyph/v-09-11-3-56.png",
+        metaphors: "",
+      },
+      {
+        name: "v-09-11-3-8",
+        url: "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-09-11-3-8.wav",
+        image: "https://www.cs.ubc.ca/~seifi/VibViz/PNGglyph/v-09-11-3-8.png",
+        metaphors: "motor",
+      },
+      {
+        name: "v-09-11-4-1",
+        url: "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-09-11-4-1.wav",
+        image: "https://www.cs.ubc.ca/~seifi/VibViz/PNGglyph/v-09-11-4-1.png",
+        metaphors: "tocando,instrumentos musicales,batería,juego",
+      },
+      {
+        name: "v-09-11-4-12",
+        url: "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-09-11-4-12.wav",
+        image: "https://www.cs.ubc.ca/~seifi/VibViz/PNGglyph/v-09-11-4-12.png",
+        metaphors: "motor,campana,juego,alarma",
+      },
+      {
+        name: "v-09-11-4-22",
+        url: "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-09-11-4-22.wav",
+        image: "https://www.cs.ubc.ca/~seifi/VibViz/PNGglyph/v-09-11-4-22.png",
+        metaphors: "zumbido,celebración,bocina,alarma",
+      },
+      {
+        name: "v-09-11-4-3",
+        url: "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-09-11-4-3.wav",
+        image: "https://www.cs.ubc.ca/~seifi/VibViz/PNGglyph/v-09-11-4-3.png",
+        metaphors: "tocando,código morse,andando,saltando",
+      },
+      {
+        name: "v-09-11-4-41",
+        url: "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-09-11-4-41.wav",
+        image: "https://www.cs.ubc.ca/~seifi/VibViz/PNGglyph/v-09-11-4-41.png",
+        metaphors: "yendo o viniendo,going away,andando,latido del corazón",
+      },
+      {
+        name: "v-09-11-4-54",
+        url: "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-09-11-4-54.wav",
+        image: "https://www.cs.ubc.ca/~seifi/VibViz/PNGglyph/v-09-11-4-54.png",
+        metaphors: "tocando,alarma,pulsante,bip,palpando,teléfono",
+      },
+      {
+        name: "v-09-11-4-8",
+        url: "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-09-11-4-8.wav",
+        image: "https://www.cs.ubc.ca/~seifi/VibViz/PNGglyph/v-09-11-4-8.png",
+        metaphors: "tocando",
+      },
+      {
+        name: "v-09-12-1-0",
+        url: "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-09-12-1-0.wav",
+        image: "https://www.cs.ubc.ca/~seifi/VibViz/PNGglyph/v-09-12-1-0.png",
+        metaphors: "palpando,naturaleza,animal",
+      },
+      {
+        name: "v-09-12-1-19",
+        url: "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-09-12-1-19.wav",
+        image: "https://www.cs.ubc.ca/~seifi/VibViz/PNGglyph/v-09-12-1-19.png",
+        metaphors: "",
+      },
+      {
+        name: "v-09-12-1-23",
+        url: "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-09-12-1-23.wav",
+        image: "https://www.cs.ubc.ca/~seifi/VibViz/PNGglyph/v-09-12-1-23.png",
+        metaphors: "bip,juego,palpando",
+      },
+      {
+        name: "v-09-12-1-29",
+        url: "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-09-12-1-29.wav",
+        image: "https://www.cs.ubc.ca/~seifi/VibViz/PNGglyph/v-09-12-1-29.png",
+        metaphors: "bip,juego,heartbeat,rascando,animal,instrumentos musicales,batería,tocando",
+      },
+      {
+        name: "v-09-12-1-39",
+        url: "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-09-12-1-39.wav",
+        image: "https://www.cs.ubc.ca/~seifi/VibViz/PNGglyph/v-09-12-1-39.png",
+        metaphors: "instrumentos musicales,batería,echo,campana",
+      },
+      {
+        name: "v-09-12-1-48",
+        url: "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-09-12-1-48.wav",
+        image: "https://www.cs.ubc.ca/~seifi/VibViz/PNGglyph/v-09-12-1-48.png",
+        metaphors: "tocando,pulsante,bip",
+      },
+      {
+        name: "v-09-12-1-53",
+        url: "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-09-12-1-53.wav",
+        image: "https://www.cs.ubc.ca/~seifi/VibViz/PNGglyph/v-09-12-1-53.png",
+        metaphors: "latido del corazón,instrumentos musicales,batería",
+      },
+      {
+        name: "v-09-12-2-17",
+        url: "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-09-12-2-17.wav",
+        image: "https://www.cs.ubc.ca/~seifi/VibViz/PNGglyph/v-09-12-2-17.png",
+        metaphors: "pistola,motor,animal",
+      },
+      {
+        name: "v-09-12-2-20",
+        url: "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-09-12-2-20.wav",
+        image: "https://www.cs.ubc.ca/~seifi/VibViz/PNGglyph/v-09-12-2-20.png",
+        metaphors: "tocando,juego",
+      },
+      {
+        name: "v-09-12-2-23",
+        url: "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-09-12-2-23.wav",
+        image: "https://www.cs.ubc.ca/~seifi/VibViz/PNGglyph/v-09-12-2-23.png",
+        metaphors: "alarma,bip,deslizando,rascando,animal",
+      },
+      {
+        name: "v-09-12-2-40",
+        url: "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-09-12-2-40.wav",
+        image: "https://www.cs.ubc.ca/~seifi/VibViz/PNGglyph/v-09-12-2-40.png",
+        metaphors: "caminando",
+      },
+      {
+        name: "v-09-12-8-10",
+        url: "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-09-12-8-10.wav",
+        image: "https://www.cs.ubc.ca/~seifi/VibViz/PNGglyph/v-09-12-8-10.png",
+        metaphors: "motor,roncando,bocina,animal",
+      },
+      {
+        name: "v-09-12-8-13",
+        url: "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-09-12-8-13.wav",
+        image: "https://www.cs.ubc.ca/~seifi/VibViz/PNGglyph/v-09-12-8-13.png",
+        metaphors: "motor,zumbido,animal,roncando",
+      },
+      {
+        name: "v-09-12-8-21",
+        url: "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-09-12-8-21.wav",
+        image: "https://www.cs.ubc.ca/~seifi/VibViz/PNGglyph/v-09-12-8-21.png",
+        metaphors: "tocando,bip,reloj,palpando",
+      },
+      {
+        name: "v-09-12-8-27",
+        url: "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-09-12-8-27.wav",
+        image: "https://www.cs.ubc.ca/~seifi/VibViz/PNGglyph/v-09-12-8-27.png",
+        metaphors: "bip,campana,naturaleza",
+      },
+      {
+        name: "v-09-12-8-30",
+        url: "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-09-12-8-30.wav",
+        image: "https://www.cs.ubc.ca/~seifi/VibViz/PNGglyph/v-09-12-8-30.png",
+        metaphors: "animal,roncando,naturaleza",
+      },
+      {
+        name: "v-09-12-8-32",
+        url: "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-09-12-8-32.wav",
+        image: "https://www.cs.ubc.ca/~seifi/VibViz/PNGglyph/v-09-12-8-32.png",
+        metaphors: "animal",
+      },
+      {
+        name: "v-09-16-1-43",
+        url: "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-09-16-1-43.wav",
+        image: "https://www.cs.ubc.ca/~seifi/VibViz/PNGglyph/v-09-16-1-43.png",
+        metaphors: "bip",
+      },
+      {
+        name: "v-09-16-1-56",
+        url: "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-09-16-1-56.wav",
+        image: "https://www.cs.ubc.ca/~seifi/VibViz/PNGglyph/v-09-16-1-56.png",
+        metaphors: "alarma,yendo o viniendo,juego,campana,bocina,saltando",
+      },
+      {
+        name: "v-09-18-1-55",
+        url: "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-09-18-1-55.wav",
+        image: "https://www.cs.ubc.ca/~seifi/VibViz/PNGglyph/v-09-18-1-55.png",
+        metaphors: "latido del corazón,tocando",
+      },
+      {
+        name: "v-09-18-2-7",
+        url: "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-09-18-2-7.wav",
+        image: "https://www.cs.ubc.ca/~seifi/VibViz/PNGglyph/v-09-18-2-7.png",
+        metaphors: "bip",
+      },
+      {
+        name: "v-09-18-4-12",
+        url: "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-09-18-4-12.wav",
+        image: "https://www.cs.ubc.ca/~seifi/VibViz/PNGglyph/v-09-18-4-12.png",
+        metaphors: "saltando,animal,juego,instrumentos musicales,batería,alarma",
+      },
+      {
+        name: "v-09-18-4-15",
+        url: "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-09-18-4-15.wav",
+        image: "https://www.cs.ubc.ca/~seifi/VibViz/PNGglyph/v-09-18-4-15.png",
+        metaphors: "bip,tocando,palpando",
+      },
+      {
+        name: "v-09-18-4-16",
+        url: "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-09-18-4-16.wav",
+        image: "https://www.cs.ubc.ca/~seifi/VibViz/PNGglyph/v-09-18-4-16.png",
+        metaphors: "bip,campana,juego,latido del corazón,teléfono,ranas,animal",
+      },
+      {
+        name: "v-09-18-4-18",
+        url: "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-09-18-4-18.wav",
+        image: "https://www.cs.ubc.ca/~seifi/VibViz/PNGglyph/v-09-18-4-18.png",
+        metaphors: "bip,bocina,alarma,juego,naturaleza,animal,tocando",
+      },
+      {
+        name: "v-09-18-4-22",
+        url: "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-09-18-4-22.wav",
+        image: "https://www.cs.ubc.ca/~seifi/VibViz/PNGglyph/v-09-18-4-22.png",
+        metaphors: "respirando,pulsante,latido del corazón",
+      },
+      {
+        name: "v-09-18-4-56",
+        url: "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-09-18-4-56.wav",
+        image: "https://www.cs.ubc.ca/~seifi/VibViz/PNGglyph/v-09-18-4-56.png",
+        metaphors: "yendo o viniendo,alarma,deslizando",
+      },
+      {
+        name: "v-09-23-6-24",
+        url: "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-09-23-6-24.wav",
+        image: "https://www.cs.ubc.ca/~seifi/VibViz/PNGglyph/v-09-23-6-24.png",
+        metaphors: "animal,motor,deslizando,yendo o viniendo",
+      },
+      {
+        name: "v-09-26-1-39",
+        url: "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-09-26-1-39.wav",
+        image: "https://www.cs.ubc.ca/~seifi/VibViz/PNGglyph/v-09-26-1-39.png",
+        metaphors: "pulsante",
+      },
+      {
+        name: "v-10-09-1-1",
+        url: "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-10-09-1-1.wav",
+        image: "https://www.cs.ubc.ca/~seifi/VibViz/PNGglyph/v-10-09-1-1.png",
+        metaphors: "tocando,batería",
+      },
+      {
+        name: "v-10-09-1-11",
+        url: "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-10-09-1-11.wav",
+        image: "https://www.cs.ubc.ca/~seifi/VibViz/PNGglyph/v-10-09-1-11.png",
+        metaphors: "rascando",
+      },
+      {
+        name: "v-10-09-1-12",
+        url: "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-10-09-1-12.wav",
+        image: "https://www.cs.ubc.ca/~seifi/VibViz/PNGglyph/v-10-09-1-12.png",
+        metaphors: "alarma,instrumentos musicales,juego",
+      },
+      {
+        name: "v-10-09-1-14",
+        url: "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-10-09-1-14.wav",
+        image: "https://www.cs.ubc.ca/~seifi/VibViz/PNGglyph/v-10-09-1-14.png",
+        metaphors: "teléfono,instrumentos musicales,batería,bip,music,singing,celebración",
+      },
+      {
+        name: "v-10-09-1-16",
+        url: "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-10-09-1-16.wav",
+        image: "https://www.cs.ubc.ca/~seifi/VibViz/PNGglyph/v-10-09-1-16.png",
+        metaphors: "motor",
+      },
+      {
+        name: "v-10-09-1-20",
+        url: "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-10-09-1-20.wav",
+        image: "https://www.cs.ubc.ca/~seifi/VibViz/PNGglyph/v-10-09-1-20.png",
+        metaphors: "roncando,naturaleza",
+      },
+      {
+        name: "v-10-09-1-8",
+        url: "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-10-09-1-8.wav",
+        image: "https://www.cs.ubc.ca/~seifi/VibViz/PNGglyph/v-10-09-1-8.png",
+        metaphors: "zumbido,animal,celebración",
+      },
+      {
+        name: "v-10-09-5-0",
+        url: "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-10-09-5-0.wav",
+        image: "https://www.cs.ubc.ca/~seifi/VibViz/PNGglyph/v-10-09-5-0.png",
+        metaphors: "alarma,tocando",
+      },
+      {
+        name: "v-10-09-5-2",
+        url: "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-10-09-5-2.wav",
+        image: "https://www.cs.ubc.ca/~seifi/VibViz/PNGglyph/v-10-09-5-2.png",
+        metaphors: "tocando,código morse",
+      },
+      {
+        name: "v-10-09-5-4",
+        url: "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-10-09-5-4.wav",
+        image: "https://www.cs.ubc.ca/~seifi/VibViz/PNGglyph/v-10-09-5-4.png",
+        metaphors: "alarma,campana,shock eléctrico",
+      },
+      {
+        name: "v-10-09-5-7",
+        url: "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-10-09-5-7.wav",
+        image: "https://www.cs.ubc.ca/~seifi/VibViz/PNGglyph/v-10-09-5-7.png",
+        metaphors: "shock eléctrico,pistola,bip,juego",
+      },
+      {
+        name: "v-10-10-1-10",
+        url: "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-10-10-1-10.wav",
+        image: "https://www.cs.ubc.ca/~seifi/VibViz/PNGglyph/v-10-10-1-10.png",
+        metaphors: "",
+      },
+      {
+        name: "v-10-10-1-18",
+        url: "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-10-10-1-18.wav",
+        image: "https://www.cs.ubc.ca/~seifi/VibViz/PNGglyph/v-10-10-1-18.png",
+        metaphors: "código morse,alarma,bip,juego,latido del corazón,palpando",
+      },
+      {
+        name: "v-10-10-1-21",
+        url: "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-10-10-1-21.wav",
+        image: "https://www.cs.ubc.ca/~seifi/VibViz/PNGglyph/v-10-10-1-21.png",
+        metaphors: "teléfono,alarma,andando",
+      },
+      {
+        name: "v-10-10-1-5",
+        url: "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-10-10-1-5.wav",
+        image: "https://www.cs.ubc.ca/~seifi/VibViz/PNGglyph/v-10-10-1-5.png",
+        metaphors: "deslizando,yendo o viniendo,alarma,juego",
+      },
+      {
+        name: "v-10-18-11-11",
+        url: "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-10-18-11-11.wav",
+        image: "https://www.cs.ubc.ca/~seifi/VibViz/PNGglyph/v-10-18-11-11.png",
+        metaphors: "teléfono,alarma,bip,juego",
+      },
+      {
+        name: "v-10-21-2-48",
+        url: "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-10-21-2-48.wav",
+        image: "https://www.cs.ubc.ca/~seifi/VibViz/PNGglyph/v-10-21-2-48.png",
+        metaphors: "instrumentos musicales,batería,cymbal,explosion tocando",
+      },
+      {
+        name: "v-10-21-3-11",
+        url: "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-10-21-3-11.wav",
+        image: "https://www.cs.ubc.ca/~seifi/VibViz/PNGglyph/v-10-21-3-11.png",
+        metaphors: "tocando,juego",
+      },
+      {
+        name: "v-10-21-3-17",
+        url: "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-10-21-3-17.wav",
+        image: "https://www.cs.ubc.ca/~seifi/VibViz/PNGglyph/v-10-21-3-17.png",
+        metaphors: "zumbido,alarma",
+      },
+      {
+        name: "v-10-21-3-2",
+        url: "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-10-21-3-2.wav",
+        image: "https://www.cs.ubc.ca/~seifi/VibViz/PNGglyph/v-10-21-3-2.png",
+        metaphors: "bip,reloj",
+      },
+      {
+        name: "v-10-21-3-21",
+        url: "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-10-21-3-21.wav",
+        image: "https://www.cs.ubc.ca/~seifi/VibViz/PNGglyph/v-10-21-3-21.png",
+        metaphors: "",
+      },
+      {
+        name: "v-10-21-3-30",
+        url: "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-10-21-3-30.wav",
+        image: "https://www.cs.ubc.ca/~seifi/VibViz/PNGglyph/v-10-21-3-30.png",
+        metaphors: "bip,zumbido,shock eléctrico,alarma",
+      },
+      {
+        name: "v-10-21-3-33",
+        url: "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-10-21-3-33.wav",
+        image: "https://www.cs.ubc.ca/~seifi/VibViz/PNGglyph/v-10-21-3-33.png",
+        metaphors: "tocando,bip,palpando,reloj",
+      },
+      {
+        name: "v-10-21-3-39",
+        url: "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-10-21-3-39.wav",
+        image: "https://www.cs.ubc.ca/~seifi/VibViz/PNGglyph/v-10-21-3-39.png",
+        metaphors: "alarma,juego,fail juego,pistola,shock eléctrico",
+      },
+      {
+        name: "v-10-21-3-4",
+        url: "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-10-21-3-4.wav",
+        image: "https://www.cs.ubc.ca/~seifi/VibViz/PNGglyph/v-10-21-3-4.png",
+        metaphors: "tocando,saltando,instrumentos musicales,batería,yendo o viniendo,SOS,celebración,pistola,alarma,palpando",
+      },
+      {
+        name: "v-10-21-3-45",
+        url: "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-10-21-3-45.wav",
+        image: "https://www.cs.ubc.ca/~seifi/VibViz/PNGglyph/v-10-21-3-45.png",
+        metaphors: "alarma,teléfono,instrumentos musicales,batería,juego,celebración",
+      },
+      {
+        name: "v-10-21-3-7",
+        url: "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-10-21-3-7.wav",
+        image: "https://www.cs.ubc.ca/~seifi/VibViz/PNGglyph/v-10-21-3-7.png",
+        metaphors: "motor,getting close,coming & going,deslizando",
+      },
+      {
+        name: "v-10-23-1-10",
+        url: "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-10-23-1-10.wav",
+        image: "https://www.cs.ubc.ca/~seifi/VibViz/PNGglyph/v-10-23-1-10.png",
+        metaphors: "yendo o viniendo,teléfono,alarma,bocina,bip",
+      },
+      {
+        name: "v-10-23-1-16",
+        url: "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-10-23-1-16.wav",
+        image: "https://www.cs.ubc.ca/~seifi/VibViz/PNGglyph/v-10-23-1-16.png",
+        metaphors: "teléfono,alarma,SOS,bocina,juego,bip,palpando",
+      },
+      {
+        name: "v-10-23-1-21",
+        url: "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-10-23-1-21.wav",
+        image: "https://www.cs.ubc.ca/~seifi/VibViz/PNGglyph/v-10-23-1-21.png",
+        metaphors: "yendo o viniendo,motor,roncando,something moving,something rolling,deslizando",
+      },
+      {
+        name: "v-10-23-1-23",
+        url: "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-10-23-1-23.wav",
+        image: "https://www.cs.ubc.ca/~seifi/VibViz/PNGglyph/v-10-23-1-23.png",
+        metaphors: "motor,shock eléctrico,roncando,yendo o viniendo,stopping,growl,chainsaw,a door closing",
+      },
+      {
+        name: "v-10-23-1-24",
+        url: "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-10-23-1-24.wav",
+        image: "https://www.cs.ubc.ca/~seifi/VibViz/PNGglyph/v-10-23-1-24.png",
+        metaphors: "motor,pistola,zumbido,animal,yendo o viniendo,celebración",
+      },
+      {
+        name: "v-10-28-7-22",
+        url: "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-10-28-7-22.wav",
+        image: "https://www.cs.ubc.ca/~seifi/VibViz/PNGglyph/v-10-28-7-22.png",
+        metaphors: "SOS,alarma,bip,tocando,batería",
+      },
+      {
+        name: "v-10-28-7-23",
+        url: "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-10-28-7-23.wav",
+        image: "https://www.cs.ubc.ca/~seifi/VibViz/PNGglyph/v-10-28-7-23.png",
+        metaphors: "alarma,tocando",
+      },
+      {
+        name: "v-10-28-7-26",
+        url: "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-10-28-7-26.wav",
+        image: "https://www.cs.ubc.ca/~seifi/VibViz/PNGglyph/v-10-28-7-26.png",
+        metaphors: "rascando,animal,naturaleza",
+      },
+      {
+        name: "v-10-28-7-29",
+        url: "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-10-28-7-29.wav",
+        image: "https://www.cs.ubc.ca/~seifi/VibViz/PNGglyph/v-10-28-7-29.png",
+        metaphors: "andando,yendo o viniendo,motor",
+      },
+      {
+        name: "v-10-28-7-31",
+        url: "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-10-28-7-31.wav",
+        image: "https://www.cs.ubc.ca/~seifi/VibViz/PNGglyph/v-10-28-7-31.png",
+        metaphors: "caminando,tocando,reloj",
+      },
+      {
+        name: "v-10-28-7-33",
+        url: "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-10-28-7-33.wav",
+        image: "https://www.cs.ubc.ca/~seifi/VibViz/PNGglyph/v-10-28-7-33.png",
+        metaphors: "zumbido,motor",
+      },
+      {
+        name: "v-10-28-7-35",
+        url: "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-10-28-7-35.wav",
+        image: "https://www.cs.ubc.ca/~seifi/VibViz/PNGglyph/v-10-28-7-35.png",
+        metaphors: "zumbido,animal,fog bocina",
+      },
+      {
+        name: "v-10-28-7-36",
+        url: "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-10-28-7-36.wav",
+        image: "https://www.cs.ubc.ca/~seifi/VibViz/PNGglyph/v-10-28-7-36.png",
+        metaphors: "zumbido,shock eléctrico,motor,roncando,teléfono,animal",
+      },
+      {
+        name: "v-10-29-4-20",
+        url: "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-10-29-4-20.wav",
+        image: "https://www.cs.ubc.ca/~seifi/VibViz/PNGglyph/v-10-29-4-20.png",
+        metaphors: "roncando,motor,yendo o viniendo,respirando",
+      },
+      {
+        name: "v-10-29-4-22",
+        url: "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-10-29-4-22.wav",
+        image: "https://www.cs.ubc.ca/~seifi/VibViz/PNGglyph/v-10-29-4-22.png",
+        metaphors: "motor,juego",
+      },
+    ];
 
-      let registered = false;
-      let t0k3n = "";
-      let uniqueId = "";
+    let registered = false;
+    let t0k3n = "";
+    let uniqueId = "";
 
-      window.onmessage = (event) => {
-        const msg = event.data.pluginMessage;
-        if (msg.type === "keys") {
-          retrieveSounds(msg.keys);
-        } else if (msg.type === "sound") {
-          if (msg.external) {
-            addExternalSound(msg.key, msg.value, msg.url, msg.image);
-          } else {
-            updateSoundMetaphors(msg.key, msg.value);
-          }
-          displaySounds();
-        } else if (msg.type === "result-token") {
-          registered = msg.value;
-        } else if (msg.type === "initialize-tokens-result") {
-          if (registered) {
-            refreshTokens(msg.tokens.refresh_token);
-          }
+    window.onmessage = (event) => {
+      const msg = event.data.pluginMessage;
+      if (msg.type === "keys") {
+        retrieveSounds(msg.keys);
+      } else if (msg.type === "sound") {
+        if (msg.external) {
+          addExternalSound(msg.key, msg.value, msg.url, msg.image);
         } else {
-          displaySounds();
+          updateSoundMetaphors(msg.key, msg.value);
         }
-      };
-
-      function retrieveSounds(keys) {
-        keys.forEach((key) => {
-          parent.postMessage(
-            { pluginMessage: { type: "get-sound", key } },
-            "*"
-          );
-        });
-      }
-
-      function updateSoundMetaphors(key, newMetaphors) {
-        const sound = sounds.find((s) => s.name === key);
-        if (sound) {
-          sound.metaphors = newMetaphors;
+        displaySounds();
+      } else if (msg.type === "result-token") {
+        registered = msg.value;
+      } else if (msg.type === "initialize-tokens-result") {
+        if (registered) {
+          refreshTokens(msg.tokens.refresh_token);
         }
+      } else {
+        displaySounds();
       }
+    };
 
-      function filterSounds() {
-        const filter = document
-          .getElementById("metaphorFilter")
-          .value.toLowerCase();
-        const filteredSounds = sounds.filter((sound) =>
-          sound.metaphors
-            .split(",")
-            .some((metaphor) => metaphor.trim().toLowerCase().includes(filter))
+    function retrieveSounds(keys) {
+      keys.forEach((key) => {
+        parent.postMessage({
+            pluginMessage: {
+              type: "get-sound",
+              key
+            }
+          },
+          "*"
         );
-        displayFilteredSounds(filteredSounds);
-      }
+      });
+    }
 
-      function displaySounds(soundsToDisplay = sounds) {
-        const soundList = document.getElementById("sound-list");
-        soundList.innerHTML = "";
-        soundsToDisplay.forEach((sound) => {
-          soundList.innerHTML += `
+    function updateSoundMetaphors(key, newMetaphors) {
+      const sound = sounds.find((s) => s.name === key);
+      if (sound) {
+        sound.metaphors = newMetaphors;
+      }
+    }
+
+    function filterSounds() {
+      const filter = document
+        .getElementById("metaphorFilter")
+        .value.toLowerCase();
+      const filteredSounds = sounds.filter((sound) =>
+        sound.metaphors
+        .split(",")
+        .some((metaphor) => metaphor.trim().toLowerCase().includes(filter))
+      );
+      displayFilteredSounds(filteredSounds);
+    }
+
+    function displaySounds(soundsToDisplay = sounds) {
+      const soundList = document.getElementById("sound-list");
+      soundList.innerHTML = "";
+      soundsToDisplay.forEach((sound) => {
+        soundList.innerHTML += `
                 <div class="sound-item" id="sound-${sound.name}">
                   <div class="sound-image">
                     <img src="${sound.image}" alt="${sound.name}" width="50" height="50">
                   </div>
-                  <div class="sound-info">
-                    <span>Name: ${sound.name}</span>
-                    <span>Metaphors: ${sound.metaphors}</span>
+                  <div class="sound-info" style="width: 40%">
+                    <span>Nombre: ${sound.name}</span>
+                    <span>Metáforas: ${sound.metaphors}</span>
                   </div>
                   <button onclick="playSound('${sound.url}')" title="Reproducir sonido">
                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-play-circle-fill" viewBox="0 0 16 16">
@@ -1142,334 +1023,454 @@
                       <path fill-rule="evenodd" d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5z"/>
                     </svg>
                   </button>
+                  <button onclick="getSoundToArray('${sound.url}')" title="Agregar al prototipo">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-plus" viewBox="0 0 16 16">
+                      <path d="M8 1a.5.5 0 0 1 .5.5v6h6a.5.5 0 0 1 0 1h-6v6a.5.5 0 0 1-1 0v-6h-6a.5.5 0 0 1 0-1h6v-6A.5.5 0 0 1 8 1z"/>
+                    </svg>
+                  </button>
                 </div>
               `;
-        });
-      }
+      });
+    }
 
-      function displayFilteredSounds(filteredSounds) {
-        displaySounds(filteredSounds);
-      }
+    function displayFilteredSounds(filteredSounds) {
+      displaySounds(filteredSounds);
+    }
 
-      function playSound(url) {
-        const audio = new Audio(url);
-        audio.play().catch((err) => console.error("Error playing sound:", err));
-      }
+    function playSound(url) {
+      const audio = new Audio(url);
+      audio.play().catch((err) => console.error("Error playing sound:", err));
+    }
 
-      function editMetaphors(soundName) {
-        const sound = sounds.find((s) => s.name === soundName);
-        document.getElementById("metaphorsInput").value = sound.metaphors;
-        const modal = document.getElementById("editModal");
-        modal.style.display = "block";
+    // a partir del id de FreeSound, descarga el wav para luego convertirlo en array
+    async function getSoundToArray(soundUrl) {
+      const header = new Headers();
+      header.append("Authorization", "Bearer " + t0k3n);
+      // Add the X-Requested-With header to satisfy CORS Anywhere requirements
+      header.append("X-Requested-With", "XMLHttpRequest");
+      const requestOptions = {
+        method: "GET",
+        headers: header,
+      };
 
-        document.getElementById("saveMetaphors").onclick = () => {
-          const newMetaphors = document.getElementById("metaphorsInput").value;
-          sound.metaphors = newMetaphors;
-          document.querySelector(
-            `#sound-${sound.name} .sound-info span:nth-child(2)`
-          ).textContent = `Metaphors: ${newMetaphors}`;
+        const request = await fetch(
+          `https://cors-anywhere.herokuapp.com/${soundUrl}`, // Use CORS Anywhere proxy
+          requestOptions
+        );
+        if (request.ok) {
+          // Get the file as a blob
+          const fileBlob = await request.blob();
+          console.log(fileBlob);
+          const array = await getArraySound(fileBlob);
+          
           parent.postMessage(
-            { pluginMessage: { type: "update-sound", sound } },
+            { pluginMessage: { type: "add-to-figma", array: array } },
             "*"
           );
-          modal.style.display = "none";
-        };
-
-        document.querySelector(".close").onclick = () => {
-          modal.style.display = "none";
-        };
+        } else {
+          console.error("Error fetching sound:", request.statusText);
+        }
       }
 
-      // Obtener keys en carga inicial
-      parent.postMessage({ pluginMessage: { type: "get-keys" } }, "*");
+    async function getArraySound(file, threshold = 0.5, sampleStep = 100) {
+      const context = new(window.AudioContext || window.webkitAudioContext)();
 
-      // Chequear registro de usuario
-      parent.postMessage({ pluginMessage: { type: "check-token" } }, "*");
+      // Leer archivo como arrayBuffer y decodificar
+      const arrayBuffer = await file.arrayBuffer();
+      const audioBuffer = await context.decodeAudioData(arrayBuffer);
 
-      // Inicializar tokens
-      parent.postMessage({ pluginMessage: { type: "initialize-tokens" } }, "*");
+      const data = audioBuffer.getChannelData(0); // Obtener datos del primer canal (mono)
+      const sampleRate = audioBuffer.sampleRate; // Frecuencia de muestreo del archivo de audio
 
-      // Mostrar modal de subida cuando el boton "Subir" es clickeado
-      document.getElementById("add-sound").onclick = () => {
-        parent.postMessage({ pluginMessage: { type: "check-token" } }, "*");
-        if (!registered) {
-          document.getElementById("registrationModal").style.display = "block";
+      const pattern = [];
+      let vibrate = false; // Indica si estamos en vibración o pausa
+      let currentDuration = 0; // Tiempo actual acumulado de vibración o pausa
+
+      const msPerStep = (1000 / sampleRate) * sampleStep; // Tiempo en ms para cada `sampleStep`
+
+      // Recorrer los datos del audio tomando muestras a intervalos de `sampleStep`
+      for (let i = 0; i < data.length; i += sampleStep) {
+        const amplitude = Math.abs(data[i]); // Obtener valor absoluto de la amplitud en este paso
+
+        if (amplitude > threshold) {
+          // Si la amplitud es mayor que el umbral, estamos en un período de vibración
+          if (vibrate) {
+            // Si ya estamos vibrando, acumulamos tiempo de vibración
+            currentDuration += msPerStep;
+          } else {
+            // Si estábamos en pausa, guardamos el tiempo de pausa y comenzamos a vibrar
+            if (currentDuration > 0) pattern.push(Math.round(currentDuration)); // Agregar duración de pausa
+            vibrate = true; // Cambiamos a modo vibración
+            currentDuration = msPerStep; // Empezamos a contar tiempo de vibración
+          }
         } else {
+          // Si la amplitud es menor o igual al umbral, estamos en un período de pausa
+          if (vibrate) {
+            // Si estábamos vibrando, guardamos el tiempo de vibración y comenzamos a pausar
+            if (currentDuration > 0) pattern.push(Math.round(currentDuration)); // Agregar duración de vibración
+            vibrate = false; // Cambiamos a modo pausa
+            currentDuration = msPerStep; // Empezamos a contar tiempo de pausa
+          } else {
+            // Si ya estamos en pausa, acumulamos tiempo de pausa
+            currentDuration += msPerStep;
+          }
+        }
+      }
+
+      // Agregar la última vibración o pausa si quedó algo pendiente
+      if (currentDuration > 0) pattern.push(Math.round(currentDuration));
+      console.log(pattern);
+      return pattern;
+    }
+
+
+
+    function editMetaphors(soundName) {
+      const sound = sounds.find((s) => s.name === soundName);
+      document.getElementById("metaphorsInput").value = sound.metaphors;
+      const modal = document.getElementById("editModal");
+      modal.style.display = "block";
+
+      document.getElementById("saveMetaphors").onclick = () => {
+        const newMetaphors = document.getElementById("metaphorsInput").value;
+        sound.metaphors = newMetaphors;
+        document.querySelector(
+          `#sound-${sound.name} .sound-info span:nth-child(2)`
+        ).textContent = `Metaphors: ${newMetaphors}`;
+        parent.postMessage({
+            pluginMessage: {
+              type: "update-sound",
+              sound
+            }
+          },
+          "*"
+        );
+        modal.style.display = "none";
+      };
+
+      document.querySelector(".close").onclick = () => {
+        modal.style.display = "none";
+      };
+    }
+
+    // Obtener keys en carga inicial
+    parent.postMessage({
+      pluginMessage: {
+        type: "get-keys"
+      }
+    }, "*");
+
+    // Chequear registro de usuario
+    parent.postMessage({
+      pluginMessage: {
+        type: "check-token"
+      }
+    }, "*");
+
+    // Inicializar tokens
+    parent.postMessage({
+      pluginMessage: {
+        type: "initialize-tokens"
+      }
+    }, "*");
+
+    // Mostrar modal de subida cuando el boton "Subir" es clickeado
+    document.getElementById("add-sound").onclick = () => {
+      parent.postMessage({
+        pluginMessage: {
+          type: "check-token"
+        }
+      }, "*");
+      if (!registered) {
+        document.getElementById("registrationModal").style.display = "block";
+      } else {
+        document.getElementById("uploadModal").style.display = "block";
+        document.getElementById("registrationModal").style.display = "none";
+      }
+    };
+
+    // Cerrar modal de subida
+    document.querySelector(".close-upload").onclick = () => {
+      document.getElementById("uploadModal").style.display = "none";
+    };
+
+    // Close modal de registro
+    document.querySelector(".close-register").onclick = () => {
+      document.getElementById("registrationModal").style.display = "none";
+    };
+
+    // Funcion para subir sonido
+    document.getElementById("uploadSound").onclick = async () => {
+      // Bloquer el boton de subida
+      document.getElementById("uploadSound").disabled = true;
+
+      // Obtener los valores de los campos de entrada
+      const name = document.getElementById("name").value.trim();
+      const description = document.getElementById("description").value.trim();
+      const tags = document.getElementById("tags").value.trim();
+      const fileInput = document.getElementById("soundFile");
+
+      try {
+        // Validar que todos los campos estén completos
+        if (
+          description === "" ||
+          tags === "" ||
+          fileInput.files.length === 0
+        ) {
+          alert("Todos los campos son obligatorios");
+        }
+
+        // Validar que haya mas de 3 tags
+        if (tags.split(" ").length < 3) {
+          alert("Por favor, ingrese al menos 3 tags.");
+          return;
+        }
+
+        // Validar que el nombre del sonido no exista en el arreglo de sounds
+        if (sounds.some((sound) => sound.name === name)) {
+          alert(
+            "El nombre ya existe en la lista de sonidos. Por favor, elija otro."
+          );
+          return;
+        }
+
+        if (fileInput.files.length > 0) {
+          const file = fileInput.files[0];
+          const reader = new FileReader();
+
+          const succeded = await uploadSound(file, tags, description, name);
+
+          if (succeded) {
+            // Limpiar los campos de entrada
+            document.getElementById("name").value = "";
+            document.getElementById("description").value = "";
+            document.getElementById("tags").value = "";
+            document.getElementById("soundFile").value = "";
+            alert(
+              "Sonido subido exitosamente! Aguarde unos minutos para que aparezca en la lista de sonidos."
+            );
+
+            // Agregar un delay de 3 sepistolados para processing de sonido
+            setTimeout(() => {
+              displaySounds();
+            }, 3000);
+          } else {
+            alert(
+              "Error al cargar el sonido. Por favor, inténtelo de nuevo."
+            );
+          }
+
+          document.getElementById("uploadModal").style.display = "none";
+        } else {
+          alert("Seleccione un archivo para cargar.");
+        }
+      } catch (error) {
+        console.error("Error uploading sound:", error);
+      } finally {
+        // Desbloquear el boton de subida
+        document.getElementById("uploadSound").disabled = false;
+      }
+    };
+
+    // Guardar Auth Code
+    document.getElementById("saveAuthCode").onclick = async () => {
+      // Bloquear el boton de guardar
+      document.getElementById("saveAuthCode").disabled = true;
+
+      try {
+        const authCode = document.getElementById("authCode").value;
+        const valid = await saveAuthCode(authCode);
+        if (valid) {
+          registered = true;
           document.getElementById("uploadModal").style.display = "block";
           document.getElementById("registrationModal").style.display = "none";
+        } else {
+          alert(
+            "Código de autenticación inválido. Por favor, inténtelo de nuevo."
+          );
+          // Clear the auth code
+          document.getElementById("authCode").value = "";
         }
+      } catch {
+        console.error("Error saving auth code");
+      } finally {
+        // Desbloquear el boton de guardar
+        document.getElementById("saveAuthCode").disabled = false;
+      }
+    };
+
+    async function saveAuthCode(token) {
+      const data = new FormData();
+      data.append("client_id", "sk4SYvtNWujw8dwXsjub");
+      data.append(
+        "client_secret",
+        "BISQF8r4KvtJAnTciMYXuyigPKwBmT4B4AvibBpf"
+      );
+      data.append("grant_type", "authorization_code");
+      data.append("code", token);
+
+      const requestOptions = {
+        method: "POST",
+        body: data,
       };
 
-      // Cerrar modal de subida
-      document.querySelector(".close-upload").onclick = () => {
-        document.getElementById("uploadModal").style.display = "none";
-      };
+      const request = await fetch(
+        "https://freesound.org/apiv2/oauth2/access_token/",
+        requestOptions
+      );
+      const response = await request.json();
 
-      // Close modal de registro
-      document.querySelector(".close-register").onclick = () => {
-        document.getElementById("registrationModal").style.display = "none";
-      };
-
-      // Funcion para subir sonido
-      document.getElementById("uploadSound").onclick = async () => {
-        // Bloquer el boton de subida
-        document.getElementById("uploadSound").disabled = true;
-
-        // Obtener los valores de los campos de entrada
-        const name = document.getElementById("name").value.trim();
-        const description = document.getElementById("description").value.trim();
-        const tags = document.getElementById("tags").value.trim();
-        const fileInput = document.getElementById("soundFile");
-
-        try {
-          // Validar que todos los campos estén completos
-          if (
-            description === "" ||
-            tags === "" ||
-            fileInput.files.length === 0
-          ) {
-            alert("Todos los campos son obligatorios");
-          }
-
-          // Validar que haya mas de 3 tags
-          if (tags.split(" ").length < 3) {
-            alert("Por favor, ingrese al menos 3 tags.");
-            return;
-          }
-
-          // Validar que el nombre del sonido no exista en el arreglo de sounds
-          if (sounds.some((sound) => sound.name === name)) {
-            alert(
-              "El nombre ya existe en la lista de sonidos. Por favor, elija otro."
-            );
-            return;
-          }
-
-          if (fileInput.files.length > 0) {
-            const file = fileInput.files[0];
-            const reader = new FileReader();
-
-            const succeded = await uploadSound(file, tags, description, name);
-
-            if (succeded) {
-              // Limpiar los campos de entrada
-              document.getElementById("name").value = "";
-              document.getElementById("description").value = "";
-              document.getElementById("tags").value = "";
-              document.getElementById("soundFile").value = "";
-              alert(
-                "Sonido subido exitosamente! Aguarde unos minutos para que aparezca en la lista de sonidos."
-              );
-
-              // Agregar un delay de 3 segundos para processing de sonido
-              setTimeout(() => {
-                displaySounds();
-              }, 3000);
-              
-            } else {
-              alert(
-                "Error al cargar el sonido. Por favor, inténtelo de nuevo."
-              );
+      if (response.access_token) {
+        parent.postMessage({
+            pluginMessage: {
+              type: "save-token",
+              token: response
             }
+          },
+          "*"
+        );
+        t0k3n = response.access_token;
+        await getUniqueId();
 
-            document.getElementById("uploadModal").style.display = "none";
-          } else {
-            alert("Seleccione un archivo para cargar.");
-          }
-        } catch (error) {
-          console.error("Error uploading sound:", error);
-        } finally {
-          // Desbloquear el boton de subida
-          document.getElementById("uploadSound").disabled = false;
-        }
+        return true;
+      } else {
+        return false;
+      }
+    }
+
+    async function getUniqueId() {
+      // Guardar Unique ID
+      const header = new Headers();
+      header.append("Authorization", "Bearer " + t0k3n);
+      const requestOptions = {
+        method: "GET",
+        headers: header,
+      };
+      const request = await fetch(
+        "https://freesound.org/apiv2/me/",
+        requestOptions
+      );
+
+      const response = await request.json();
+      uniqueId = response.unique_id;
+    }
+
+    async function addExternalSound(name, metaphors, url, image) {
+      sounds.push({
+        name: name,
+        url: url,
+        image: image,
+        metaphors: metaphors,
+      });
+    }
+
+    async function refreshTokens(refreshToken) {
+      const data = new FormData();
+      data.append("client_id", "sk4SYvtNWujw8dwXsjub");
+      data.append(
+        "client_secret",
+        "BISQF8r4KvtJAnTciMYXuyigPKwBmT4B4AvibBpf"
+      );
+      data.append("grant_type", "refresh_token");
+      data.append("refresh_token", refreshToken);
+
+      const requestOptions = {
+        method: "POST",
+        body: data,
       };
 
-      // Guardar Auth Code
-      document.getElementById("saveAuthCode").onclick = async () => {
-        // Bloquear el boton de guardar
-        document.getElementById("saveAuthCode").disabled = true;
+      const request = await fetch(
+        "https://freesound.org/apiv2/oauth2/access_token/",
+        requestOptions
+      );
+      const response = await request.json();
 
-        try {
-          const authCode = document.getElementById("authCode").value;
-          const valid = await saveAuthCode(authCode);
-          if (valid) {
-            registered = true;
-            document.getElementById("uploadModal").style.display = "block";
-            document.getElementById("registrationModal").style.display = "none";
-          } else {
-            alert(
-              "Código de autenticación inválido. Por favor, inténtelo de nuevo."
-            );
-            // Clear the auth code
-            document.getElementById("authCode").value = "";
-          }
-        } catch {
-          console.error("Error saving auth code");
-        } finally {
-          // Desbloquear el boton de guardar
-          document.getElementById("saveAuthCode").disabled = false;
-        }
-      };
-
-      async function saveAuthCode(token) {
-        const data = new FormData();
-        data.append("client_id", "sk4SYvtNWujw8dwXsjub");
-        data.append(
-          "client_secret",
-          "BISQF8r4KvtJAnTciMYXuyigPKwBmT4B4AvibBpf"
+      if (response.access_token) {
+        parent.postMessage({
+            pluginMessage: {
+              type: "save-token",
+              token: response
+            }
+          },
+          "*"
         );
-        data.append("grant_type", "authorization_code");
-        data.append("code", token);
-
-        const requestOptions = {
-          method: "POST",
-          body: data,
-        };
-
-        const request = await fetch(
-          "https://freesound.org/apiv2/oauth2/access_token/",
-          requestOptions
-        );
-        const response = await request.json();
-
-        if (response.access_token) {
-          parent.postMessage(
-            { pluginMessage: { type: "save-token", token: response } },
-            "*"
-          );
-          t0k3n = response.access_token;
-          await getUniqueId();
-
-          return true;
-        } else {
-          return false;
-        }
-      }
-
-      async function getUniqueId() {
-        // Guardar Unique ID
-        const header = new Headers();
-        header.append("Authorization", "Bearer " + t0k3n);
-        const requestOptions = {
-          method: "GET",
-          headers: header,
-        };
-        const request = await fetch(
-          "https://freesound.org/apiv2/me/",
-          requestOptions
-        );
-
-        const response = await request.json();
-        uniqueId = response.unique_id;
-      }
-
-      async function addExternalSound(name, metaphors, url, image) {
-        sounds.push({
-          name: name,
-          url: url,
-          image: image,
-          metaphors: metaphors,
-        });
-      }
-
-      async function refreshTokens(refreshToken) {
-        const data = new FormData();
-        data.append("client_id", "sk4SYvtNWujw8dwXsjub");
-        data.append(
-          "client_secret",
-          "BISQF8r4KvtJAnTciMYXuyigPKwBmT4B4AvibBpf"
-        );
-        data.append("grant_type", "refresh_token");
-        data.append("refresh_token", refreshToken);
-
-        const requestOptions = {
-          method: "POST",
-          body: data,
-        };
-
-        const request = await fetch(
-          "https://freesound.org/apiv2/oauth2/access_token/",
-          requestOptions
-        );
-        const response = await request.json();
-
-        if (response.access_token) {
-          parent.postMessage(
-            { pluginMessage: { type: "save-token", token: response } },
-            "*"
-          );
-          t0k3n = response.access_token;
-          if (!uniqueId) {
-            await getUniqueId();
-          }
-          return true;
-        } else {
-          console.log("Error refreshing token");
-          console.log(response.status);
-          return false;
-        }
-      }
-
-      async function uploadSound(file, tags, description, name) {
-        const data = new FormData();
-        data.append("name", name);
-        data.append("tags", tags);
-        data.append("description", description);
-        data.append("license", "Creative Commons 0");
-        data.append("audiofile", file);
-
-        const header = new Headers();
-        header.append("Authorization", "Bearer " + t0k3n);
-        const requestOptions = {
-          method: "POST",
-          headers: header,
-          body: data,
-        };
-
-        const request = await fetch(
-          "https://freesound.org/apiv2/sounds/upload/",
-          requestOptions
-        );
-
-        // Chequeo doble del UniqueID
+        t0k3n = response.access_token;
         if (!uniqueId) {
           await getUniqueId();
         }
+        return true;
+      } else {
+        console.log("Error refreshing token");
+        console.log(response.status);
+        return false;
+      }
+    }
 
-        const response = await request.json();
-        if (response.id) {
-          const key = response.id.toString();
-          sound_data = {
-            key: key,
-            metaphors: tags,
-            url: `https://cdn.freesound.org/previews/${key.slice(
+    async function uploadSound(file, tags, description, name) {
+      const data = new FormData();
+      data.append("name", name);
+      data.append("tags", tags);
+      data.append("description", description);
+      data.append("license", "Creative Commons 0");
+      data.append("audiofile", file);
+
+      const header = new Headers();
+      header.append("Authorization", "Bearer " + t0k3n);
+      const requestOptions = {
+        method: "POST",
+        headers: header,
+        body: data,
+      };
+
+      const request = await fetch(
+        "https://freesound.org/apiv2/sounds/upload/",
+        requestOptions
+      );
+
+      // Chequeo doble del UniqueID
+      if (!uniqueId) {
+        await getUniqueId();
+      }
+
+      const response = await request.json();
+      if (response.id) {
+        const key = response.id.toString();
+        sound_data = {
+          key: key,
+          metaphors: tags,
+          url: `https://cdn.freesound.org/previews/${key.slice(
               0,
               3
             )}/${key}_${uniqueId}-lq.mp3`,
-            image: `https://cdn.freesound.org/displays/${key.slice(
+          image: `https://cdn.freesound.org/displays/${key.slice(
               0,
               3
             )}/${key}_${uniqueId}_wave_bw_M.png`,
-          };
+        };
 
-          //Se lo agrega para verlo ahora
-          sounds.push({
-            name: key,
-            url: sound_data.url,
-            image: sound_data.image,
-            metaphors: tags,
-          });
+        //Se lo agrega para verlo ahora
+        sounds.push({
+          name: key,
+          url: sound_data.url,
+          image: sound_data.image,
+          metaphors: tags,
+        });
 
-          parent.postMessage(
-            { pluginMessage: { type: "sound-uploaded", sound: sound_data } },
-            "*"
-          );
-          return true;
-        } else {
-          console.log("Error en la subida del archivo");
-          return false;
-        }
+        parent.postMessage({
+            pluginMessage: {
+              type: "sound-uploaded",
+              sound: sound_data
+            }
+          },
+          "*"
+        );
+        return true;
+      } else {
+        console.log("Error en la subida del archivo");
+        return false;
       }
-    </script>
-  </body>
+    }
+  </script>
+</body>
+
 </html>
