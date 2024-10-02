@@ -70,53 +70,36 @@ figma.ui.onmessage = async (msg) => {
 
     // Create a frame
     const frame = figma.createFrame();
-    frame.resize(400, 300);
+    frame.resize(400, 500);
     frame.fills = [{ type: "SOLID", color: { r: 1, g: 1, b: 1 } }];
     frame.name = "Haptic Interaction Frame";
 
     // Create a text element
     const text = figma.createText();
-    text.characters =
-      "Cree una interaccion 'OnClick' con accion 'Open Link' en el boton para abrir nuestra web externa: https://ourapi.com/";
+    text.characters = `Desafortunadamente, Figma aun no permite ejecutar vibraciones. Sin embargo puede seguir los siguientes pasos realizarlo en Framer:
+  1. Crear una cuenta y proyecto en framer.com
+  2. Utilizando el plugin Figma to HTML with Framer, copie los frames que representan la vista antes de presionar el boton en la pagina 1
+  3. De misma manera, cree una segunda pagina en framer y pegue la vista luego de oprimir el boton que desencadena la vibracion
+  4. Agregue el boton que permitira ejecutar la vibracion pegando el siguiente link: https://framer.com/m/Vibrate-ElkP.js@vp5tTtxDs8IVVNJUEcLu
+  5. Seleccionar el boton agregado y en el panel de propiedades, en el campo de "Vibration pattern" introducir lo siguiente:`;
     text.fontSize = 16;
-    text.resize(380, 50);
+    text.resize(380, 350);
     text.x = 10;
     text.y = 10;
     text.fills = [{ type: "SOLID", color: { r: 0, g: 0, b: 0 } }]; // Set text color to black
     frame.appendChild(text);
 
-    // Create a button-like appearance
-    const buttonFrame = figma.createFrame();
-    buttonFrame.resize(100, 40);
-    buttonFrame.cornerRadius = 10;
-    buttonFrame.fills = [{ type: "SOLID", color: { r: 0, g: 0, b: 1 } }]; // Blue background
-    buttonFrame.x = (frame.width - buttonFrame.width) / 2;
-    buttonFrame.y = 70;
-
-    const buttonText = figma.createText();
-    buttonText.characters = "Vibrar!";
-    buttonText.fontSize = 16;
-    buttonText.resize(80, 30);
-    buttonText.x = 10;
-    buttonText.y = 5;
-    buttonText.fills = [{ type: "SOLID", color: { r: 1, g: 1, b: 1 } }]; // White text
-    buttonFrame.appendChild(buttonText);
-
-    frame.appendChild(buttonFrame);
-
     // Create a note
     const note = figma.createText();
-    note.characters = `Copie el siguiente arreglo e introduzcalo en nuestra API: ${JSON.stringify(
-      array
-    )}`;
+    note.characters = `${array.join(",")}`;
     note.fontSize = 14;
-    note.resize(380, 200);
+    note.resize(380, 120);
     note.x = 10;
-    note.y = 120;
+    note.y = 350;
     note.fills = [{ type: "SOLID", color: { r: 0, g: 0, b: 0 } }]; // Set text color to black
     frame.appendChild(note);
 
-    frame.resize(400, 450);
+    frame.resize(400, 470);
 
     // Add the frame to the current page
     figma.currentPage.appendChild(frame);
