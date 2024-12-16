@@ -1,0 +1,162 @@
+/* Your Plugin CSS */
+
+main {
+    display: flex;
+    flex-direction: column;
+    align-items: start;
+    padding: 0 15px 15px 15px;
+    height: 100%;
+    gap: 15px;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    margin: 20px;
+  }
+
+  h2 {
+    text-align: center;
+  }
+
+  .sound-item {
+    margin: 15px 0;
+    display: flex;
+    align-items: center;
+    border: 1px solid #ddd;
+    padding: 10px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+
+  .sound-image {
+    margin-right: 20px;
+  }
+
+  .sound-image img {
+    border-radius: 8px;
+  }
+
+  .sound-info {
+    flex-grow: 1;
+  }
+
+  .sound-info span {
+    display: block;
+    margin: 5px 0;
+  }
+
+  button {
+    margin-left: 10px;
+    padding: 5px 10px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+
+  button:hover {
+    background-color: #0056b3;
+  }
+
+  .modal {
+    display: none;
+    position: fixed;
+    z-index: 1;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0, 0, 0, 0.4);
+  }
+
+  .modal-content {
+    background-color: #fefefe;
+    margin: 15% auto;
+    padding: 20px;
+    border: 1px solid #888;
+    width: 80%;
+    border-radius: 8px;
+  }
+
+  .close {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+  }
+
+  .close:hover,
+  .close:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+  }
+
+  input[type="text"]#metaphorFilter {
+    width: 100%;
+    padding: 12px 20px;
+    margin: 8px 0;
+    box-sizing: border-box;
+    font-size: 16px;
+    border: 2px solid #ccc;
+    border-radius: 4px;
+  }
+
+  .textUpload {
+    width: 100%;
+    padding: 12px 20px;
+    margin: 8px 0;
+    box-sizing: border-box;
+    font-size: 12px;
+    border: 2px solid #ccc;
+    border-radius: 4px;
+  }
+
+  input[type="text"]#metaphorFilter:focus {
+    border: 2px solid #007bff;
+    outline: none;
+  }
+
+  #add-sound {
+    float: right;
+  }
+
+  .close-upload,
+  .close-register {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+    margin-top: -10px;
+    margin-right: -10px;
+    cursor: pointer;
+  }
+
+  .close-upload:hover,
+  .close-upload:focus,
+  .close-register:hover,
+  .close-register:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+  }
+
+  input[type="file"].styled-input,
+  .uploadInput {
+    width: 100%;
+    padding: 12px 20px;
+    margin: 8px 0;
+    box-sizing: border-box;
+    font-size: 14px;
+    border: 2px solid #ccc;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+
+  input[type="file"].styled-input:focus,
+  .uploadInput:focus {
+    border: 2px solid #007bff;
+    outline: none;
+  }
