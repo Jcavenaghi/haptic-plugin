@@ -738,6 +738,7 @@ const initialSounds: Sound[] = [{
 ];
 
 export function App() {
+  const [uniqueId, setUniqueId] = useState<string | null>(null);
   const [sounds, setSounds] = useState<Sound[]>([]);
   const [filteredSounds, setFilteredSounds] = useState<Sound[]>([]);
   const [filter, setFilter] = useState("");
@@ -812,16 +813,64 @@ export function App() {
     setModalVisible(true); // Mostrar el modal cuando el usuario no está autenticado
   };
 
-  const handleAuthCodeSubmit = () => {
+  const handleAuthCodeSubmit = async () => {
     const code = (document.getElementById("authCode") as HTMLInputElement).value;
     if (code) {
-      setAuthToken(code);
-      setIsLoggedIn(true);
-      localStorage.setItem("authToken", code);
-      setModalVisible(false);
-      fetchSoundsFromFreesound(code);
+      console.log(code)
+      const data = new FormData();
+      data.append("client_id", "sk4SYvtNWujw8dwXsjub");
+      data.append(
+        "client_secret",
+        "BISQF8r4KvtJAnTciMYXuyigPKwBmT4B4AvibBpf"
+      );
+      data.append("grant_type", "authorization_code");
+      data.append("code", code);
+
+      const requestOptions = {
+        method: "POST",
+        body: data,
+      };
+
+      const request = await fetch(
+        "https://freesound.org/apiv2/oauth2/access_token/",
+        requestOptions
+      );
+
+      console.log(request)
+
+      const response = await request.json();
+
+      if (response.access_token) {
+        localStorage.setItem("authToken", response.access_token);
+        setAuthToken(response.access_token);
+        setIsLoggedIn(true);
+        setModalVisible(false);
+        fetchSoundsFromFreesound(authToken);
+        await getUniqueId();
+
+        return true;
+      } else {
+        return false;
+      }
     }
   };
+
+  async function getUniqueId() {
+    // Guardar Unique ID
+    const header = new Headers();
+    header.append("Authorization", "Bearer " + authToken);
+    const requestOptions = {
+      method: "GET",
+      headers: header,
+    };
+    const request = await fetch(
+      "https://freesound.org/apiv2/me/",
+      requestOptions
+    );
+
+    const response = await request.json();
+    setUniqueId(response.unique_id);
+  }
 
   const fetchSoundsFromFreesound = async (token: string) => {
     try {
@@ -884,29 +933,52 @@ const handleUploadSound = async () => {
     }
 
     // Crear el FormData para enviar el archivo
+
     const formData = new FormData();
-    formData.append("file", file);
     formData.append("name", name);
-    formData.append("description", description);
     formData.append("tags", tags);
+    formData.append("description", description);
+    formData.append("license", "Creative Commons 0");
+    formData.append("audiofile", file);
+
+    const header = new Headers();
+    header.append("Authorization", "Bearer " + authToken);
+    const requestOptions = {
+      method: "POST",
+      headers: header,
+      body: formData,
+    };
 
     // Subir el sonido a Freesound
-    const response = await fetch("https://freesound.org/apiv2/sounds/", {
-      method: "POST",
-      headers: {
-        Authorization: `Bearer ${authToken}`, // Autenticación con token
-      },
-      body: formData,
-    });
+    const response = await fetch(
+      "https://freesound.org/apiv2/sounds/upload/",
+      requestOptions
+    );
+
 
     const data = await response.json();
-
+    console.log(data);
+    console.log(uniqueId)
     if (data.id) {
       // Si el sonido se sube exitosamente, actualizar la lista de sonidos
+      const key = data.id.toString();
+      const sound_data = {
+        key: key,
+        metaphors: tags,
+        url: `https://cdn.freesound.org/previews/${key.slice(
+            0,
+            3
+          )}/${key}_${uniqueId}-lq.mp3`,
+        image: `https://cdn.freesound.org/displays/${key.slice(
+            0,
+            3
+          )}/${key}_${uniqueId}_wave_bw_M.png`,
+      };
+
       const newSound: Sound = {
-        name: name,
-        url: data.previews["preview-lq-ogg"], // URL del sonido
-        image: data.images.image || "", // Imagen asociada
+        name: sound_data.key,
+        url: sound_data.url,
+        image: sound_data.image,
         metaphors: tags, // Tags como metáforas
       };
 
