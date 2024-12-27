@@ -738,13 +738,10 @@ const initialSounds: Sound[] = [{
 ];
 
 export function App() {
-  const [uniqueId, setUniqueId] = useState<string | null>(null);
   const [sounds, setSounds] = useState<Sound[]>([]);
   const [filteredSounds, setFilteredSounds] = useState<Sound[]>([]);
   const [filter, setFilter] = useState("");
   const [selectedSound, setSelectedSound] = useState<Sound | null>(null);
-  const [authToken, setAuthToken] = useState<string | null>(null);
-  const [refreshToken, setRefreshToken] = useState<string | null>(null);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [modalVisible, setModalVisible] = useState(false); // Modal de autenticación
   const [messageModalVisible, setMessageModalVisible] = useState(false);  // Modal para mostrar el mensaje
@@ -805,6 +802,9 @@ export function App() {
     const requestOptions = {
       method: "POST",
       body: data,
+      headers: {
+        "origin": "https://framer.com",
+      },
     };
 
     const request = await fetch(
@@ -816,11 +816,8 @@ export function App() {
     if (response.access_token) {
       localStorage.setItem("authToken", response.access_token);
       localStorage.setItem("refreshToken", response.refresh_token);
-      setAuthToken(response.access_token);
-      setRefreshToken(response.refresh_token);
       setIsLoggedIn(true);
       setModalVisible(false);
-      fetchSoundsFromFreesound(authToken);
       await getUniqueId();
     }
   };
@@ -852,7 +849,6 @@ export function App() {
   const handleAuthCodeSubmit = async () => {
     const code = (document.getElementById("authCode") as HTMLInputElement).value;
     if (code) {
-      console.log(code)
       const data = new FormData();
       data.append("client_id", "sk4SYvtNWujw8dwXsjub");
       data.append(
@@ -865,6 +861,9 @@ export function App() {
       const requestOptions = {
         method: "POST",
         body: data,
+        headers: {
+          "origin": "https://framer.com",
+        },
       };
 
       const request = await fetch(
@@ -875,15 +874,11 @@ export function App() {
       console.log(request)
 
       const response = await request.json();
-
       if (response.access_token) {
         localStorage.setItem("authToken", response.access_token);
         localStorage.setItem("refreshToken", response.refresh_token);
-        setAuthToken(response.access_token);
-        setRefreshToken(response.refresh_token);
         setIsLoggedIn(true);
         setModalVisible(false);
-        fetchSoundsFromFreesound(authToken);
         await getUniqueId();
 
         return true;
@@ -896,6 +891,7 @@ export function App() {
   async function getUniqueId() {
     // Guardar Unique ID
     const header = new Headers();
+    const authToken = localStorage.getItem("authToken");
     header.append("Authorization", "Bearer " + authToken);
     const requestOptions = {
       method: "GET",
@@ -907,35 +903,24 @@ export function App() {
     );
 
     const response = await request.json();
-    setUniqueId(response.unique_id);
+    localStorage.setItem("uniqueId", response.unique_id);
   }
-
-  const fetchSoundsFromFreesound = async (token: string) => {
-    try {
-      const response = await fetch("https://freesound.org/apiv2/sounds/", {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-      const data = await response.json();
-      const soundsFromApi = data.results.map((sound: any) => ({
-        name: sound.name,
-        url: sound.previews["preview-lq-ogg"], // URL del sonido en calidad baja
-        image: sound.images.image || "", // Imagen asociada al sonido
-        metaphors: "", // No se obtiene metáforas directamente
-      }));
-      setSounds(soundsFromApi);
-      setFilteredSounds(soundsFromApi);
-      localStorage.setItem("sounds", JSON.stringify(soundsFromApi));
-    } catch (error) {
-      console.error("Error al obtener sonidos de Freesound:", error);
-    }
-  };
 
   // Función para manejar el modal de subir sonido
   const handleOpenUploadModal = () => {
     setUploadModalVisible(true);
   };
+
+
+// Funcion para limpiar el modal de input de sonido nuevo
+const clearInput = () => {
+  setSoundDetails({
+    name: "",
+    description: "",
+    metaphors: "",
+    file: null,
+  });
+};
 
 // Función para manejar el envío del formulario de subida de sonido
 const handleUploadSound = async () => {
@@ -980,6 +965,7 @@ const handleUploadSound = async () => {
     formData.append("audiofile", file);
 
     const header = new Headers();
+    const authToken = localStorage.getItem("authToken");
     header.append("Authorization", "Bearer " + authToken);
     const requestOptions = {
       method: "POST",
@@ -993,6 +979,10 @@ const handleUploadSound = async () => {
       requestOptions
     );
 
+    const uniqueId = localStorage.getItem("uniqueId");
+    if (!uniqueId) {
+      await getUniqueId();
+    }
 
     const data = await response.json();
     console.log(data);
@@ -1020,15 +1010,19 @@ const handleUploadSound = async () => {
         metaphors: tags, // Tags como metáforas
       };
 
-      const updatedSounds = [...sounds, newSound];
-      setSounds(updatedSounds);
-      setFilteredSounds(updatedSounds);
-      localStorage.setItem("sounds", JSON.stringify(updatedSounds)); // Actualizar en localStorage
-
-      // Cerrar el modal de subida y mostrar el mensaje de éxito
-      setUploadModalVisible(false);
-      setMessage("Sonido subido exitosamente! Aguarde unos minutos para que aparezca en la lista de sonidos.");
-      setMessageModalVisible(true); // Mostrar el modal de mensaje
+      // Agregar un delay de 3 segundos para que el sonido se suba correctamente
+      setTimeout(() => {
+        const updatedSounds = [...sounds, newSound];
+        setSounds(updatedSounds);
+        setFilteredSounds(updatedSounds);
+        localStorage.setItem("sounds", JSON.stringify(updatedSounds)); // Actualizar en localStorage
+  
+        // Cerrar el modal de subida y mostrar el mensaje de éxito
+        setUploadModalVisible(false);
+        clearInput();
+        setMessage("Sonido subido exitosamente! Aguarde unos minutos para que aparezca en la lista de sonidos.");
+        setMessageModalVisible(true); // Mostrar el modal de mensaje
+      }, 3000);
 
     } else {
       // Si ocurre un error al subir el sonido
