@@ -744,6 +744,7 @@ export function App() {
   const [filter, setFilter] = useState("");
   const [selectedSound, setSelectedSound] = useState<Sound | null>(null);
   const [authToken, setAuthToken] = useState<string | null>(null);
+  const [refreshToken, setRefreshToken] = useState<string | null>(null);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [modalVisible, setModalVisible] = useState(false); // Modal de autenticación
   const [messageModalVisible, setMessageModalVisible] = useState(false);  // Modal para mostrar el mensaje
@@ -769,7 +770,8 @@ export function App() {
 
     const storedToken = localStorage.getItem("authToken");
     if (storedToken) {
-      setAuthToken(storedToken);
+      const storedRefreshToken = localStorage.getItem("refreshToken");
+      functionRefreshToken(storedRefreshToken);
       setIsLoggedIn(true);
     } else {
       setModalVisible(true); // Si no está logueado, muestra el modal de login
@@ -789,6 +791,40 @@ export function App() {
       setFilteredSounds(sounds);
     }
   }, [filter, sounds]);
+
+  const functionRefreshToken = async (refreshToken: any) => {
+    const data = new FormData();
+    data.append("client_id", "sk4SYvtNWujw8dwXsjub");
+    data.append(
+      "client_secret",
+      "BISQF8r4KvtJAnTciMYXuyigPKwBmT4B4AvibBpf"
+    );
+    data.append("grant_type", "refresh_token");
+    data.append("refresh_token", refreshToken);
+    
+    const requestOptions = {
+      method: "POST",
+      body: data,
+    };
+
+    const request = await fetch(
+      "https://freesound.org/apiv2/oauth2/access_token/",
+      requestOptions
+    );
+    const response = await request.json();
+
+    if (response.access_token) {
+      localStorage.setItem("authToken", response.access_token);
+      localStorage.setItem("refreshToken", response.refresh_token);
+      setAuthToken(response.access_token);
+      setRefreshToken(response.refresh_token);
+      setIsLoggedIn(true);
+      setModalVisible(false);
+      fetchSoundsFromFreesound(authToken);
+      await getUniqueId();
+    }
+  };
+
 
   const playSound = (url: string) => {
     const audio = new Audio(url);
@@ -842,7 +878,9 @@ export function App() {
 
       if (response.access_token) {
         localStorage.setItem("authToken", response.access_token);
+        localStorage.setItem("refreshToken", response.refresh_token);
         setAuthToken(response.access_token);
+        setRefreshToken(response.refresh_token);
         setIsLoggedIn(true);
         setModalVisible(false);
         fetchSoundsFromFreesound(authToken);
