@@ -822,8 +822,8 @@ export function App() {
     }
   };
 
-
   const playSound = (url: string) => {
+    console.log("A");
     const audio = new Audio(url);
     audio.play().catch((err) => console.error("Error reproduciendo el sonido:", err));
   };
@@ -904,6 +904,99 @@ export function App() {
 
     const response = await request.json();
     localStorage.setItem("uniqueId", response.unique_id);
+  }
+
+  async function getArraySound(file, threshold = 0.5, sampleStep = 100) {
+    const context = new(window.AudioContext)();
+
+    // Leer archivo como arrayBuffer y decodificar
+    const arrayBuffer = await file.arrayBuffer();
+    const audioBuffer = await context.decodeAudioData(arrayBuffer);
+
+    const data = audioBuffer.getChannelData(0); // Obtener datos del primer canal (mono)
+    const sampleRate = audioBuffer.sampleRate; // Frecuencia de muestreo del archivo de audio
+
+    const pattern = [];
+    let vibrate = false; // Indica si estamos en vibración o pausa
+    let currentDuration = 0; // Tiempo actual acumulado de vibración o pausa
+
+    const msPerStep = (1000 / sampleRate) * sampleStep; // Tiempo en ms para cada ⁠ sampleStep ⁠
+
+    // Recorrer los datos del audio tomando muestras a intervalos de ⁠ sampleStep ⁠
+    for (let i = 0; i < data.length; i += sampleStep) {
+      const amplitude = Math.abs(data[i]); // Obtener valor absoluto de la amplitud en este paso
+
+      if (amplitude > threshold) {
+        // Si la amplitud es mayor que el umbral, estamos en un período de vibración
+        if (vibrate) {
+          // Si ya estamos vibrando, acumulamos tiempo de vibración
+          currentDuration += msPerStep;
+        } else {
+          // Si estábamos en pausa, guardamos el tiempo de pausa y comenzamos a vibrar
+          if (currentDuration > 0) pattern.push(Math.round(currentDuration)); // Agregar duración de pausa
+          vibrate = true; // Cambiamos a modo vibración
+          currentDuration = msPerStep; // Empezamos a contar tiempo de vibración
+        }
+      } else {
+        // Si la amplitud es menor o igual al umbral, estamos en un período de pausa
+        if (vibrate) {
+          // Si estábamos vibrando, guardamos el tiempo de vibración y comenzamos a pausar
+          if (currentDuration > 0) pattern.push(Math.round(currentDuration)); // Agregar duración de vibración
+          vibrate = false; // Cambiamos a modo pausa
+          currentDuration = msPerStep; // Empezamos a contar tiempo de pausa
+        } else {
+          // Si ya estamos en pausa, acumulamos tiempo de pausa
+          currentDuration += msPerStep;
+        }
+      }
+    }
+
+    // Agregar la última vibración o pausa si quedó algo pendiente
+    if (currentDuration > 0) pattern.push(Math.round(currentDuration));
+    console.log(pattern);
+    return pattern;
+  }
+
+  async function getSoundToArray(soundUrl: string) {
+    const header = new Headers();
+    const authToken = localStorage.getItem("authToken");
+    header.append("Authorization", "Bearer " + authToken);
+    // Add the X-Requested-With header to satisfy CORS Anywhere requirements
+    header.append("X-Requested-With", "XMLHttpRequest");
+    header.append("origin", "https://framer.com");
+    const requestOptions = {
+      method: "GET",
+      headers: header,
+    };
+
+      const request = await fetch(
+        soundUrl,
+        requestOptions
+      );
+      if (request.ok) {
+        // Get the file as a blob
+        const fileBlob = await request.blob();
+        console.log(fileBlob);
+        const array = await getArraySound(fileBlob);
+        return array;
+      } else {
+        console.error("Error fetching sound:", request.statusText);
+      }
+    }
+
+
+  const insertButtonOnCanvas = async (soundUrl: string) => {
+    const pattern = getSoundToArray(soundUrl);
+    console.log(pattern);
+    const instance = await framer.addComponentInstance({
+      url: "https://framer.com/m/Vibrate-ElkP.js@vp5tTtxDs8IVVNJUEcLu"
+    })
+
+    instance.setAttributes({
+      controls: {
+        vibrationPattern: pattern,
+      }
+    })
   }
 
   // Función para manejar el modal de subir sonido
@@ -1324,6 +1417,27 @@ const handleUploadSound = async () => {
                 viewBox="0 0 16 16"
               >
                 <path d="M12.854.146a.5.5 0 0 0-.707 0L10.5 1.793 14.207 5.5l1.647-1.646a.5.5 0 0 0 0-.708zm.646 6.061L9.793 2.5 3.293 9H3.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.207zm-7.468 7.468A.5.5 0 0 1 6 13.5V13h-.5a.5.5 0 0 1-.5-.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0 1-.5-.5V10h-.5a.5.5 0 0 1-.175-.032l-.179.178a.5.5 0 0 0-.11.168l-2 5a.5.5 0 0 0 .65.65l5-2a.5.5 0 0 0 .168-.11z" />
+              </svg>
+            </button>
+            <button
+              onClick={() => insertButtonOnCanvas(sound.url)}
+              style={{
+                width: "fit-content",
+                padding: "5px",
+                border: "none",
+                background: "transparent",
+                cursor: "pointer",
+              }}
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="20"
+                height="20"
+                fill="currentColor"
+                className="bi bi-plus-lg"
+                viewBox="0 0 16 16"
+              >
+                <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z"/> 
               </svg>
             </button>
           </div>
