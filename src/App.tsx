@@ -963,41 +963,41 @@ export function App() {
     header.append("Authorization", "Bearer " + authToken);
     // Add the X-Requested-With header to satisfy CORS Anywhere requirements
     header.append("X-Requested-With", "XMLHttpRequest");
-    header.append("origin", "https://framer.com");
     const requestOptions = {
       method: "GET",
       headers: header,
     };
 
-      const request = await fetch(
-        soundUrl,
-        requestOptions
-      );
-      if (request.ok) {
-        // Get the file as a blob
-        const fileBlob = await request.blob();
-        console.log(fileBlob);
-        const array = await getArraySound(fileBlob);
-        return array;
-      } else {
-        console.error("Error fetching sound:", request.statusText);
-      }
+    const request = await fetch(
+      `https://cors-anywhere.herokuapp.com/${soundUrl}`, // Use CORS Anywhere proxy
+      requestOptions
+    );
+
+    if (request.ok) {
+      // Get the file as a blob
+      const fileBlob = await request.blob();
+      console.log(fileBlob);
+      const array = await getArraySound(fileBlob);
+      return array;
+    } else {
+      console.error("Error fetching sound:", request.statusText);
+    }
     }
 
 
   const insertButtonOnCanvas = async (soundUrl: string) => {
-    const pattern = getSoundToArray(soundUrl);
-    console.log(pattern);
+    const pattern = await getSoundToArray(soundUrl);
+    const patternString = JSON.stringify(pattern);
     const instance = await framer.addComponentInstance({
       url: "https://framer.com/m/Vibrate-ElkP.js@vp5tTtxDs8IVVNJUEcLu"
-    })
+    });
 
     instance.setAttributes({
       controls: {
-        vibrationPattern: pattern,
+        vibrationPattern: patternString,
       }
-    })
-  }
+    });
+  };
 
   // Función para manejar el modal de subir sonido
   const handleOpenUploadModal = () => {
