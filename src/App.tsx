@@ -770,8 +770,6 @@ export function App() {
       const storedRefreshToken = localStorage.getItem("refreshToken");
       functionRefreshToken(storedRefreshToken);
       setIsLoggedIn(true);
-    } else {
-      setModalVisible(true); // Si no está logueado, muestra el modal de login
     }
   }, []);
 
@@ -1036,7 +1034,7 @@ const handleUploadSound = async () => {
 
     // Validar que haya al menos 3 tags
     if (tags.split(",").length < 3) {
-      setMessage("Por favor, ingrese al menos 3 tags.");
+      setMessage("Por favor, ingrese al menos 3 metáforas. las mismas deben estar separadas por una coma");
       setMessageModalVisible(true);
       return;
     }
@@ -1153,13 +1151,18 @@ const handleUploadSound = async () => {
   };
 
   return (
-    <div style={{ padding: "20px", fontFamily: "Arial, sans-serif" }}>
-      <h2>Diseño Vibrante</h2>
+    <div className="container py-4">
+      <h2 className="text-center mb-4">Diseño Vibrante</h2>
       {!isLoggedIn ? (
-        <button onClick={authenticateUser}>Iniciar sesión en Freesound</button>
+        <button 
+        className="btn btn-blue w-100 mb-5"
+        onClick={authenticateUser}>Iniciar sesión en Freesound</button>
       ) : (
         <div>
-          <button onClick={handleOpenUploadModal}>Subir Sonido</button>
+          <button 
+          className="btn w-100 mb-5 btn-custom"
+          onClick={handleOpenUploadModal}
+          >Subir Sonido</button>
         </div>
       )}
 
@@ -1167,47 +1170,42 @@ const handleUploadSound = async () => {
     {messageModalVisible && (
       <div
         id="messageModal"
-        className="modal"
-        style={{ display: "block", position: "fixed", top: 0, left: 0, width: "100%", height: "100%", backgroundColor: "rgba(0, 0, 0, 0.5)", alignItems: "center" }}
-      >
-        <div className="modal-content" style={{ backgroundColor: "#fff", color: "#000", padding: "20px", borderRadius: "10px", width: "300px", textAlign: "center" }}>
-          <h3>{message}</h3>
+        className="modal message-modal">
+        <div className="msg-modal-content modal-content">
+          <h5>{message}</h5>
           <button
             onClick={() => setMessageModalVisible(false)}
-            style={{ backgroundColor: "#28a745", color: "#fff", padding: "10px", borderRadius: "5px" }}
+            className="btn btn-fit btn-blue"
           >
             Cerrar
           </button>
         </div>
       </div>
-    )}
+      )}
 
 
       {/* Modal para ingresar el código de autorización */}
       {modalVisible && (
-        <div id="registrationModal" className="modal" style={{ display: "block" }}>
-          <div className="modal-content">
-            <span
-              className="close-register"
-              onClick={() => setModalVisible(false)}
-              style={{ cursor: "pointer" }}
-            >
-              &times;
-            </span>
-            <h2>Por favor registrese en FreeSound</h2>
+        <div id="registrationModal" className="modal registration-modal">
+          <div className="modal-content reg-modal-content">
+          <span
+          className="close"
+          onClick={() => setModalVisible(false)}
+          >
+            &times;
+          </span>
+            <h5>Registrarse en FreeSound</h5>
             <p>
-              Tienes que registrarte en FreeSound para poder subir sonidos. Por
+              Es necesario registrarse en FreeSound para poder subir sonidos. Por
               favor, haga clic en el botón de abajo para registrarse o iniciar
-              sesión. Después de registrarse ingrese el 'Código de Autorización'
-              para poder cargar sonidos.
+              sesión. Después de registrarse, ingrese el 'Código de Autorización'
             </p>
-            <button id="registerButton">
-              <a
-                href="https://freesound.org/apiv2/oauth2/authorize/?client_id=sk4SYvtNWujw8dwXsjub&response_type=code&state=xyz"
-                target="_blank"
-              >
-                Registrarse/Iniciar sesión
-              </a>
+            <button 
+              id="registerButton" 
+              className="btn btn-blue mb-5"
+              onClick={() => window.open('https://freesound.org/apiv2/oauth2/authorize/?client_id=sk4SYvtNWujw8dwXsjub&response_type=code&state=xyz', '_blank')}
+            >
+              Registrarse/Iniciar sesión
             </button>
             <input
               type="text"
@@ -1218,7 +1216,7 @@ const handleUploadSound = async () => {
             <button
               id="saveAuthCode"
               onClick={handleAuthCodeSubmit}
-              style={{ marginTop: "10px" }}
+              className="btn btn-custom"
             >
               Guardar
             </button>
@@ -1228,32 +1226,18 @@ const handleUploadSound = async () => {
 
       {/* Modal de subir sonido */}
       {uploadModalVisible && (
-  <div id="uploadModal" className="modal" style={{ display: "block" }}>
-    <div
-      className="modal-content"
-      style={{
-        display: "flex",
-        flexDirection: "column",
-        backgroundColor: "#000", // Fondo negro
-        color: "#fff", // Texto blanco
-        padding: "20px",
-        borderRadius: "10px",
-        boxShadow: "0 4px 8px rgba(0, 0, 0, 0.2)", // Sombra para mejor visibilidad
-      }}
+    <div id="uploadModal" className="modal" style={{ display: "block" }}>
+     <div
+      className="modal-content upload-modal"
+      style={{ backgroundColor:"rgb(62, 62, 62)"}}
     >
       <span
-        className="close-upload"
+        className="close"
         onClick={() => setUploadModalVisible(false)}
-        style={{
-          cursor: "pointer",
-          color: "#fff", // Icono de cerrar en blanco
-          fontSize: "24px",
-          position: "absolute",
-        }}
       >
         &times;
       </span>
-      <h2>Subir un sonido</h2>
+      <h4>Subir un sonido</h4>
       <label htmlFor="name" style={{ marginTop: "10px" }}>
         Nombre
       </label>
@@ -1263,13 +1247,6 @@ const handleUploadSound = async () => {
         className="uploadInput"
         value={soundDetails.name}
         onChange={handleInputChange}
-        style={{
-          height: "30px",
-          marginBottom: "10px",
-          padding: "5px",
-          borderRadius: "5px",
-          fontSize: "16px",
-        }}
       />
       <label htmlFor="description">Descripción</label>
       <input
@@ -1278,13 +1255,6 @@ const handleUploadSound = async () => {
         className="uploadInput"
         value={soundDetails.description}
         onChange={handleInputChange}
-        style={{
-          height: "30px",
-          marginBottom: "10px",
-          padding: "5px",
-          borderRadius: "5px",
-          fontSize: "16px",
-        }}
       />
       <label htmlFor="tags">Metáforas</label>
       <input
@@ -1293,40 +1263,29 @@ const handleUploadSound = async () => {
         className="uploadInput"
         value={soundDetails.metaphors}
         onChange={handleInputChange}
-        style={{
-          height: "30px",
-          marginBottom: "10px",
-          padding: "5px",
-          borderRadius: "5px",
-          fontSize: "16px",
-        }}
         />
       <label htmlFor="soundFile">Archivo de sonido</label>
       <input
         type="file"
         id="soundFile"
-        className="uploadInput"
+        className="uploadInput file"
         onChange={handleFileChange}
-        style={{
-          marginBottom: "10px",
-          padding: "5px",
-          borderRadius: "5px",
-        }}
       />
-      <button
-        id="uploadSound"
-        onClick={handleUploadSound}
-        style={{
-          backgroundColor: "#28a745",
-          color: "#fff",
-          padding: "10px",
-          borderRadius: "5px",
-          fontSize: "16px",
-          cursor: "pointer",
-        }}
-      >
-        Subir
-      </button>
+      <div className="d-flex flex-row justify-content-center">
+          <button
+            onClick={() => setUploadModalVisible(false)}
+            className="btn btn-fit btn-danger"
+          >
+            Cancelar
+          </button>
+          <button
+          id="uploadSound"
+          onClick={handleUploadSound}
+          className="btn btn-fit btn-custom"
+          >
+            Subir sonido
+          </button>
+      </div>
     </div>
   </div>
 )}
@@ -1341,8 +1300,8 @@ const handleUploadSound = async () => {
         style={{
           width: "100%",
           padding: "10px",
-          marginBottom: "20px",
-          fontSize: "16px",
+          marginTop: "10px",
+          marginBottom: "10px",
           border: "1px solid #ddd",
           borderRadius: "8px",
         }}
@@ -1379,13 +1338,8 @@ const handleUploadSound = async () => {
             </div>
             <button
               onClick={() => playSound(sound.url)}
-              style={{
-                width: "fit-content",
-                padding: "5px",
-                border: "none",
-                background: "transparent",
-                cursor: "pointer",
-              }}
+              className="svg"
+              title="Reproducir sonido" 
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -1400,13 +1354,8 @@ const handleUploadSound = async () => {
             </button>
             <button
               onClick={() => setSelectedSound(sound)}
-              style={{
-                width: "fit-content",
-                padding: "5px",
-                border: "none",
-                background: "transparent",
-                cursor: "pointer",
-              }}
+              className="svg"
+              title="Editar metáforas"
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -1421,13 +1370,8 @@ const handleUploadSound = async () => {
             </button>
             <button
               onClick={() => insertButtonOnCanvas(sound.url)}
-              style={{
-                width: "fit-content",
-                padding: "5px",
-                border: "none",
-                background: "transparent",
-                cursor: "pointer",
-              }}
+              className="svg"
+              title="Insertar en Framer"
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -1460,13 +1404,20 @@ const handleUploadSound = async () => {
         >
           <div
             style={{
-              backgroundColor: "#fff",
+              backgroundColor: "black",
               padding: "20px",
               borderRadius: "8px",
               width: "400px",
+              position: "relative",
             }}
           >
-            <h3>Editar Metáforas</h3>
+            <span
+            onClick={() => setSelectedSound(null)}
+            className="close"
+          >
+            &times;
+          </span>
+            <h4>Editar metáforas</h4>
             <textarea
               value={selectedSound.metaphors}
               onChange={(e) =>
@@ -1475,13 +1426,20 @@ const handleUploadSound = async () => {
               rows={4}
               style={{ width: "100%", marginBottom: "20px" }}
             />
-            <button
-              onClick={() => saveMetaphors(selectedSound.metaphors)}
-              style={{ marginRight: "10px" }}
-            >
-              Guardar
-            </button>
-            <button onClick={() => setSelectedSound(null)}>Cancelar</button>
+              <div className="d-flex flex-row justify-content-center">
+                <button
+                  onClick={() => setSelectedSound(null)}
+                  className="btn btn-fit btn-danger"
+                >
+                  Cancelar
+                </button>
+                <button
+                  onClick={() => saveMetaphors(selectedSound.metaphors)}
+                  className="btn btn-fit btn-custom"
+                >
+                  Guardar
+                </button>
+            </div>
           </div>
         </div>
       )}
