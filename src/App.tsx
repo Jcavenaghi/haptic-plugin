@@ -821,7 +821,6 @@ export function App() {
   };
 
   const playSound = (url: string) => {
-    console.log("A");
     const audio = new Audio(url);
     audio.play().catch((err) => console.error("Error reproduciendo el sonido:", err));
   };
@@ -959,16 +958,10 @@ export function App() {
     const header = new Headers();
     const authToken = localStorage.getItem("authToken");
     header.append("Authorization", "Bearer " + authToken);
-    // Add the X-Requested-With header to satisfy CORS Anywhere requirements
-    header.append("X-Requested-With", "XMLHttpRequest");
-    const requestOptions = {
-      method: "GET",
-      headers: header,
-    };
 
+    // Usamos el proxy corsproxy.io para evitar problemas de CORS
     const request = await fetch(
-      `https://cors-anywhere.herokuapp.com/${soundUrl}`, // Use CORS Anywhere proxy
-      requestOptions
+      `https://corsproxy.io/?url=${soundUrl}`
     );
 
     if (request.ok) {
