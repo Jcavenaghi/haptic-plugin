@@ -868,7 +868,6 @@ export function App() {
         requestOptions
       );
 
-      console.log(request)
 
       const response = await request.json();
       if (response.access_token) {
@@ -950,7 +949,6 @@ export function App() {
 
     // Agregar la última vibración o pausa si quedó algo pendiente
     if (currentDuration > 0) pattern.push(Math.round(currentDuration));
-    console.log(pattern);
     return pattern;
   }
 
@@ -967,7 +965,6 @@ export function App() {
     if (request.ok) {
       // Get the file as a blob
       const fileBlob = await request.blob();
-      console.log(fileBlob);
       const array = await getArraySound(fileBlob);
       return array;
     } else {
@@ -1027,7 +1024,7 @@ const handleUploadSound = async () => {
 
     // Validar que haya al menos 3 tags
     if (tags.split(",").length < 3) {
-      setMessage("Por favor, ingrese al menos 3 metáforas. las mismas deben estar separadas por una coma");
+      setMessage("Por favor, ingrese al menos 3 etiquetas. las mismas deben estar separadas por una coma");
       setMessageModalVisible(true);
       return;
     }
@@ -1069,8 +1066,7 @@ const handleUploadSound = async () => {
     }
 
     const data = await response.json();
-    console.log(data);
-    console.log(uniqueId)
+
     if (data.id) {
       // Si el sonido se sube exitosamente, actualizar la lista de sonidos
       const key = data.id.toString();
@@ -1091,7 +1087,7 @@ const handleUploadSound = async () => {
         name: sound_data.key,
         url: sound_data.url,
         image: sound_data.image,
-        metaphors: tags, // Tags como metáforas
+        metaphors: tags, // Tags como etiquetas
       };
 
       // Agregar un delay de 3 segundos para que el sonido se suba correctamente
@@ -1249,7 +1245,7 @@ const handleUploadSound = async () => {
         value={soundDetails.description}
         onChange={handleInputChange}
       />
-      <label htmlFor="tags">Metáforas</label>
+      <label htmlFor="tags">Etiquetas</label>
       <input
         type="text"
         id="metaphors"
@@ -1326,7 +1322,7 @@ const handleUploadSound = async () => {
                 <strong>Nombre:</strong> {sound.name}
               </div>
               <div>
-                <strong>Metáforas:</strong> {sound.metaphors}
+                <strong>Etiquetas:</strong> {sound.metaphors}
               </div>
             </div>
             <button
@@ -1348,7 +1344,7 @@ const handleUploadSound = async () => {
             <button
               onClick={() => setSelectedSound(sound)}
               className="svg"
-              title="Editar metáforas"
+              title="Modificar etiquetas"
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -1410,7 +1406,7 @@ const handleUploadSound = async () => {
           >
             &times;
           </span>
-            <h4>Editar metáforas</h4>
+            <h4>Modificar etiquetas</h4>
             <textarea
               value={selectedSound.metaphors}
               onChange={(e) =>
