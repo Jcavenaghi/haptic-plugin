@@ -19,127 +19,127 @@ const initialSounds: Sound[] = [{
   name: "v-09-09-8-11",
   url: "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-09-09-8-11.wav",
   image: "https://www.cs.ubc.ca/~seifi/VibViz/PNGglyph/v-09-09-8-11.png",
-  metaphors: "latido del corazón,pulsante,tocando,palpando",
+  metaphors: "heartbeat,pulsating,touching,palpating",
 },
 {
   name: "v-09-09-8-20",
   url: "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-09-09-8-20.wav",
   image: "https://www.cs.ubc.ca/~seifi/VibViz/PNGglyph/v-09-09-8-20.png",
-  metaphors: "latido del corazón,tocando,animal",
+  metaphors: "heartbeat,touching,animal",
 },
 {
   name: "v-09-09-8-24",
   url: "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-09-09-8-24.wav",
   image: "https://www.cs.ubc.ca/~seifi/VibViz/PNGglyph/v-09-09-8-24.png",
-  metaphors: "motor,yendo o viniendo",
+  metaphors: "motor,coming and going",
 },
 {
   name: "v-09-10-11-55",
   url: "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-09-10-11-55.wav",
   image: "https://www.cs.ubc.ca/~seifi/VibViz/PNGglyph/v-09-10-11-55.png",
-  metaphors: "alarma,saltando,deslizando,teléfono",
+  metaphors: "alarm,jumping,sliding,phone",
 },
 {
   name: "v-09-10-11-58",
   url: "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-09-10-11-58.wav",
   image: "https://www.cs.ubc.ca/~seifi/VibViz/PNGglyph/v-09-10-11-58.png",
-  metaphors: "ronroneando,roncando,animal,yendo o viniendo",
+  metaphors: "purring,snoring,animal,coming and going",
 },
 {
   name: "v-09-10-12-11",
   url: "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-09-10-12-11.wav",
   image: "https://www.cs.ubc.ca/~seifi/VibViz/PNGglyph/v-09-10-12-11.png",
-  metaphors: "alarma,shock eléctrico",
+  metaphors: "alarm,electric shock",
 },
 {
   name: "v-09-10-12-13",
   url: "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-09-10-12-13.wav",
   image: "https://www.cs.ubc.ca/~seifi/VibViz/PNGglyph/v-09-10-12-13.png",
-  metaphors: "alarma,tocando,instrumentos musicales,batería,bip,teléfono,celebración",
+  metaphors: "alarm,touching,musical instruments,battery,bip,phone,celebration",
 },
 {
   name: "v-09-10-12-16",
   url: "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-09-10-12-16.wav",
   image: "https://www.cs.ubc.ca/~seifi/VibViz/PNGglyph/v-09-10-12-16.png",
-  metaphors: "instrumentos musicales,bip",
+  metaphors: "musical instruments,bip",
 },
 {
   name: "v-09-10-12-2",
   url: "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-09-10-12-2.wav",
   image: "https://www.cs.ubc.ca/~seifi/VibViz/PNGglyph/v-09-10-12-2.png",
-  metaphors: "roncando,zumbido",
+  metaphors: "snoring,buzzing",
 },
 {
   name: "v-09-10-12-6",
   url: "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-09-10-12-6.wav",
   image: "https://www.cs.ubc.ca/~seifi/VibViz/PNGglyph/v-09-10-12-6.png",
-  metaphors: "roncando,campana,caminando,alarma,yendo o viniendo",
+  metaphors: "snoring,bell,walking,alarm,coming and going",
 },
 {
   name: "v-09-10-12-9",
   url: "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-09-10-12-9.wav",
   image: "https://www.cs.ubc.ca/~seifi/VibViz/PNGglyph/v-09-10-12-9.png",
-  metaphors: "tocando,alarma,instrumentos musicales,batería,animal",
+  metaphors: "touching,alarm,musical instruments,battery,animal",
 },
 {
   name: "v-09-10-3-52",
   url: "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-09-10-3-52.wav",
   image: "https://www.cs.ubc.ca/~seifi/VibViz/PNGglyph/v-09-10-3-52.png",
-  metaphors: "tocando,código morse,teléfono,alarma",
+  metaphors: "touching,morse code,phone,alarm",
 },
 {
   name: "v-09-10-3-56",
   url: "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-09-10-3-56.wav",
   image: "https://www.cs.ubc.ca/~seifi/VibViz/PNGglyph/v-09-10-3-56.png",
-  metaphors: "pistola",
+  metaphors: "pistol",
 },
 {
   name: "v-09-10-4-2",
   url: "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-09-10-4-2.wav",
   image: "https://www.cs.ubc.ca/~seifi/VibViz/PNGglyph/v-09-10-4-2.png",
-  metaphors: "tocando,pulsante",
+  metaphors: "touching,pulsating",
 },
 {
   name: "v-09-10-4-20",
   url: "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-09-10-4-20.wav",
   image: "https://www.cs.ubc.ca/~seifi/VibViz/PNGglyph/v-09-10-4-20.png",
-  metaphors: "latido del corazón,rascando,animal,tocando",
+  metaphors: "heartbeat,scratching,animal,touching",
 },
 {
   name: "v-09-10-4-23",
   url: "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-09-10-4-23.wav",
   image: "https://www.cs.ubc.ca/~seifi/VibViz/PNGglyph/v-09-10-4-23.png",
-  metaphors: "latido del corazón,tocando,rascando,reloj",
+  metaphors: "heartbeat,touching,scratching,clock",
 },
 {
   name: "v-09-10-4-25",
   url: "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-09-10-4-25.wav",
   image: "https://www.cs.ubc.ca/~seifi/VibViz/PNGglyph/v-09-10-4-25.png",
-  metaphors: "motor,latido del corazón,tocando",
+  metaphors: "motor,heartbeat,touching",
 },
 {
   name: "v-09-10-4-6",
   url: "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-09-10-4-6.wav",
   image: "https://www.cs.ubc.ca/~seifi/VibViz/PNGglyph/v-09-10-4-6.png",
-  metaphors: "tocando,yendo o viniendo,animal",
+  metaphors: "touching,coming and going,animal",
 },
 {
   name: "v-09-10-6-16",
   url: "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-09-10-6-16.wav",
   image: "https://www.cs.ubc.ca/~seifi/VibViz/PNGglyph/v-09-10-6-16.png",
-  metaphors: "tocando,bip,latido del corazón",
+  metaphors: "touching,bip,heartbeat",
 },
 {
   name: "v-09-10-6-22",
   url: "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-09-10-6-22.wav",
   image: "https://www.cs.ubc.ca/~seifi/VibViz/PNGglyph/v-09-10-6-22.png",
-  metaphors: "pistola,shock eléctrico,motor,andando",
+  metaphors: "pistol,electric shock,motor,working",
 },
 {
   name: "v-09-10-6-27",
   url: "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-09-10-6-27.wav",
   image: "https://www.cs.ubc.ca/~seifi/VibViz/PNGglyph/v-09-10-6-27.png",
-  metaphors: "tocando,bip,alarma,instrumentos musicales,batería",
+  metaphors: "touching,bip,alarm,musical instruments,battery",
 },
 {
   name: "v-09-10-6-38",
@@ -151,79 +151,79 @@ const initialSounds: Sound[] = [{
   name: "v-09-10-6-43",
   url: "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-09-10-6-43.wav",
   image: "https://www.cs.ubc.ca/~seifi/VibViz/PNGglyph/v-09-10-6-43.png",
-  metaphors: "pulsante,juego,tocando,roncando,deslizando",
+  metaphors: "pulsating,game,touching,snoring,sliding",
 },
 {
   name: "v-09-10-6-46",
   url: "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-09-10-6-46.wav",
   image: "https://www.cs.ubc.ca/~seifi/VibViz/PNGglyph/v-09-10-6-46.png",
-  metaphors: "",
+  metaphors: "bomb",
 },
 {
   name: "v-09-10-6-5",
   url: "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-09-10-6-5.wav",
   image: "https://www.cs.ubc.ca/~seifi/VibViz/PNGglyph/v-09-10-6-5.png",
-  metaphors: "tocando,instrumentos musicales,batería,latido del corazón,reloj",
+  metaphors: "touching,musical instruments,battery,heartbeat,clock",
 },
 {
   name: "v-09-10-6-59",
   url: "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-09-10-6-59.wav",
   image: "https://www.cs.ubc.ca/~seifi/VibViz/PNGglyph/v-09-10-6-59.png",
-  metaphors: "motor,zumbido,animal,andando,shaking",
+  metaphors: "motor,buzzing,animal,working,shaking",
 },
 {
   name: "v-09-10-7-34",
   url: "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-09-10-7-34.wav",
   image: "https://www.cs.ubc.ca/~seifi/VibViz/PNGglyph/v-09-10-7-34.png",
-  metaphors: "tocando,palpando,latido del corazón",
+  metaphors: "touching,palpating,heartbeat",
 },
 {
   name: "v-09-10-7-36",
   url: "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-09-10-7-36.wav",
   image: "https://www.cs.ubc.ca/~seifi/VibViz/PNGglyph/v-09-10-7-36.png",
-  metaphors: "zumbido,animal,yendo o viniendo,campana",
+  metaphors: "buzzing,animal,coming and going,bell",
 },
 {
   name: "v-09-10-7-9",
   url: "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-09-10-7-9.wav",
   image: "https://www.cs.ubc.ca/~seifi/VibViz/PNGglyph/v-09-10-7-9.png",
-  metaphors: "tocando",
+  metaphors: "touching",
 },
 {
   name: "v-09-10-8-5",
   url: "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-09-10-8-5.wav",
   image: "https://www.cs.ubc.ca/~seifi/VibViz/PNGglyph/v-09-10-8-5.png",
-  metaphors: "juego,palpando,alarma",
+  metaphors: "game,palpating,alarm",
 },
 {
   name: "v-09-10-8-7",
   url: "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-09-10-8-7.wav",
   image: "https://www.cs.ubc.ca/~seifi/VibViz/PNGglyph/v-09-10-8-7.png",
-  metaphors: "juego,pulsante,palpando,tocando,zumbido",
+  metaphors: "game,pulsating,palpating,touching,buzzing",
 },
 {
   name: "v-09-11-3-12",
   url: "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-09-11-3-12.wav",
   image: "https://www.cs.ubc.ca/~seifi/VibViz/PNGglyph/v-09-11-3-12.png",
-  metaphors: "alarma,teléfono,SOS",
+  metaphors: "alarm,phone,SOS",
 },
 {
   name: "v-09-11-3-16",
   url: "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-09-11-3-16.wav",
   image: "https://www.cs.ubc.ca/~seifi/VibViz/PNGglyph/v-09-11-3-16.png",
-  metaphors: "alarma,teléfono,instrumentos musicales,batería",
+  metaphors: "alarm,phone,musical instruments,battery",
 },
 {
   name: "v-09-11-3-19",
   url: "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-09-11-3-19.wav",
   image: "https://www.cs.ubc.ca/~seifi/VibViz/PNGglyph/v-09-11-3-19.png",
-  metaphors: "código morse,bocina,juego,teléfono,alarma",
+  metaphors: "morse code,horn,game,phone,alarm",
 },
 {
   name: "v-09-11-3-21",
   url: "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-09-11-3-21.wav",
   image: "https://www.cs.ubc.ca/~seifi/VibViz/PNGglyph/v-09-11-3-21.png",
-  metaphors: "latido del corazón,teléfono",
+  metaphors: "heartbeat,phone",
 },
 {
   name: "v-09-11-3-24",
@@ -235,31 +235,31 @@ const initialSounds: Sound[] = [{
   name: "v-09-11-3-4",
   url: "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-09-11-3-4.wav",
   image: "https://www.cs.ubc.ca/~seifi/VibViz/PNGglyph/v-09-11-3-4.png",
-  metaphors: "alarma,motor",
+  metaphors: "alarm,motor",
 },
 {
   name: "v-09-11-3-43",
   url: "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-09-11-3-43.wav",
   image: "https://www.cs.ubc.ca/~seifi/VibViz/PNGglyph/v-09-11-3-43.png",
-  metaphors: "dancing,tocando,instrumentos musicales",
+  metaphors: "dancing,touching,musical instruments",
 },
 {
   name: "v-09-11-3-50",
   url: "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-09-11-3-50.wav",
   image: "https://www.cs.ubc.ca/~seifi/VibViz/PNGglyph/v-09-11-3-50.png",
-  metaphors: "juego,saltando",
+  metaphors: "game,jumping",
 },
 {
   name: "v-09-11-3-54",
   url: "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-09-11-3-54.wav",
   image: "https://www.cs.ubc.ca/~seifi/VibViz/PNGglyph/v-09-11-3-54.png",
-  metaphors: "latido del corazón,pulsante,tocando,reloj,saltando",
+  metaphors: "heartbeat,pulsating,touching,clock,jumping",
 },
 {
   name: "v-09-11-3-56",
   url: "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-09-11-3-56.wav",
   image: "https://www.cs.ubc.ca/~seifi/VibViz/PNGglyph/v-09-11-3-56.png",
-  metaphors: "",
+  metaphors: "vibration",
 },
 {
   name: "v-09-11-3-8",
@@ -271,139 +271,139 @@ const initialSounds: Sound[] = [{
   name: "v-09-11-4-1",
   url: "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-09-11-4-1.wav",
   image: "https://www.cs.ubc.ca/~seifi/VibViz/PNGglyph/v-09-11-4-1.png",
-  metaphors: "tocando,instrumentos musicales,batería,juego",
+  metaphors: "touching,musical instruments,battery,game",
 },
 {
   name: "v-09-11-4-12",
   url: "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-09-11-4-12.wav",
   image: "https://www.cs.ubc.ca/~seifi/VibViz/PNGglyph/v-09-11-4-12.png",
-  metaphors: "motor,campana,juego,alarma",
+  metaphors: "motor,bell,game,alarm",
 },
 {
   name: "v-09-11-4-22",
   url: "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-09-11-4-22.wav",
   image: "https://www.cs.ubc.ca/~seifi/VibViz/PNGglyph/v-09-11-4-22.png",
-  metaphors: "zumbido,celebración,bocina,alarma",
+  metaphors: "buzzing,celebration,horn,alarm",
 },
 {
   name: "v-09-11-4-3",
   url: "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-09-11-4-3.wav",
   image: "https://www.cs.ubc.ca/~seifi/VibViz/PNGglyph/v-09-11-4-3.png",
-  metaphors: "tocando,código morse,andando,saltando",
+  metaphors: "touching,morse code,working,jumping",
 },
 {
   name: "v-09-11-4-41",
   url: "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-09-11-4-41.wav",
   image: "https://www.cs.ubc.ca/~seifi/VibViz/PNGglyph/v-09-11-4-41.png",
-  metaphors: "yendo o viniendo,going away,andando,latido del corazón",
+  metaphors: "coming and going,going away,working,heartbeat",
 },
 {
   name: "v-09-11-4-54",
   url: "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-09-11-4-54.wav",
   image: "https://www.cs.ubc.ca/~seifi/VibViz/PNGglyph/v-09-11-4-54.png",
-  metaphors: "tocando,alarma,pulsante,bip,palpando,teléfono",
+  metaphors: "touching,alarm,pulsating,bip,palpating,phone",
 },
 {
   name: "v-09-11-4-8",
   url: "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-09-11-4-8.wav",
   image: "https://www.cs.ubc.ca/~seifi/VibViz/PNGglyph/v-09-11-4-8.png",
-  metaphors: "tocando",
+  metaphors: "touching",
 },
 {
   name: "v-09-12-1-0",
   url: "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-09-12-1-0.wav",
   image: "https://www.cs.ubc.ca/~seifi/VibViz/PNGglyph/v-09-12-1-0.png",
-  metaphors: "palpando,naturaleza,animal",
+  metaphors: "palpating,nature,animal",
 },
 {
   name: "v-09-12-1-19",
   url: "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-09-12-1-19.wav",
   image: "https://www.cs.ubc.ca/~seifi/VibViz/PNGglyph/v-09-12-1-19.png",
-  metaphors: "",
+  metaphors: "drop",
 },
 {
   name: "v-09-12-1-23",
   url: "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-09-12-1-23.wav",
   image: "https://www.cs.ubc.ca/~seifi/VibViz/PNGglyph/v-09-12-1-23.png",
-  metaphors: "bip,juego,palpando",
+  metaphors: "bip,game,palpating",
 },
 {
   name: "v-09-12-1-29",
   url: "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-09-12-1-29.wav",
   image: "https://www.cs.ubc.ca/~seifi/VibViz/PNGglyph/v-09-12-1-29.png",
-  metaphors: "bip,juego,heartbeat,rascando,animal,instrumentos musicales,batería,tocando",
+  metaphors: "bip,game,heartbeat,scratching,animal,musical instruments,battery,touching",
 },
 {
   name: "v-09-12-1-39",
   url: "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-09-12-1-39.wav",
   image: "https://www.cs.ubc.ca/~seifi/VibViz/PNGglyph/v-09-12-1-39.png",
-  metaphors: "instrumentos musicales,batería,echo,campana",
+  metaphors: "musical instruments,battery,echo,bell",
 },
 {
   name: "v-09-12-1-48",
   url: "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-09-12-1-48.wav",
   image: "https://www.cs.ubc.ca/~seifi/VibViz/PNGglyph/v-09-12-1-48.png",
-  metaphors: "tocando,pulsante,bip",
+  metaphors: "touching,pulsating,bip",
 },
 {
   name: "v-09-12-1-53",
   url: "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-09-12-1-53.wav",
   image: "https://www.cs.ubc.ca/~seifi/VibViz/PNGglyph/v-09-12-1-53.png",
-  metaphors: "latido del corazón,instrumentos musicales,batería",
+  metaphors: "heartbeat,musical instruments,battery",
 },
 {
   name: "v-09-12-2-17",
   url: "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-09-12-2-17.wav",
   image: "https://www.cs.ubc.ca/~seifi/VibViz/PNGglyph/v-09-12-2-17.png",
-  metaphors: "pistola,motor,animal",
+  metaphors: "pistol,motor,animal",
 },
 {
   name: "v-09-12-2-20",
   url: "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-09-12-2-20.wav",
   image: "https://www.cs.ubc.ca/~seifi/VibViz/PNGglyph/v-09-12-2-20.png",
-  metaphors: "tocando,juego",
+  metaphors: "touching,game",
 },
 {
   name: "v-09-12-2-23",
   url: "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-09-12-2-23.wav",
   image: "https://www.cs.ubc.ca/~seifi/VibViz/PNGglyph/v-09-12-2-23.png",
-  metaphors: "alarma,bip,deslizando,rascando,animal",
+  metaphors: "alarm,bip,sliding,scratching,animal",
 },
 {
   name: "v-09-12-2-40",
   url: "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-09-12-2-40.wav",
   image: "https://www.cs.ubc.ca/~seifi/VibViz/PNGglyph/v-09-12-2-40.png",
-  metaphors: "caminando",
+  metaphors: "walking",
 },
 {
   name: "v-09-12-8-10",
   url: "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-09-12-8-10.wav",
   image: "https://www.cs.ubc.ca/~seifi/VibViz/PNGglyph/v-09-12-8-10.png",
-  metaphors: "motor,roncando,bocina,animal",
+  metaphors: "motor,snoring,horn,animal",
 },
 {
   name: "v-09-12-8-13",
   url: "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-09-12-8-13.wav",
   image: "https://www.cs.ubc.ca/~seifi/VibViz/PNGglyph/v-09-12-8-13.png",
-  metaphors: "motor,zumbido,animal,roncando",
+  metaphors: "motor,buzzing,animal,snoring",
 },
 {
   name: "v-09-12-8-21",
   url: "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-09-12-8-21.wav",
   image: "https://www.cs.ubc.ca/~seifi/VibViz/PNGglyph/v-09-12-8-21.png",
-  metaphors: "tocando,bip,reloj,palpando",
+  metaphors: "touching,bip,clock,palpating",
 },
 {
   name: "v-09-12-8-27",
   url: "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-09-12-8-27.wav",
   image: "https://www.cs.ubc.ca/~seifi/VibViz/PNGglyph/v-09-12-8-27.png",
-  metaphors: "bip,campana,naturaleza",
+  metaphors: "bip,bell,nature",
 },
 {
   name: "v-09-12-8-30",
   url: "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-09-12-8-30.wav",
   image: "https://www.cs.ubc.ca/~seifi/VibViz/PNGglyph/v-09-12-8-30.png",
-  metaphors: "animal,roncando,naturaleza",
+  metaphors: "animal,snoring,nature",
 },
 {
   name: "v-09-12-8-32",
@@ -421,13 +421,13 @@ const initialSounds: Sound[] = [{
   name: "v-09-16-1-56",
   url: "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-09-16-1-56.wav",
   image: "https://www.cs.ubc.ca/~seifi/VibViz/PNGglyph/v-09-16-1-56.png",
-  metaphors: "alarma,yendo o viniendo,juego,campana,bocina,saltando",
+  metaphors: "alarm,coming and going,game,bell,horn,jumping",
 },
 {
   name: "v-09-18-1-55",
   url: "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-09-18-1-55.wav",
   image: "https://www.cs.ubc.ca/~seifi/VibViz/PNGglyph/v-09-18-1-55.png",
-  metaphors: "latido del corazón,tocando",
+  metaphors: "heartbeat,touching",
 },
 {
   name: "v-09-18-2-7",
@@ -439,73 +439,73 @@ const initialSounds: Sound[] = [{
   name: "v-09-18-4-12",
   url: "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-09-18-4-12.wav",
   image: "https://www.cs.ubc.ca/~seifi/VibViz/PNGglyph/v-09-18-4-12.png",
-  metaphors: "saltando,animal,juego,instrumentos musicales,batería,alarma",
+  metaphors: "jumping,animal,game,musical instruments,battery,alarm",
 },
 {
   name: "v-09-18-4-15",
   url: "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-09-18-4-15.wav",
   image: "https://www.cs.ubc.ca/~seifi/VibViz/PNGglyph/v-09-18-4-15.png",
-  metaphors: "bip,tocando,palpando",
+  metaphors: "bip,touching,palpating",
 },
 {
   name: "v-09-18-4-16",
   url: "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-09-18-4-16.wav",
   image: "https://www.cs.ubc.ca/~seifi/VibViz/PNGglyph/v-09-18-4-16.png",
-  metaphors: "bip,campana,juego,latido del corazón,teléfono,ranas,animal",
+  metaphors: "bip,bell,game,heartbeat,phone,frogs,animal",
 },
 {
   name: "v-09-18-4-18",
   url: "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-09-18-4-18.wav",
   image: "https://www.cs.ubc.ca/~seifi/VibViz/PNGglyph/v-09-18-4-18.png",
-  metaphors: "bip,bocina,alarma,juego,naturaleza,animal,tocando",
+  metaphors: "bip,horn,alarm,game,nature,animal,touching",
 },
 {
   name: "v-09-18-4-22",
   url: "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-09-18-4-22.wav",
   image: "https://www.cs.ubc.ca/~seifi/VibViz/PNGglyph/v-09-18-4-22.png",
-  metaphors: "respirando,pulsante,latido del corazón",
+  metaphors: "breathing,pulsating,heartbeat",
 },
 {
   name: "v-09-18-4-56",
   url: "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-09-18-4-56.wav",
   image: "https://www.cs.ubc.ca/~seifi/VibViz/PNGglyph/v-09-18-4-56.png",
-  metaphors: "yendo o viniendo,alarma,deslizando",
+  metaphors: "coming and going,alarm,sliding",
 },
 {
   name: "v-09-23-6-24",
   url: "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-09-23-6-24.wav",
   image: "https://www.cs.ubc.ca/~seifi/VibViz/PNGglyph/v-09-23-6-24.png",
-  metaphors: "animal,motor,deslizando,yendo o viniendo",
+  metaphors: "animal,motor,sliding,coming and going",
 },
 {
   name: "v-09-26-1-39",
   url: "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-09-26-1-39.wav",
   image: "https://www.cs.ubc.ca/~seifi/VibViz/PNGglyph/v-09-26-1-39.png",
-  metaphors: "pulsante",
+  metaphors: "pulsating",
 },
 {
   name: "v-10-09-1-1",
   url: "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-10-09-1-1.wav",
   image: "https://www.cs.ubc.ca/~seifi/VibViz/PNGglyph/v-10-09-1-1.png",
-  metaphors: "tocando,batería",
+  metaphors: "touching,battery",
 },
 {
   name: "v-10-09-1-11",
   url: "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-10-09-1-11.wav",
   image: "https://www.cs.ubc.ca/~seifi/VibViz/PNGglyph/v-10-09-1-11.png",
-  metaphors: "rascando",
+  metaphors: "scratching",
 },
 {
   name: "v-10-09-1-12",
   url: "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-10-09-1-12.wav",
   image: "https://www.cs.ubc.ca/~seifi/VibViz/PNGglyph/v-10-09-1-12.png",
-  metaphors: "alarma,instrumentos musicales,juego",
+  metaphors: "alarm,musical instruments,game",
 },
 {
   name: "v-10-09-1-14",
   url: "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-10-09-1-14.wav",
   image: "https://www.cs.ubc.ca/~seifi/VibViz/PNGglyph/v-10-09-1-14.png",
-  metaphors: "teléfono,instrumentos musicales,batería,bip,music,singing,celebración",
+  metaphors: "phone,musical instruments,battery,bip,music,singing,celebration",
 },
 {
   name: "v-10-09-1-16",
@@ -517,223 +517,223 @@ const initialSounds: Sound[] = [{
   name: "v-10-09-1-20",
   url: "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-10-09-1-20.wav",
   image: "https://www.cs.ubc.ca/~seifi/VibViz/PNGglyph/v-10-09-1-20.png",
-  metaphors: "roncando,naturaleza",
+  metaphors: "snoring,nature",
 },
 {
   name: "v-10-09-1-8",
   url: "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-10-09-1-8.wav",
   image: "https://www.cs.ubc.ca/~seifi/VibViz/PNGglyph/v-10-09-1-8.png",
-  metaphors: "zumbido,animal,celebración",
+  metaphors: "buzzing,animal,celebration",
 },
 {
   name: "v-10-09-5-0",
   url: "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-10-09-5-0.wav",
   image: "https://www.cs.ubc.ca/~seifi/VibViz/PNGglyph/v-10-09-5-0.png",
-  metaphors: "alarma,tocando",
+  metaphors: "alarm,touching",
 },
 {
   name: "v-10-09-5-2",
   url: "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-10-09-5-2.wav",
   image: "https://www.cs.ubc.ca/~seifi/VibViz/PNGglyph/v-10-09-5-2.png",
-  metaphors: "tocando,código morse",
+  metaphors: "touching,morse code",
 },
 {
   name: "v-10-09-5-4",
   url: "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-10-09-5-4.wav",
   image: "https://www.cs.ubc.ca/~seifi/VibViz/PNGglyph/v-10-09-5-4.png",
-  metaphors: "alarma,campana,shock eléctrico",
+  metaphors: "alarm,bell,electric shock",
 },
 {
   name: "v-10-09-5-7",
   url: "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-10-09-5-7.wav",
   image: "https://www.cs.ubc.ca/~seifi/VibViz/PNGglyph/v-10-09-5-7.png",
-  metaphors: "shock eléctrico,pistola,bip,juego",
+  metaphors: "electric shock,pistol,bip,game",
 },
 {
   name: "v-10-10-1-10",
   url: "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-10-10-1-10.wav",
   image: "https://www.cs.ubc.ca/~seifi/VibViz/PNGglyph/v-10-10-1-10.png",
-  metaphors: "",
+  metaphors: "ovni",
 },
 {
   name: "v-10-10-1-18",
   url: "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-10-10-1-18.wav",
   image: "https://www.cs.ubc.ca/~seifi/VibViz/PNGglyph/v-10-10-1-18.png",
-  metaphors: "código morse,alarma,bip,juego,latido del corazón,palpando",
+  metaphors: "morse code,alarm,bip,game,heartbeat,palpating",
 },
 {
   name: "v-10-10-1-21",
   url: "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-10-10-1-21.wav",
   image: "https://www.cs.ubc.ca/~seifi/VibViz/PNGglyph/v-10-10-1-21.png",
-  metaphors: "teléfono,alarma,andando",
+  metaphors: "phone,alarm,working",
 },
 {
   name: "v-10-10-1-5",
   url: "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-10-10-1-5.wav",
   image: "https://www.cs.ubc.ca/~seifi/VibViz/PNGglyph/v-10-10-1-5.png",
-  metaphors: "deslizando,yendo o viniendo,alarma,juego",
+  metaphors: "sliding,coming and going,alarm,game",
 },
 {
   name: "v-10-18-11-11",
   url: "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-10-18-11-11.wav",
   image: "https://www.cs.ubc.ca/~seifi/VibViz/PNGglyph/v-10-18-11-11.png",
-  metaphors: "teléfono,alarma,bip,juego",
+  metaphors: "phone,alarm,bip,game",
 },
 {
   name: "v-10-21-2-48",
   url: "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-10-21-2-48.wav",
   image: "https://www.cs.ubc.ca/~seifi/VibViz/PNGglyph/v-10-21-2-48.png",
-  metaphors: "instrumentos musicales,batería,cymbal,explosion tocando",
+  metaphors: "musical instruments,battery,cymbal,explosion touching",
 },
 {
   name: "v-10-21-3-11",
   url: "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-10-21-3-11.wav",
   image: "https://www.cs.ubc.ca/~seifi/VibViz/PNGglyph/v-10-21-3-11.png",
-  metaphors: "tocando,juego",
+  metaphors: "touching,game",
 },
 {
   name: "v-10-21-3-17",
   url: "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-10-21-3-17.wav",
   image: "https://www.cs.ubc.ca/~seifi/VibViz/PNGglyph/v-10-21-3-17.png",
-  metaphors: "zumbido,alarma",
+  metaphors: "buzzing,alarm",
 },
 {
   name: "v-10-21-3-2",
   url: "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-10-21-3-2.wav",
   image: "https://www.cs.ubc.ca/~seifi/VibViz/PNGglyph/v-10-21-3-2.png",
-  metaphors: "bip,reloj",
+  metaphors: "bip,clock",
 },
 {
   name: "v-10-21-3-21",
   url: "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-10-21-3-21.wav",
   image: "https://www.cs.ubc.ca/~seifi/VibViz/PNGglyph/v-10-21-3-21.png",
-  metaphors: "",
+  metaphors: "buzzing",
 },
 {
   name: "v-10-21-3-30",
   url: "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-10-21-3-30.wav",
   image: "https://www.cs.ubc.ca/~seifi/VibViz/PNGglyph/v-10-21-3-30.png",
-  metaphors: "bip,zumbido,shock eléctrico,alarma",
+  metaphors: "bip,buzzing,electric shock,alarm",
 },
 {
   name: "v-10-21-3-33",
   url: "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-10-21-3-33.wav",
   image: "https://www.cs.ubc.ca/~seifi/VibViz/PNGglyph/v-10-21-3-33.png",
-  metaphors: "tocando,bip,palpando,reloj",
+  metaphors: "touching,bip,palpating,clock",
 },
 {
   name: "v-10-21-3-39",
   url: "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-10-21-3-39.wav",
   image: "https://www.cs.ubc.ca/~seifi/VibViz/PNGglyph/v-10-21-3-39.png",
-  metaphors: "alarma,juego,fail juego,pistola,shock eléctrico",
+  metaphors: "alarm,game,fail game,pistol,electric shock",
 },
 {
   name: "v-10-21-3-4",
   url: "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-10-21-3-4.wav",
   image: "https://www.cs.ubc.ca/~seifi/VibViz/PNGglyph/v-10-21-3-4.png",
-  metaphors: "tocando,saltando,instrumentos musicales,batería,yendo o viniendo,SOS,celebración,pistola,alarma,palpando",
+  metaphors: "touching,jumping,musical instruments,battery,coming and going,SOS,celebration,pistol,alarm,palpating",
 },
 {
   name: "v-10-21-3-45",
   url: "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-10-21-3-45.wav",
   image: "https://www.cs.ubc.ca/~seifi/VibViz/PNGglyph/v-10-21-3-45.png",
-  metaphors: "alarma,teléfono,instrumentos musicales,batería,juego,celebración",
+  metaphors: "alarm,phone,musical instruments,battery,game,celebration",
 },
 {
   name: "v-10-21-3-7",
   url: "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-10-21-3-7.wav",
   image: "https://www.cs.ubc.ca/~seifi/VibViz/PNGglyph/v-10-21-3-7.png",
-  metaphors: "motor,getting close,coming & going,deslizando",
+  metaphors: "motor,getting close,coming and going,sliding",
 },
 {
   name: "v-10-23-1-10",
   url: "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-10-23-1-10.wav",
   image: "https://www.cs.ubc.ca/~seifi/VibViz/PNGglyph/v-10-23-1-10.png",
-  metaphors: "yendo o viniendo,teléfono,alarma,bocina,bip",
+  metaphors: "coming and going,phone,alarm,horn,bip",
 },
 {
   name: "v-10-23-1-16",
   url: "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-10-23-1-16.wav",
   image: "https://www.cs.ubc.ca/~seifi/VibViz/PNGglyph/v-10-23-1-16.png",
-  metaphors: "teléfono,alarma,SOS,bocina,juego,bip,palpando",
+  metaphors: "phone,alarm,SOS,horn,game,bip,palpating",
 },
 {
   name: "v-10-23-1-21",
   url: "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-10-23-1-21.wav",
   image: "https://www.cs.ubc.ca/~seifi/VibViz/PNGglyph/v-10-23-1-21.png",
-  metaphors: "yendo o viniendo,motor,roncando,something moving,something rolling,deslizando",
+  metaphors: "coming and going,motor,snoring,something moving,something rolling,sliding",
 },
 {
   name: "v-10-23-1-23",
   url: "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-10-23-1-23.wav",
   image: "https://www.cs.ubc.ca/~seifi/VibViz/PNGglyph/v-10-23-1-23.png",
-  metaphors: "motor,shock eléctrico,roncando,yendo o viniendo,stopping,growl,chainsaw,a door closing",
+  metaphors: "motor,electric shock,snoring,coming and going,stopping,growl,chainsaw,a door closing",
 },
 {
   name: "v-10-23-1-24",
   url: "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-10-23-1-24.wav",
   image: "https://www.cs.ubc.ca/~seifi/VibViz/PNGglyph/v-10-23-1-24.png",
-  metaphors: "motor,pistola,zumbido,animal,yendo o viniendo,celebración",
+  metaphors: "motor,pistol,buzzing,animal,coming and going,celebration",
 },
 {
   name: "v-10-28-7-22",
   url: "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-10-28-7-22.wav",
   image: "https://www.cs.ubc.ca/~seifi/VibViz/PNGglyph/v-10-28-7-22.png",
-  metaphors: "SOS,alarma,bip,tocando,batería",
+  metaphors: "SOS,alarm,bip,touching,battery",
 },
 {
   name: "v-10-28-7-23",
   url: "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-10-28-7-23.wav",
   image: "https://www.cs.ubc.ca/~seifi/VibViz/PNGglyph/v-10-28-7-23.png",
-  metaphors: "alarma,tocando",
+  metaphors: "alarm,touching",
 },
 {
   name: "v-10-28-7-26",
   url: "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-10-28-7-26.wav",
   image: "https://www.cs.ubc.ca/~seifi/VibViz/PNGglyph/v-10-28-7-26.png",
-  metaphors: "rascando,animal,naturaleza",
+  metaphors: "scratching,animal,nature",
 },
 {
   name: "v-10-28-7-29",
   url: "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-10-28-7-29.wav",
   image: "https://www.cs.ubc.ca/~seifi/VibViz/PNGglyph/v-10-28-7-29.png",
-  metaphors: "andando,yendo o viniendo,motor",
+  metaphors: "working,coming and going,motor",
 },
 {
   name: "v-10-28-7-31",
   url: "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-10-28-7-31.wav",
   image: "https://www.cs.ubc.ca/~seifi/VibViz/PNGglyph/v-10-28-7-31.png",
-  metaphors: "caminando,tocando,reloj",
+  metaphors: "walking,touching,clock",
 },
 {
   name: "v-10-28-7-33",
   url: "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-10-28-7-33.wav",
   image: "https://www.cs.ubc.ca/~seifi/VibViz/PNGglyph/v-10-28-7-33.png",
-  metaphors: "zumbido,motor",
+  metaphors: "buzzing,motor",
 },
 {
   name: "v-10-28-7-35",
   url: "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-10-28-7-35.wav",
   image: "https://www.cs.ubc.ca/~seifi/VibViz/PNGglyph/v-10-28-7-35.png",
-  metaphors: "zumbido,animal,fog bocina",
+  metaphors: "buzzing,animal,fog horn",
 },
 {
   name: "v-10-28-7-36",
   url: "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-10-28-7-36.wav",
   image: "https://www.cs.ubc.ca/~seifi/VibViz/PNGglyph/v-10-28-7-36.png",
-  metaphors: "zumbido,shock eléctrico,motor,roncando,teléfono,animal",
+  metaphors: "buzzing,electric shock,motor,snoring,phone,animal",
 },
 {
   name: "v-10-29-4-20",
   url: "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-10-29-4-20.wav",
   image: "https://www.cs.ubc.ca/~seifi/VibViz/PNGglyph/v-10-29-4-20.png",
-  metaphors: "roncando,motor,yendo o viniendo,respirando",
+  metaphors: "snoring,motor,coming and going,breathing",
 },
 {
   name: "v-10-29-4-22",
   url: "https://www.cs.ubc.ca/~seifi/VibViz/vteffects/v-10-29-4-22.wav",
   image: "https://www.cs.ubc.ca/~seifi/VibViz/PNGglyph/v-10-29-4-22.png",
-  metaphors: "motor,juego",
+  metaphors: "motor,game",
 },
 ];
 
@@ -916,9 +916,9 @@ export function App() {
     let vibrate = false; // Indica si estamos en vibración o pausa
     let currentDuration = 0; // Tiempo actual acumulado de vibración o pausa
 
-    const msPerStep = (1000 / sampleRate) * sampleStep; // Tiempo en ms para cada ⁠ sampleStep ⁠
+    const msPerStep = (1000 / sampleRate) * sampleStep; // Tiempo en ms para cada ⁠sampleStep
 
-    // Recorrer los datos del audio tomando muestras a intervalos de ⁠ sampleStep ⁠
+    // Recorrer los datos del audio tomando muestras a intervalos de ⁠sampleStep
     for (let i = 0; i < data.length; i += sampleStep) {
       const amplitude = Math.abs(data[i]); // Obtener valor absoluto de la amplitud en este paso
 
@@ -1017,21 +1017,21 @@ const handleUploadSound = async () => {
   try {
     // Validar que todos los campos estén completos
     if (description === "" || tags === "" || !file) {
-      setMessage("Todos los campos son obligatorios");
+      setMessage("All fields must be filled in");
       setMessageModalVisible(true);
       return;
     }
 
     // Validar que haya al menos 3 tags
     if (tags.split(",").length < 3) {
-      setMessage("Por favor, ingrese al menos 3 etiquetas. las mismas deben estar separadas por una coma");
+      setMessage("Please enter at least 3 tags, separated by a comma.");
       setMessageModalVisible(true);
       return;
     }
 
     // Validar que el nombre del sonido no exista en el arreglo de sounds
     if (sounds.some((sound) => sound.name === name)) {
-      setMessage("El nombre ya existe en la lista de sonidos. Por favor, elija otro.");
+      setMessage("The name already exists in the sound list. Please choose another one.");
       setMessageModalVisible(true);
       return;
     }
@@ -1100,18 +1100,18 @@ const handleUploadSound = async () => {
         // Cerrar el modal de subida y mostrar el mensaje de éxito
         setUploadModalVisible(false);
         clearInput();
-        setMessage("Sonido subido exitosamente! Aguarde unos minutos para que aparezca en la lista de sonidos.");
+        setMessage("Sound uploaded successfully! Please wait a few minutes for it to appear in the sound list.");
         setMessageModalVisible(true); // Mostrar el modal de mensaje
       }, 3000);
 
     } else {
       // Si ocurre un error al subir el sonido
-      setMessage("Error al cargar el sonido. Por favor, inténtelo de nuevo.");
+      setMessage("Error loading sound. Please try again.");
       setMessageModalVisible(true); // Mostrar el modal de mensaje
     }
   } catch (error) {
-    console.error("Error al subir el sonido:", error);
-    setMessage("Error al subir el sonido. Por favor, inténtelo de nuevo.");
+    console.error("Error uploading sound:", error);
+    setMessage("Error uploading sound. Please try again.");
     setMessageModalVisible(true); // Mostrar el modal de mensaje
   } finally {
     // Desbloquear el botón de subida
@@ -1141,17 +1141,17 @@ const handleUploadSound = async () => {
 
   return (
     <div className="container py-4">
-      <h2 className="text-center mb-4">Diseño Vibrante</h2>
+      <h2 className="text-center mb-4">Haptic Vibrations</h2>
       {!isLoggedIn ? (
         <button 
         className="btn btn-blue w-100 mb-5"
-        onClick={authenticateUser}>Iniciar sesión en Freesound</button>
+        onClick={authenticateUser}>Login in Freesound</button>
       ) : (
         <div>
           <button 
           className="btn w-100 mb-5 btn-custom"
           onClick={handleOpenUploadModal}
-          >Subir Sonido</button>
+          >Upload sound</button>
         </div>
       )}
 
@@ -1166,7 +1166,7 @@ const handleUploadSound = async () => {
             onClick={() => setMessageModalVisible(false)}
             className="btn btn-fit btn-blue"
           >
-            Cerrar
+            Close
           </button>
         </div>
       </div>
@@ -1183,18 +1183,18 @@ const handleUploadSound = async () => {
           >
             &times;
           </span>
-            <h5>Registrarse en FreeSound</h5>
+            <h5>Register in FreeSound</h5>
             <p>
-              Es necesario registrarse en FreeSound para poder subir sonidos. Por
-              favor, haga clic en el botón de abajo para registrarse o iniciar
-              sesión. Después de registrarse, ingrese el 'Código de Autorización'
+              You need to register with FreeSound in order to upload sounds.
+              Please click on the button below to register or log in.
+              After logging in, enter the ‘Authorisation Code’.
             </p>
             <button 
               id="registerButton" 
               className="btn btn-blue mb-5"
               onClick={() => window.open('https://freesound.org/apiv2/oauth2/authorize/?client_id=sk4SYvtNWujw8dwXsjub&response_type=code&state=xyz', '_blank')}
             >
-              Registrarse/Iniciar sesión
+              Register/Login
             </button>
             <input
               type="text"
@@ -1207,7 +1207,7 @@ const handleUploadSound = async () => {
               onClick={handleAuthCodeSubmit}
               className="btn btn-custom"
             >
-              Guardar
+              Save
             </button>
           </div>
         </div>
@@ -1226,9 +1226,9 @@ const handleUploadSound = async () => {
       >
         &times;
       </span>
-      <h4>Subir un sonido</h4>
+      <h4>Upload your own sound</h4>
       <label htmlFor="name" style={{ marginTop: "10px" }}>
-        Nombre
+        Name
       </label>
       <input
         type="text"
@@ -1237,7 +1237,7 @@ const handleUploadSound = async () => {
         value={soundDetails.name}
         onChange={handleInputChange}
       />
-      <label htmlFor="description">Descripción</label>
+      <label htmlFor="description">Description</label>
       <input
         type="text"
         id="description"
@@ -1245,7 +1245,7 @@ const handleUploadSound = async () => {
         value={soundDetails.description}
         onChange={handleInputChange}
       />
-      <label htmlFor="tags">Etiquetas</label>
+      <label htmlFor="tags">Tags</label>
       <input
         type="text"
         id="metaphors"
@@ -1253,7 +1253,7 @@ const handleUploadSound = async () => {
         value={soundDetails.metaphors}
         onChange={handleInputChange}
         />
-      <label htmlFor="soundFile">Archivo de sonido</label>
+      <label htmlFor="soundFile">Sound file</label>
       <input
         type="file"
         id="soundFile"
@@ -1265,14 +1265,14 @@ const handleUploadSound = async () => {
             onClick={() => setUploadModalVisible(false)}
             className="btn btn-fit btn-danger"
           >
-            Cancelar
+            Cancel
           </button>
           <button
           id="uploadSound"
           onClick={handleUploadSound}
           className="btn btn-fit btn-custom"
           >
-            Subir sonido
+            Upload sound
           </button>
       </div>
     </div>
@@ -1283,7 +1283,7 @@ const handleUploadSound = async () => {
       {/* Lista de sonidos */}
       <input
         type="text"
-        placeholder="Filtrar por metáfora"
+        placeholder="Search by tags"
         value={filter}
         onChange={(e) => setFilter(e.target.value)}
         style={{
@@ -1319,16 +1319,16 @@ const handleUploadSound = async () => {
             />
             <div style={{ flexGrow: 1 }}>
               <div>
-                <strong>Nombre:</strong> {sound.name}
+                <strong>Name:</strong> {sound.name}
               </div>
               <div>
-                <strong>Etiquetas:</strong> {sound.metaphors}
+                <strong>Tags:</strong> {sound.metaphors}
               </div>
             </div>
             <button
               onClick={() => playSound(sound.url)}
               className="svg"
-              title="Reproducir sonido" 
+              title="Play sound" 
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -1344,7 +1344,7 @@ const handleUploadSound = async () => {
             <button
               onClick={() => setSelectedSound(sound)}
               className="svg"
-              title="Modificar etiquetas"
+              title="Edit tags"
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -1360,7 +1360,7 @@ const handleUploadSound = async () => {
             <button
               onClick={() => insertButtonOnCanvas(sound.url)}
               className="svg"
-              title="Insertar en Framer"
+              title="Insert in Framer"
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -1406,7 +1406,7 @@ const handleUploadSound = async () => {
           >
             &times;
           </span>
-            <h4>Modificar etiquetas</h4>
+            <h4>Edit tags</h4>
             <textarea
               value={selectedSound.metaphors}
               onChange={(e) =>
@@ -1420,13 +1420,13 @@ const handleUploadSound = async () => {
                   onClick={() => setSelectedSound(null)}
                   className="btn btn-fit btn-danger"
                 >
-                  Cancelar
+                  Cancel
                 </button>
                 <button
                   onClick={() => saveMetaphors(selectedSound.metaphors)}
                   className="btn btn-fit btn-custom"
                 >
-                  Guardar
+                  Save
                 </button>
             </div>
           </div>
